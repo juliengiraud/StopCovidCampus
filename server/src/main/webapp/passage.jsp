@@ -2,13 +2,17 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Passage" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.GestionPassages" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
 <%@ page import="java.util.List" %>
 
-<%! private final GestionPassages passages = new GestionPassages(); %>
+<jsp:useBean id="passages" scope="application" class="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
+
+<% if (request.getSession().getAttribute("user") == null) {
+    response.sendRedirect("index.html");
+    return;
+} %>
 
 <% if (request.getMethod().equals("POST")) { // Traitement du formulaire envoyé par saisie.html
 
