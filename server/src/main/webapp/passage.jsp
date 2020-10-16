@@ -77,9 +77,5 @@
         </tr>
     </c:forEach>
 </table>
-
-<p><a href="saisie.html">Saisir un nouveau passage</a></p>
-<p><a href="Deco">Se déconnecter</a></p>
-
 </body>
 </html>
