@@ -34,12 +34,16 @@
     }
 } %>
 
-<h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
+<% List<Passage> passagesAffiches = null; %>
 
-<% List<Passage> passagesAffiches = passages.getPassagesByUser((User) session.getAttribute("user")); %>
+<c:if test="${sessionScope.admin}">
+    <h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
+    <% passagesAffiches = passages.getAllPassages(); %>
+</c:if>
 
 
-<h1>Liste de vos passages</h1>
+
+<h1>Liste de tous les passages</h1>
 
 <table>
     <tr>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Jérémy
@@ -16,28 +17,21 @@
         <nav>
             <a href="interface.jsp?page=passage">Voir les passages</a>
             <a href="interface.jsp?page=user">voir mes informations</a>
+            <a href="saisie.html">Saisir un nouveau passage</a>
             <a href="Deco">Se déconnecter</a>
         </nav>
         <main>
-            <%
-                String p = "";
-                if (request.getMethod().equals("GET")) { // Traitement du formulaire envoyé par saisie.html
-                    if(request.getParameter("page") != null) {
-                        p = request.getParameter("page");
-                        switch (p) {
-                            case "passage":
-                                p = "passage.jsp";
-                                break;
-                            case "user":
-                                p = "user.jsp";
-                                break;
-                            default:
-                        }
-                    }
-                }
-             %>
-
-            <jsp:include page="<%= p %>" ></jsp:include>
+            <c:choose>
+                <c:when test="${param.saisiePassage == \"passage\"}">
+                    <%request.getRequestDispatcher("passage.jsp").forward(request, response);%>
+                </c:when>
+                <c:when test="${param.page == \"passage\"}">
+                    <c:import url="passage.jsp"></c:import>
+                </c:when>
+                <c:when test="${param.page == \"user\"}">
+                    <c:import url="user.jsp"></c:import>
+                </c:when>
+            </c:choose>
 
         </main>
         <footer>

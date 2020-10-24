@@ -18,13 +18,17 @@ public class Init extends HttpServlet {
             HttpSession session = request.getSession(true);
             session.setAttribute("user", new User(login));
             session.setAttribute("admin", request.getParameter("admin") != null);
-            request.getRequestDispatcher("interface.jsp").forward(request, response);
+            if(session.getAttribute("admin") != null){
+                request.getRequestDispatcher("interface_admin.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("interface.jsp").forward(request, response);
+            }
         } else {
-            response.sendRedirect("interface.html");
+            response.sendRedirect("index.html");
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("interface.html");
+        response.sendRedirect("index.html");
     }
 }

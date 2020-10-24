@@ -7,7 +7,7 @@
 <body>
     <h1>Passage dans une salle</h1>
     <p>Indiquez le nom d'une salle, et cliquez sur l'un des boutons pour indiquer que vous y entrez ou que vous en sortez.</p>
-    <form method="post" action="passage.jsp">
+    <form method="post" action="interface.jsp">
         <p>
             <label>
                 Nom de la salle :
@@ -17,6 +17,9 @@
         <p>
             <input type="submit" value="Entrée" name="entree">
             <input type="submit" value="Sortie" name="sortie">
+        </p>
+        <p>
+            <input type="hidden" value="passage" name="saisiePassage">
         </p>
     </form>
     <p><a href="Deco">Déconnexion</a></p>

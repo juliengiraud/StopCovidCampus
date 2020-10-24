@@ -5,13 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<jsp:useBean id="passages" scope="application" class="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
-
-<html>
-<head>
-    <title>Salles</title>
-</head>
-<body>
+<jsp:useBean id="passages" scope="application" type="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
 
 <h1>Liste des salles</h1>
 
@@ -26,6 +20,7 @@
 <c:if test="${!sessionScope.admin}">
     <% passagesAffiches = passages.getPassagesByUser((User) session.getAttribute("user")); %>
 </c:if>
+
 <table>
     <tr>
         <th>Salle</th>
@@ -37,9 +32,3 @@
         </tr>
     </c:forEach>
 </table>
-
-<p><a href="saisie.html">Saisir un nouveau passage</a></p>
-<p><a href="Deco">Se déconnecter</a></p>
-
-</body>
-</html>
