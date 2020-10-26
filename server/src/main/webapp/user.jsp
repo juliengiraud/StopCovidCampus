@@ -13,11 +13,11 @@
 
 <c:if test="${sessionScope.admin}">
     <c:if test="${empty param.login}">
-        <h1>Liste des utilisateurs</h1>
+        <h2>Liste des utilisateurs</h2>
         <% passagesAffiches = passages.getAllPassages(); %>
     </c:if>
     <c:if test="${!empty param.login}">
-        <h1>Utilisateur ${param.login}</h1>
+        <h2>Utilisateur ${param.login}</h2>
         <% passagesAffiches = passages.getPassagesByUserLogin(request.getParameter("login")); %>
     </c:if>
 </c:if>

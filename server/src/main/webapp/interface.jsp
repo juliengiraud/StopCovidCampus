@@ -8,18 +8,22 @@
 --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<html>
+<!DOCTYPE html>
+<html lang="fr">
     <head>
+        <meta charset="UTF-8">
         <title>Présence UCBL</title>
     </head>
     <body>
-        <h1>Interface</h1>
-        <nav>
-            <a href="interface.jsp?page=passage">Voir les passages</a>
-            <a href="interface.jsp?page=user">voir mes informations</a>
-            <a href="saisie.html">Saisir un nouveau passage</a>
-            <a href="Deco">Se déconnecter</a>
-        </nav>
+        <header>
+            <nav>
+                <a href="interface.jsp?page=passage">Voir les passages</a>
+                <a href="interface.jsp?page=user">voir mes informations</a>
+                <a href="saisie.html">Saisir un nouveau passage</a>
+                <a href="Deco">Se déconnecter</a>
+            </nav>
+        </header>
+        <h1>Interface utilisateur normal</h1>
         <main>
             <c:choose>
                 <c:when test="${param.saisiePassage == \"passage\"}">

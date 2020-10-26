@@ -7,9 +7,9 @@
 
 <jsp:useBean id="passages" scope="application" type="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
 
-<h1>Liste des salles</h1>
+<h2>Liste des salles</h2>
 
-<h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
+<h3>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h3>
 
 <% List<Passage> passagesAffiches = null; %>
 

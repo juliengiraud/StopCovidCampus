@@ -1,13 +1,19 @@
-<form method="post" action="Init">
-    <p>
-        <label>
-            Entrez votre login :
-            <input type="text" name="login">
-        </label>
-        <label>
-            Êtes-vous administrateur ?
-            <input type="checkbox" name="admin">
-        </label>
-        <input type="submit" value="Connexion">
-    </p>
-</form>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Connexion</title>
+    </head>
+    <body>
+        <h1>Page de connexion</h1>
+        <form method="post" action="Init">
+            <label for="login">Entrez votre login :</label>
+            <input id="login" type="text" name="login">
+
+            <label for="admin">Êtes-vous administrateur ?</label>
+            <input id="admin" type="checkbox" name="admin">
+
+            <input type="submit" value="Connexion">
+        </form>
+    </body>
+</html>
