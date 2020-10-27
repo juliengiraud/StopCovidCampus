@@ -34,12 +34,17 @@
     }
 } %>
 
-<h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
+<h2>Liste des passages</h2>
 
-<% List<Passage> passagesAffiches = passages.getPassagesByUser((User) session.getAttribute("user")); %>
+<h3>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h3>
 
+<c:if test="${!sessionScope.admin}">
+    <% session.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
+</c:if>
 
-<h1>Liste de vos passages</h1>
+<c:if test="${sessionScope.admin}">
+    <% session.setAttribute("passagesAffiches", passages.getAllPassages()); %>
+</c:if>
 
 <table>
     <tr>
@@ -49,7 +54,7 @@
         <th>Sortie</th>
     </tr>
 
-    <c:forEach items="<%= passagesAffiches %>" var="passage">
+    <c:forEach items="<%= session.getAttribute(\"passagesAffiches\") %>" var="passage">
         <tr>
             <td>${passage.user.login}</td>
             <td>${passage.salle.nom}</td>

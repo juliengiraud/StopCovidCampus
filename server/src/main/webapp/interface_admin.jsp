@@ -36,7 +36,7 @@
                     <%request.getRequestDispatcher("passage.jsp").forward(request, response);%>
                 </c:when>
                 <c:when test="${param.page == \"passage\"}">
-                    <c:import url="passage_admin.jsp"></c:import>
+                    <c:import url="passage.jsp"></c:import>
                 </c:when>
                 <c:when test="${param.page == \"users\"}">
                     <c:import url="user.jsp"></c:import>
