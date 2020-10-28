@@ -8,7 +8,7 @@
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
 <%@ page import="java.util.List" %>
 
-<%! private final GestionPassages passages = new GestionPassages(); %>
+<jsp:useBean id="passages" scope="application" class="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
 
 <% if (request.getSession().getAttribute("user") == null) {
     response.sendRedirect("index.html");
