@@ -10,6 +10,11 @@
 
 <%! private final GestionPassages passages = new GestionPassages(); %>
 
+<% if (request.getSession().getAttribute("user") == null) {
+    response.sendRedirect("index.html");
+    return;
+} %>
+
 <% if (request.getMethod().equals("POST")) { // Traitement du formulaire envoyé par saisie.html
 
     if(request.getParameter("entree") != null) {
