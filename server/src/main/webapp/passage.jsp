@@ -2,17 +2,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Passage" %>
+<%@ page import="fr.univlyon1.m1if.m1if03.classes.GestionPassages" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
 <%@ page import="java.util.List" %>
 
-<jsp:useBean id="passages" scope="application" class="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
-
-<% if (request.getSession().getAttribute("user") == null) {
-    response.sendRedirect("index.html");
-    return;
-} %>
+<%! private final GestionPassages passages = new GestionPassages(); %>
 
 <% if (request.getMethod().equals("POST")) { // Traitement du formulaire envoyé par saisie.html
 
@@ -34,16 +30,24 @@
     }
 } %>
 
-<h2>Liste des passages</h2>
+<!doctype html>
+<html>
+<head>
+    <title>Passages</title>
+</head>
+<body>
+<h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
 
-<h3>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h3>
-
-<c:if test="${!sessionScope.admin}">
-    <% session.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
-</c:if>
+<% List<Passage> passagesAffiches = null; %>
 
 <c:if test="${sessionScope.admin}">
-    <% session.setAttribute("passagesAffiches", passages.getAllPassages()); %>
+    <h1>Liste de tous les passages</h1>
+    <% passagesAffiches = passages.getAllPassages(); %>
+</c:if>
+
+<c:if test="${!sessionScope.admin}">
+    <h1>Liste de vos passages</h1>
+    <% passagesAffiches = passages.getPassagesByUser((User) session.getAttribute("user")); %>
 </c:if>
 
 <table>
@@ -54,7 +58,7 @@
         <th>Sortie</th>
     </tr>
 
-    <c:forEach items="<%= session.getAttribute(\"passagesAffiches\") %>" var="passage">
+    <c:forEach items="<%= passagesAffiches %>" var="passage">
         <tr>
             <td>${passage.user.login}</td>
             <td>${passage.salle.nom}</td>
@@ -69,3 +73,9 @@
         </tr>
     </c:forEach>
 </table>
+
+<p><a href="saisie.html">Saisir un nouveau passage</a></p>
+<p><a href="Deco">Se déconnecter</a></p>
+
+</body>
+</html>

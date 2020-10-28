@@ -14,20 +14,17 @@ import java.io.IOException;
 public class Init extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
-        if (login == null && login.isEmpty()) {
+        if(login != null && !login.equals("")) {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("user", new User(login));
+            session.setAttribute("admin", request.getParameter("admin") != null);
+            request.getRequestDispatcher("passage.jsp").forward(request, response);
+        } else {
             response.sendRedirect("index.html");
         }
-
-        HttpSession session = request.getSession(true);
-        Boolean admin = request.getParameter("admin") != null;
-        session.setAttribute("user", new User(login));
-        session.setAttribute("admin", admin);
-
-        String nextJsp = admin ? "interface_admin.jsp" : "interface.jsp";
-        request.getRequestDispatcher(nextJsp).forward(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect("index.html");
     }
 }
