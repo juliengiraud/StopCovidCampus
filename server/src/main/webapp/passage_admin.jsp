@@ -13,7 +13,7 @@
 <% if (request.getSession().getAttribute("user") == null) {
     response.sendRedirect("index.html");
     return;
-}%>
+} %>
 
 <% if (request.getMethod().equals("POST")) { // Traitement du formulaire envoyé par saisie.html
 
@@ -33,14 +33,19 @@
             p.setSortie(new Date());
         }
     }
-    response.sendRedirect("interface.jsp?page=passage");
+    response.sendRedirect("interface_admin.jsp?page=passage");
 } %>
 
 <h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
 
-<c:set var="p" value="${passages.getPassagesByUser(sessionScope.user)}"/>
+<c:if test="${sessionScope.admin}">
+    <h3>Liste de tous les passages</h3>
+    <c:set var="p" value="${passages.getAllPassages()}"/>
+</c:if>
 
-<h4>Liste de vos passages</h4>
+<c:if test="${!sessionScope.admin}">
+   <c:redirect url = "interface.jsp?page=passsage"/>
+</c:if>
 
 <table>
     <tr>
