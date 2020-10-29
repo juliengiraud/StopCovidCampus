@@ -33,25 +33,21 @@
             p.setSortie(new Date());
         }
     }
+
+    response.sendRedirect("interface.jsp?page=passage");
 } %>
 
-<!doctype html>
-<html>
-<head>
-    <title>Passages</title>
-</head>
-<body>
 <h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
 
 <% List<Passage> passagesAffiches = null; %>
 
 <c:if test="${sessionScope.admin}">
-    <h1>Liste de tous les passages</h1>
+    <h3>Liste de tous les passages</h3>
     <% passagesAffiches = passages.getAllPassages(); %>
 </c:if>
 
 <c:if test="${!sessionScope.admin}">
-    <h1>Liste de vos passages</h1>
+    <h4>Liste de vos passages</h4>
     <% passagesAffiches = passages.getPassagesByUser((User) session.getAttribute("user")); %>
 </c:if>
 
@@ -78,9 +74,3 @@
         </tr>
     </c:forEach>
 </table>
-
-<p><a href="saisie.html">Saisir un nouveau passage</a></p>
-<p><a href="Deco">Se déconnecter</a></p>
-
-</body>
-</html>

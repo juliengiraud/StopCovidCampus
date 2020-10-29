@@ -12,11 +12,6 @@ if (p.size() == 0) {
     return;
 }
 %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-    <%= p.get(0).getUser().getLogin() %>
-</body>
-</html>
+
+<h1>Utilisateur courant :</h1>
+<%= p.get(0).getUser().getLogin() %>
