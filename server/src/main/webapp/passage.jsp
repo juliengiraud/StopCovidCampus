@@ -36,7 +36,13 @@
     response.sendRedirect("interface.jsp?page=passage");
 } %>
 
-<c:set var="p" value="${passages.getPassagesByUser(sessionScope.user)}"/>
+<c:if test="${!sessionScope.admin}">
+    <% session.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
+</c:if>
+
+<c:if test="${sessionScope.admin}">
+    <% session.setAttribute("passagesAffiches", passages.getAllPassages()); %>
+</c:if>
 
 <h3>Liste de vos passages</h3>
 
@@ -50,7 +56,7 @@
         </tr>
     </thead>
     <tbody>
-        <c:forEach items="${p}" var="passage">
+        <c:forEach items="<%= session.getAttribute(\"passagesAffiches\") %>" var="passage">
             <tr>
                 <th>${passage.user.login}</th>
                 <td>${passage.salle.nom}</td>

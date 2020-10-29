@@ -69,13 +69,13 @@
             <h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> (administrateur) !</h2>
             <c:choose>
                 <c:when test="${param.from == \"saisie\"}">
-                    <% request.getRequestDispatcher("passage_admin.jsp").forward(request, response); %>
+                    <% request.getRequestDispatcher("passage.jsp").forward(request, response); %>
                 </c:when>
                 <c:when test="${param.page == \"passage\"}">
                     <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"passages\"}">
-                    <c:import url="passage_admin.jsp"/>
+                    <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"user_me\"}">
                     <c:import url="user.jsp"></c:import>
