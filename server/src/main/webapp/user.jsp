@@ -9,6 +9,11 @@
 
 <jsp:useBean id="passages" scope="application" type="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
 
+<% if (request.getSession().getAttribute("user") == null) {
+    response.sendRedirect("index.html");
+    return;
+}%>
+
 <%
     List<Passage> passageList = passages.getAllPassages();
     Set<User> users = new HashSet<>();
@@ -20,7 +25,7 @@
 <c:set var="userToDisplay" value="${null}"/>
 
 <c:if test="${sessionScope.admin && !empty param.login}">
-    <h2>Recherche pour "${param.login}" :</h2>
+    <h3>Recherche pour "${param.login}" :</h3>
     <c:forEach items="<%= users %>" var = "u">
         <c:if test="${u.login == param.login }">
             <c:set var="userToDisplay" value="${u}"/>
@@ -28,7 +33,7 @@
     </c:forEach>
 </c:if>
 <c:if test="${empty param.login}">
-    <h2>Utilisateur courant :</h2>
+    <h3>Mon profil :</h3>
     <c:forEach items="<%= users %>" var = "u">
         <c:if test="${u.login == sessionScope.user.login }">
             <c:set var="userToDisplay" value="${u}"/>
@@ -36,6 +41,9 @@
     </c:forEach>
 </c:if>
 
+<c:if test="${user == null}">
+    <p>Aucun résultat.</p>
+</c:if>
 <c:if test="${user != null}">
     <p>${userToDisplay.login}</p>
 </c:if>

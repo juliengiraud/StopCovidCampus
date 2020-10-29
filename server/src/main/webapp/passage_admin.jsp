@@ -36,37 +36,35 @@
     response.sendRedirect("interface_admin.jsp?page=passage");
 } %>
 
-<h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> !</h2>
+<c:if test="${!sessionScope.admin}">
+   <c:redirect url = "interface.jsp?page=passage"/>
+</c:if>
 
 <c:if test="${sessionScope.admin}">
-    <h3>Liste de tous les passages</h3>
     <c:set var="p" value="${passages.getAllPassages()}"/>
 </c:if>
 
-<c:if test="${!sessionScope.admin}">
-   <c:redirect url = "interface.jsp?page=passsage"/>
-</c:if>
+<h3>Liste de tous les passages</h3>
 
-<table>
+<table class="table">
+    <thead class="thead-dark">
     <tr>
         <th>Login</th>
         <th>Salle</th>
         <th>Entrée</th>
         <th>Sortie</th>
     </tr>
-
+    </thead>
+    <tbody>
     <c:forEach items="${p}" var="passage">
         <tr>
-            <td>${passage.user.login}</td>
+            <th>${passage.user.login}</th>
             <td>${passage.salle.nom}</td>
-            <td>
-                <fmt:formatDate value="${passage.entree}" var="heureEntree" type="time" />
-                    ${heureEntree}
-            </td>
-            <td>
-                <fmt:formatDate value="${passage.sortie}" var="heureSortie" type="time" />
-                    ${heureSortie}
-            </td>
+            <td><fmt:formatDate value="${passage.entree}" var="heureEntree" type="time" />
+                    ${heureEntree}</td>
+            <td><fmt:formatDate value="${passage.sortie}" var="heureSortie" type="time" />
+                    ${heureSortie}</td>
         </tr>
     </c:forEach>
+    </tbody>
 </table>

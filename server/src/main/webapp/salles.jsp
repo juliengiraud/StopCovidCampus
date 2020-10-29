@@ -10,11 +10,14 @@
 
 <jsp:useBean id="passages" scope="application" type="fr.univlyon1.m1if.m1if03.classes.GestionPassages"/>
 
-<c:if test="${!sessionScope.admin}">
-    <c:redirect url="index.html"/>
-</c:if>
+<% if (request.getSession().getAttribute("user") == null) {
+    response.sendRedirect("index.html");
+    return;
+}%>
 
-<h2>Liste des salles :</h2>
+<c:if test="${!sessionScope.admin}">
+    <% request.getRequestDispatcher("interface.jsp").forward(request, response); %>
+</c:if>
 
 <%
     List<Passage> passageList = passages.getAllPassages();
@@ -23,8 +26,19 @@
         salles.add(p.getSalle());
     }
 %>
-<ul>
-    <c:forEach items="<%= salles %>" var="salle">
-        <li>${salle.nom}</li>
-    </c:forEach>
-</ul>
+
+<h3>Liste des salles :</h3>
+
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th>Nom</th>
+    </tr>
+    </thead>
+    <tbody>
+        <c:forEach items="<%= salles %>" var="salle">
+            <th>${salle.nom}</th>
+        </c:forEach>
+    </tbody>
+</table>
+
