@@ -47,6 +47,12 @@
                             <a href="interface_admin.jsp?page=passages" class="nav-link">Voir tous les passages</a>
                         </li>
                         <li class="nav-item">
+                            <a href="interface_admin.jsp?page=passagesByUser" class="nav-link">Voir tous les passages d'un utilisateur</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="interface_admin.jsp?page=passagesBySalle" class="nav-link">Voir tous les passages d'une salle</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="interface_admin.jsp?page=salles" class="nav-link">Voir toutes les salles</a>
                         </li>
                         <li class="nav-item">
@@ -72,9 +78,11 @@
                     <% request.getRequestDispatcher("passage.jsp").forward(request, response); %>
                 </c:when>
                 <c:when test="${param.page == \"passage\"}">
+                    <% session.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
                     <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"passages\"}">
+                    <% session.setAttribute("passagesAffiches", passages.getAllPassages()); %>
                     <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"user_me\"}">
@@ -89,6 +97,28 @@
                 </c:when>
                 <c:when test="${param.page == \"user\" && !empty param.login}">
                     <c:import url="user.jsp?login=${param.login}"/>
+                </c:when>
+                <c:when test="${param.page == \"passagesByUser\" && empty param.user2}">
+                    <form action="interface_admin.jsp?page=passagesByUser" method="post">
+                        <label for="user2">Entrez le nom de l'utilisateur</label>
+                        <input type="text" id="user2" name="user2">
+                        <input type="submit" value="Valider">
+                    </form>
+                </c:when>
+                <c:when test="${param.page == \"passagesByUser\" && !empty param.user2}">
+                    <% session.setAttribute("passagesAffiches", passages.getPassagesByUserLogin(request.getParameter("user2"))); %>
+                    <c:import url="passage.jsp"/>
+                </c:when>
+                <c:when test="${param.page == \"passagesBySalle\" && empty param.salle}">
+                    <form action="interface_admin.jsp?page=passagesBySalle" method="post">
+                        <label for="salle">Entrez le nom de la salle</label>
+                        <input type="text" id="salle" name="salle">
+                        <input type="submit" value="Valider">
+                    </form>
+                </c:when>
+                <c:when test="${param.page == \"passagesBySalle\" && !empty param.salle}">
+                    <% session.setAttribute("passagesAffiches", passages.getPassagesBySalleName(request.getParameter("salle"))); %>
+                    <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"salles\"}">
                     <c:import url="salles.jsp"/>

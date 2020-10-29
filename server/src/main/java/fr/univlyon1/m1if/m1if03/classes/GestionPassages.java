@@ -23,6 +23,10 @@ public class GestionPassages {
         return filterBySalle(passages, salle);
     }
 
+    public List<Passage> getPassagesBySalleName(String salleName) {
+        return getPassagesBySalle(new Salle(salleName));
+    }
+
     public List<Passage> getPassagesByUser(User user) {
         return filterByUser(passages, user);
     }
@@ -71,7 +75,7 @@ public class GestionPassages {
     private List<Passage> filterByUserLogin(List<Passage> source, String login) {
         List<Passage> res = new ArrayList<>();
         for (Passage passage : source) {
-            if(passage.getUser().getLogin() == login)
+            if(passage.getUser().getLogin().equals(login))
                 res.add(passage);
         }
         return res;

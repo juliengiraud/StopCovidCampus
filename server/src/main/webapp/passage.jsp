@@ -36,14 +36,6 @@
     response.sendRedirect("interface.jsp?page=passage");
 } %>
 
-<c:if test="${!sessionScope.admin}">
-    <% session.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
-</c:if>
-
-<c:if test="${sessionScope.admin}">
-    <% session.setAttribute("passagesAffiches", passages.getAllPassages()); %>
-</c:if>
-
 <h3>Liste de vos passages</h3>
 
 <table class="table">
