@@ -2,7 +2,9 @@ package fr.univlyon1.m1if.m1if03.classes;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GestionPassages {
     private final List<Passage> passages = new ArrayList<>();
@@ -112,5 +114,38 @@ public class GestionPassages {
             }
         }
         return contacts;
+    }
+
+    public List<Salle> getDistinctSalles() {
+        List<Salle> salles = new ArrayList<>();
+        for (Passage p : passages) {
+            if (!salles.contains(p.getSalle())) {
+                salles.add(p.getSalle());
+            }
+        }
+        return salles;
+    }
+
+    public List<Salle> getFullSalles() {
+        List<Salle> salles = new ArrayList<>();
+        Map<Salle, Integer> sallesEtCompteur = new HashMap<>();
+
+        for (Passage p : passages) { // D'abord on compte le nombre de personne dans chaque salle
+            if (!sallesEtCompteur.containsKey(p.getSalle())) {
+                sallesEtCompteur.put(p.getSalle(), 0);
+            }
+            if (p.getSortie() == null) {
+                sallesEtCompteur.put(p.getSalle(), sallesEtCompteur.get(p.getSalle()) + 1);
+            } else {
+                sallesEtCompteur.put(p.getSalle(), sallesEtCompteur.get(p.getSalle()) - 1);
+            }
+        }
+
+        for (Map.Entry<Salle, Integer> s : sallesEtCompteur.entrySet()) { // Puis on ajoute les salles pleines (voire trop pleines)
+            if (s.getValue() >= Salle.CAPACITE_MAX) {
+                salles.add(s.getKey());
+            }
+        }
+        return salles;
     }
 }

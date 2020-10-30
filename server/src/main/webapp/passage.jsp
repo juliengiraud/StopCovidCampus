@@ -2,7 +2,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Passage" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.GestionPassages" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>

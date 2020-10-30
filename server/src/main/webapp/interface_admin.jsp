@@ -74,8 +74,13 @@
                 </div>
             </nav>
         </header>
-        <main class="container-fluid">
+        <main class="container-fluid mt-3">
             <h2>Hello <%= ((User) (session.getAttribute("user"))).getLogin() %> (administrateur) !</h2>
+
+            <c:forEach items="<%= passages.getFullSalles() %>" var="salle">
+                <div class="alert alert-danger" role="alert"> La capacité maximale de la salle <i>${salle.nom}</i> est atteinte !</div>
+            </c:forEach>
+
             <c:choose>
                 <c:when test="${param.from == \"saisie\"}">
                     <% request.getRequestDispatcher("passage.jsp").forward(request, response); %>

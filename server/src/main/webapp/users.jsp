@@ -1,10 +1,5 @@
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.Passage" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Set" %>
-<%@ page import="java.util.HashSet" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
