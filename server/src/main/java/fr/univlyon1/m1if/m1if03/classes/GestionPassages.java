@@ -98,4 +98,19 @@ public class GestionPassages {
         }
         return res;
     }
+
+    public List<User> getContacts(User user) {
+        List<User> contacts = new ArrayList<>();
+        for (Passage p : passages) {
+            if (p.getUser().equals(user)) { // pour chaque passage de l'utilisateur "user"
+                for (Passage p2 : passages) {
+                    if (!p2.getUser().equals(user) // et pour chaque passage d'un autre utilisateur
+                            && p2.isAuMemeEndroitEnMemeTemps(p)) { // s'ils se sont croisés
+                        contacts.add(p2.getUser()); // alors ils sont contacts
+                    }
+                }
+            }
+        }
+        return contacts;
+    }
 }
