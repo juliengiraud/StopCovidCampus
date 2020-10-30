@@ -48,7 +48,7 @@
         </tr>
     </thead>
     <tbody>
-        <c:forEach items="<%= session.getAttribute(\"passagesAffiches\") %>" var="passage">
+        <c:forEach items="<%= request.getAttribute(\"passagesAffiches\") %>" var="passage">
             <tr>
                 <th>${passage.user.login}</th>
                 <td>${passage.salle.nom}</td>

@@ -78,11 +78,11 @@
                     <% request.getRequestDispatcher("passage.jsp").forward(request, response); %>
                 </c:when>
                 <c:when test="${param.page == \"passage\"}">
-                    <% session.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
+                    <% request.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
                     <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"passages\"}">
-                    <% session.setAttribute("passagesAffiches", passages.getAllPassages()); %>
+                    <% request.setAttribute("passagesAffiches", passages.getAllPassages()); %>
                     <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"user_me\"}">
@@ -106,7 +106,7 @@
                     </form>
                 </c:when>
                 <c:when test="${param.page == \"passagesByUser\" && !empty param.user2}">
-                    <% session.setAttribute("passagesAffiches", passages.getPassagesByUserLogin(request.getParameter("user2"))); %>
+                    <% request.setAttribute("passagesAffiches", passages.getPassagesByUserLogin(request.getParameter("user2"))); %>
                     <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"passagesBySalle\" && empty param.salle}">
@@ -117,7 +117,7 @@
                     </form>
                 </c:when>
                 <c:when test="${param.page == \"passagesBySalle\" && !empty param.salle}">
-                    <% session.setAttribute("passagesAffiches", passages.getPassagesBySalleName(request.getParameter("salle"))); %>
+                    <% request.setAttribute("passagesAffiches", passages.getPassagesBySalleName(request.getParameter("salle"))); %>
                     <c:import url="passage.jsp"/>
                 </c:when>
                 <c:when test="${param.page == \"salles\"}">

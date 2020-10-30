@@ -37,7 +37,9 @@
     </thead>
     <tbody>
         <c:forEach items="<%= salles %>" var="salle">
-            <th>${salle.nom}</th>
+            <tr>
+                <th>${salle.nom}</th>
+            </tr>
         </c:forEach>
     </tbody>
 </table>
