@@ -4,6 +4,7 @@
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.HashSet" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
@@ -21,9 +22,11 @@
 
 <%
     List<Passage> passageList = passages.getAllPassages();
-    Set<Salle> salles = new HashSet<>();
-    for(Passage p : passageList){
-        salles.add(p.getSalle());
+    List<Salle> salles = new ArrayList<>();
+    for (Passage p : passageList) {
+        if (!salles.contains(p.getSalle())) {
+            salles.add(p.getSalle());
+        }
     }
 %>
 
@@ -38,7 +41,7 @@
     <tbody>
         <c:forEach items="<%= salles %>" var="salle">
             <tr>
-                <th>${salle.nom}</th>
+                <th><a href="interface_admin.jsp?page=passagesBySalle&salle=${salle.nom}">${salle.nom}</a></th>
             </tr>
         </c:forEach>
     </tbody>
