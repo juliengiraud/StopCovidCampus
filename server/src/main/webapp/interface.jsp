@@ -62,7 +62,7 @@
                     <% request.getRequestDispatcher("passage.jsp").forward(request, response); %>
                 </c:when>
                 <c:when test="${param.page == \"passage\"}">
-                    request.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user")));
+                    <% request.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
                     <c:import url="passage.jsp"></c:import>
                 </c:when>
                 <c:when test="${param.page == \"user\"}">

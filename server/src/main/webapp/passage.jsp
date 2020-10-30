@@ -50,8 +50,8 @@
     <tbody>
         <c:forEach items="<%= request.getAttribute(\"passagesAffiches\") %>" var="passage">
             <tr>
-                <th>${passage.user.login}</th>
-                <td>${passage.salle.nom}</td>
+                <th><a href="interface_admin.jsp?page=passagesByUser&user2=${passage.user.login}">${passage.user.login}</a></th>
+                <td><a href="interface_admin.jsp?page=passagesBySalle&salle=${passage.salle.nom}">${passage.salle.nom}</a></td>
                 <td><fmt:formatDate value="${passage.entree}" var="heureEntree" type="time" />
                         ${heureEntree}</td>
                 <td><fmt:formatDate value="${passage.sortie}" var="heureSortie" type="time" />
