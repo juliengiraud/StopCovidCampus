@@ -59,6 +59,9 @@
                             <a href="interface.jsp?page=user_me" class="nav-link">Voir mon profil</a>
                         </li>
                         <li class="nav-item">
+                            <a href="interface_admin.jsp?page=contacts" class="nav-link">Voir mes contacts</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="interface_admin.jsp?page=user" class="nav-link">Voir un utilisateur</a>
                         </li>
                         <li class="nav-item">
@@ -122,6 +125,9 @@
                 </c:when>
                 <c:when test="${param.page == \"salles\"}">
                     <c:import url="salles.jsp"/>
+                </c:when>
+                <c:when test="${param.page == \"contacts\"}">
+                    <c:import url="users.jsp"></c:import>
                 </c:when>
             </c:choose>
         </main>
