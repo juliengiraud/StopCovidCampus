@@ -1,12 +1,12 @@
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
+<%@ page import="fr.univlyon1.m1if.m1if03.classes.GestionPassages" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page errorPage="erreurs/error.jsp" %>
 
-<jsp:useBean id="passages" class="fr.univlyon1.m1if.m1if03.classes.GestionPassages" scope="application"/>
-<jsp:useBean id="salles" class="java.util.HashMap" scope="application"/>
-<jsp:useBean id="users" class="java.util.HashMap" type="java.util.Map<java.lang.String,fr.univlyon1.m1if.m1if03.classes.User>" scope="application"/>
+<jsp:useBean id="salles" type="java.util.Map<java.lang.String, fr.univlyon1.m1if.m1if03.classes.Salle>" scope="application"/>
+<jsp:useBean id="users" type="java.util.Map<java.lang.String,fr.univlyon1.m1if.m1if03.classes.User>" scope="application"/>
 
 <% // Très moche :
     // - on essaye d'ajouter l'utilisateur à chaque requête
@@ -36,9 +36,9 @@
             <c:when test="${param.contenu == \"passages\"}">
                 <%
                     if (request.getParameter("nomSalle") != null)
-                        request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle((User) session.getAttribute("user"), new Salle(request.getParameter("nomSalle"))));
+                        request.setAttribute("passagesAffiches", ((GestionPassages) application.getAttribute("passages")).getPassagesByUserAndSalle((User) session.getAttribute("user"), new Salle(request.getParameter("nomSalle"))));
                     else
-                        request.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user"))); %>
+                        request.setAttribute("passagesAffiches", ((GestionPassages) application.getAttribute("passages")).getPassagesByUser((User) session.getAttribute("user"))); %>
                 <jsp:include page="contenus/passages.jsp"/>
             </c:when>
             <c:when test="${param.contenu == \"user\"}">

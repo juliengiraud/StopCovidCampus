@@ -7,8 +7,8 @@
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Passage" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
+<%@ page import="fr.univlyon1.m1if.m1if03.classes.GestionPassages" %>
 
-<jsp:useBean id="passages" type="fr.univlyon1.m1if.m1if03.classes.GestionPassages" scope="application"/>
 <jsp:useBean id="salles" type="java.util.Map<java.lang.String, fr.univlyon1.m1if.m1if03.classes.Salle>"
              scope="application"/>
 
@@ -29,11 +29,11 @@
 
         if (request.getParameter("entree") != null) {
             Passage p = new Passage(user, salle, new Date());
-            passages.add(p);
+            ((GestionPassages) application.getAttribute("passages")).add(p);
             passagesAffiches.add(p); // On rajoute le passage dans passageAffiches qui arrive par un attribut de requête
             salle.incPresent();
         } else if (request.getParameter("sortie") != null) {
-            List<Passage> passTemp = passages.getPassagesByUserAndSalle(user, salle);
+            List<Passage> passTemp = ((GestionPassages) application.getAttribute("passages")).getPassagesByUserAndSalle(user, salle);
             for (Passage p : passTemp) { // On mémorise une sortie de tous les passages existants et sans sortie
                 if (p.getSortie() == null) {
                     p.setSortie(new Date());

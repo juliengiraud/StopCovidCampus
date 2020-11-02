@@ -1,11 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<jsp:useBean id="passages" type="fr.univlyon1.m1if.m1if03.classes.GestionPassages" scope="application"/>
-
 <section id="contenu">
     <p><strong>Hello ${sessionScope.user.nom} !</strong></p>
-    <c:set var="myPassages" value="${passages.getPassagesByUserEncours(sessionScope.user)}"/>
+    <c:set var="myPassages" value="${applicationScope.passages.getPassagesByUserEncours(sessionScope.user)}"/>
     <c:if test="${myPassages.size() > 0}">
         <p>Vous êtes actuellement dans les salles :</p>
         <ul>
