@@ -24,5 +24,5 @@ junit:
   script:
     - cd server
     - mvn test --batch-mode clean install package
-    - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY target/server.war gitlabci@192.168.75.76:/opt/tomcat/webapps/v1.war
+    - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY target/tp3.war gitlabci@192.168.75.76:/opt/tomcat/webapps/v1.war
 
