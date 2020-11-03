@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 <header class="wrapper">
     <div class="header-titre"><strong>Présence UCBL</strong></div>
     <c:if test="${sessionScope.user != null}">
