@@ -17,5 +17,16 @@
     <filter-name>auth</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
+  <filter>
+    <filter-name>auth_admin</filter-name>
+    <filter-class>fr.univlyon1.m1if.m1if03.servlets.AuthAdmin</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>auth_admin</filter-name>
+    <url-pattern>/interface_admin.jsp</url-pattern>
+  </filter-mapping>
+
   <display-name>Archetype Created Web Application</display-name>
 </web-app>

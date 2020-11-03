@@ -9,10 +9,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page errorPage="erreurs/error.jsp" %>
 
-<c:if test="${!sessionScope.user.admin}">
-    <% response.sendRedirect("interface.jsp"); %>
-</c:if>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
