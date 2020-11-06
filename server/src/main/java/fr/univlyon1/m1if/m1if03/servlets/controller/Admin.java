@@ -11,19 +11,19 @@ import java.io.IOException;
 public class Admin extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("passages", getServletContext().getAttribute("passages"));
-        request.setAttribute("salles", getServletContext().getAttribute("salles"));
-        request.setAttribute("users", getServletContext().getAttribute("users"));
-
+        initAttributes(request);
         getServletContext().getRequestDispatcher("/interface_admin.jsp").include(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        initAttributes(request);
+        getServletContext().getRequestDispatcher("/interface_admin.jsp").include(request, response);
+    }
+
+    private void initAttributes(HttpServletRequest request) {
         request.setAttribute("passages", getServletContext().getAttribute("passages"));
         request.setAttribute("salles", getServletContext().getAttribute("salles"));
         request.setAttribute("users", getServletContext().getAttribute("users"));
-
-        getServletContext().getRequestDispatcher("/interface_admin.jsp").include(request, response);
     }
 
 }

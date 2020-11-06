@@ -4,46 +4,12 @@
 <%@ page import="java.text.ParseException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.*" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.Passage" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.Salle" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.GestionPassages" %>
 
 <jsp:useBean id="salles" type="java.util.Map<java.lang.String, fr.univlyon1.m1if.m1if03.classes.Salle>"
              scope="request"/>
 
 <c:set var="salle" value="${salles[param.nom]}"/>
 
-<% // Gestion des POST
-    if (request.getMethod().equals("POST")) { // Traitement du formulaire envoyé par saisie_passage.jsp
-        @SuppressWarnings("unchecked")
-        List<Passage> passagesAffiches = (List<Passage>) request.getAttribute("passagesAffiches");
-        String nomSalle = request.getParameter("nom");
-        Salle salle;
-        if (salles.get(nomSalle) == null) {
-            salle = new Salle(nomSalle);
-            salles.put(nomSalle, salle);
-        } else
-            salle = salles.get(nomSalle);
-        User user = (User) session.getAttribute("user");
-
-        if (request.getParameter("entree") != null) {
-            Passage p = new Passage(user, salle, new Date());
-            ((GestionPassages) application.getAttribute("passages")).add(p);
-            passagesAffiches.add(p); // On rajoute le passage dans passageAffiches qui arrive par un attribut de requête
-            salle.incPresent();
-        } else if (request.getParameter("sortie") != null) {
-            List<Passage> passTemp = ((GestionPassages) application.getAttribute("passages")).getPassagesByUserAndSalle(user, salle);
-            for (Passage p : passTemp) { // On mémorise une sortie de tous les passages existants et sans sortie
-                if (p.getSortie() == null) {
-                    p.setSortie(new Date());
-                    salle.decPresent();
-                }
-            }
-        }
-    }
-
-%>
 <section>
 
     <c:if test="${salle.saturee}">
