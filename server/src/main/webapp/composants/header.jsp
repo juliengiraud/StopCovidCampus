@@ -5,6 +5,6 @@
 <header class="wrapper">
     <div class="header-titre"><strong>Présence UCBL</strong></div>
     <c:if test="${sessionScope.user != null}">
-        <div class="header-user"><a href="${sessionScope.user.admin ? 'interface_admin.jsp?contenu=user&login='.concat(sessionScope.user.login) : 'presence?contenu=user&login='.concat(sessionScope.user.login)}"><%= ((User) (session.getAttribute("user"))).getLogin() %></a></div>
+        <div class="header-user"><a href="${sessionScope.user.admin ? 'admin?contenu=user&login='.concat(sessionScope.user.login) : 'presence?contenu=user&login='.concat(sessionScope.user.login)}"><%= ((User) (session.getAttribute("user"))).getLogin() %></a></div>
     </c:if>
 </header>

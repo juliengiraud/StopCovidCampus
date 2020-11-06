@@ -9,7 +9,7 @@
     </p>
     <c:if test="${sessionScope.user.admin}">
         <p>
-            <em><a href="interface_admin.jsp">Interface d'administration</a></em><br>
+            <em><a href="admin">Interface d'administration</a></em><br>
         </p>
     </c:if>
     <p>

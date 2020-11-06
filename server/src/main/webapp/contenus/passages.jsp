@@ -103,7 +103,7 @@
                 </td>
                 <c:if test="${passage.sortie != null && sessionScope.user.admin}">
                     <td>
-                        <a href="interface_admin.jsp?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">tous
+                        <a href="admin?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">tous
                             les présents</a>
                     </td>
                 </c:if>

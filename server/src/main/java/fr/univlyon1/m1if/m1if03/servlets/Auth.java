@@ -25,7 +25,7 @@ public class Auth extends HttpFilter {
                 session.setAttribute("user", user);
                 chain.doFilter(req, res);
             } else {
-                res.sendRedirect("index.jsp");
+                res.sendRedirect("./");
             }
         } else {
             chain.doFilter(req, res);

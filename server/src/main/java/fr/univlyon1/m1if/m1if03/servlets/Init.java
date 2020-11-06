@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Init extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("./");
     }
 
     public void init(ServletConfig config) {
