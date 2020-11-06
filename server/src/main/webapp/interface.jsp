@@ -5,8 +5,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page errorPage="erreurs/error.jsp" %>
 
-<jsp:useBean id="salles" type="java.util.Map<java.lang.String, fr.univlyon1.m1if.m1if03.classes.Salle>" scope="application"/>
-<jsp:useBean id="users" type="java.util.Map<java.lang.String,fr.univlyon1.m1if.m1if03.classes.User>" scope="application"/>
+<jsp:useBean id="salles" type="java.util.Map<java.lang.String, fr.univlyon1.m1if.m1if03.classes.Salle>" scope="request"/>
+<jsp:useBean id="users" type="java.util.Map<java.lang.String,fr.univlyon1.m1if.m1if03.classes.User>" scope="request"/>
 
 <% // Très moche :
     // - on essaye d'ajouter l'utilisateur à chaque requête

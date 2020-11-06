@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <jsp:useBean id="salles" type="java.util.Map<java.lang.String, fr.univlyon1.m1if.m1if03.classes.Salle>"
-             scope="application"/>
+             scope="request"/>
 <section>
     <h1>Liste des salles</h1>
 

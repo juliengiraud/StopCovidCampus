@@ -20,6 +20,7 @@ public class Init extends HttpServlet {
     }
 
     public void init(ServletConfig config) {
+        config.getServletContext().setResponseCharacterEncoding("UTF-8");
         config.getServletContext().setAttribute("passages", new GestionPassages());
         config.getServletContext().setAttribute("salles", new HashMap<String, Salle>());
         config.getServletContext().setAttribute("users", new HashMap<String, User>());

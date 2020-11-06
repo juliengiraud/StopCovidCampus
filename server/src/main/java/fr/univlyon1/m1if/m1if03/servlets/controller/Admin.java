@@ -11,12 +11,18 @@ import java.io.IOException;
 public class Admin extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        response.setCharacterEncoding("UTF-8");
+        request.setAttribute("passages", getServletContext().getAttribute("passages"));
+        request.setAttribute("salles", getServletContext().getAttribute("salles"));
+        request.setAttribute("users", getServletContext().getAttribute("users"));
+
         getServletContext().getRequestDispatcher("/interface_admin.jsp").include(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        response.setCharacterEncoding("UTF-8");
+        request.setAttribute("passages", getServletContext().getAttribute("passages"));
+        request.setAttribute("salles", getServletContext().getAttribute("salles"));
+        request.setAttribute("users", getServletContext().getAttribute("users"));
+
         getServletContext().getRequestDispatcher("/interface_admin.jsp").include(request, response);
     }
 
