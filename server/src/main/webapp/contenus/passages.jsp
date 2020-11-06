@@ -5,10 +5,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.*" %>
 
-<jsp:useBean id="salles" type="java.util.Map<java.lang.String, fr.univlyon1.m1if.m1if03.classes.Salle>"
-             scope="request"/>
-
-<c:set var="salle" value="${salles[param.nom]}"/>
+<c:set var="salle" value="${requestScope.salles[param.nom]}"/>
 
 <section>
 

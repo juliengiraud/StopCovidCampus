@@ -3,11 +3,11 @@
 
 <header class="wrapper">
     <div class="header-titre"><strong>Présence UCBL</strong></div>
-    <c:if test="${sessionScope.user != null}">
+    <c:if test="${requestScope.user != null}">
         <div class="header-user">
-            <a href="${(sessionScope.user.admin ? 'admin' : 'presence')
+            <a href="${(requestScope.user.admin ? 'admin' : 'presence')
                     .concat('?contenu=user&login=')
-                    .concat(sessionScope.user.login)}">${sessionScope.user.login}</a>
+                    .concat(requestScope.user.login)}">${requestScope.user.login}</a>
         </div>
     </c:if>
 </header>

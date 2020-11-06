@@ -59,9 +59,14 @@ public class Presence extends HttpServlet {
     }
 
     private void initAttributes(HttpServletRequest request) {
-        request.setAttribute("passages", getServletContext().getAttribute("passages"));
+        User actualUser = (User) request.getSession().getAttribute("user");
+        GestionPassages passages = ((GestionPassages) getServletContext().getAttribute("passages"));
+
+        request.setAttribute("passages", passages);
         request.setAttribute("salles", getServletContext().getAttribute("salles"));
         request.setAttribute("users", getServletContext().getAttribute("users"));
+        request.setAttribute("user", actualUser);
+        request.setAttribute("myPassages", passages.getPassagesByUserEncours(actualUser));
     }
 
 }

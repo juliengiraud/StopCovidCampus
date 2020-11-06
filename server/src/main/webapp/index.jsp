@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="static/presence.css">
 </head>
 <body>
+
 <jsp:include page="composants/header.jsp"/>
 
 <main id="contenu" class="wrapper">

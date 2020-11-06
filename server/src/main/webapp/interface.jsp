@@ -42,7 +42,7 @@
                 <jsp:include page="contenus/passages.jsp"/>
             </c:when>
             <c:when test="${param.contenu == \"user\"}">
-                <jsp:include page="contenus/user.jsp?login=${sessionScope.user.login}"/>
+                <jsp:include page="contenus/user.jsp?login=${requestScope.user.login}"/>
             </c:when>
             <c:otherwise>
                 <jsp:include page="contenus/${param.contenu}.jsp"/>

@@ -7,7 +7,7 @@
         <a href="presence?contenu=saisie_passage">Nouveau passage</a><br>
         <a href="presence?contenu=passages">Mes passages</a>
     </p>
-    <c:if test="${sessionScope.user.admin}">
+    <c:if test="${requestScope.user.admin}">
         <p>
             <em><a href="admin">Interface d'administration</a></em><br>
         </p>
