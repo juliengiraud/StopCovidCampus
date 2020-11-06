@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.servlets;
+package fr.univlyon1.m1if.m1if03.servlets.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "presence", urlPatterns = "/presence")
-public class Controller extends HttpServlet {
+public class Presence extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");

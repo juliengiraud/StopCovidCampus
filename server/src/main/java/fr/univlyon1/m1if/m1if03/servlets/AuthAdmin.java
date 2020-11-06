@@ -17,7 +17,7 @@ public class AuthAdmin extends HttpFilter {
         if (u.getAdmin()) {
             chain.doFilter(req, res);
         } else {
-            res.sendRedirect("interface.jsp");
+            res.sendRedirect("presence");
         }
     }
 }

@@ -13,7 +13,7 @@
         <a href="interface_admin.jsp?contenu=user_form">Utilisateur</a>
     </p>
     <p>
-        <em><a href="interface.jsp">Interface classique</a></em>
+        <em><a href="presence">Interface classique</a></em>
     </p>
     <p><a href="Deco">Déconnexion</a></p>
 </aside>
