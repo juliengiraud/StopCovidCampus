@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -58,15 +59,34 @@ public class Presence extends HttpServlet {
         }
     }
 
+    private void initPassagesAffiches(HttpServletRequest request, GestionPassages passages, User user) {
+        Salle salle = null;
+        if (request.getParameter("nomSalle") != null) {
+            salle = new Salle(request.getParameter("nomSalle"));
+        }
+
+        List<Passage> passagesAffiches = salle != null ?
+                passages.getPassagesByUserAndSalle(user, salle) :
+                passages.getPassagesByUser(user);
+
+        request.setAttribute("passagesAffiches", passagesAffiches);
+    }
+
     private void initAttributes(HttpServletRequest request) {
         User actualUser = (User) request.getSession().getAttribute("user");
         GestionPassages passages = ((GestionPassages) getServletContext().getAttribute("passages"));
+        Map<String, User> users = (Map<String, User>) getServletContext().getAttribute("users");
+
+        if (!users.containsValue(actualUser)) {
+            users.put(actualUser.getLogin(), actualUser);
+        }
 
         request.setAttribute("passages", passages);
         request.setAttribute("salles", getServletContext().getAttribute("salles"));
-        request.setAttribute("users", getServletContext().getAttribute("users"));
+        request.setAttribute("users", users);
         request.setAttribute("user", actualUser);
         request.setAttribute("myPassages", passages.getPassagesByUserEncours(actualUser));
+        initPassagesAffiches(request, passages, actualUser);
     }
 
 }
