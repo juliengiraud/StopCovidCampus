@@ -14,6 +14,10 @@ import java.io.IOException;
 public class Auth extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        if (req.getRequestURI().contains("/static/")) {
+            chain.doFilter(req, res);
+            return;
+        }
         if (!req.getServletPath().substring(1).contains("index.jsp")) {
             if (req.getSession().getAttribute("user") != null) {
                 chain.doFilter(req, res);
