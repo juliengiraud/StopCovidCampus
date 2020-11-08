@@ -30,6 +30,16 @@
   </filter-mapping>
 
   <filter>
+    <filter-name>cache_accueil</filter-name>
+    <filter-class>fr.univlyon1.m1if.m1if03.servlets.CacheAccueil</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>cache_accueil</filter-name>
+    <url-pattern>/presence</url-pattern>
+  </filter-mapping>
+
+  <filter>
     <filter-name>cache</filter-name>
     <filter-class>fr.univlyon1.m1if.m1if03.servlets.Cache</filter-class>
   </filter>

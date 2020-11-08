@@ -20,6 +20,7 @@ import java.util.Map;
 public class Presence extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        response.setIntHeader("Refresh", 5);
         initAttributes(request);
         getServletContext().getRequestDispatcher("/WEB-INF/jsp/interface.jsp").include(request, response);
     }
@@ -27,6 +28,7 @@ public class Presence extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getParameter("login") == null) { // Traitement du formulaire envoyé par saisie_passage.jsp
             saisiePassage(request);
+            response.sendRedirect("presence");
         }
 
         initAttributes(request);
@@ -39,6 +41,7 @@ public class Presence extends HttpServlet {
         Map<String, Salle> salles = (Map<String, Salle>) getServletContext().getAttribute("salles");
         if (salles.get(nomSalle) == null) {
             salle = new Salle(nomSalle);
+            salle.setCapacite(1);
             salles.put(nomSalle, salle);
         } else
             salle = salles.get(nomSalle);
@@ -57,6 +60,7 @@ public class Presence extends HttpServlet {
                 }
             }
         }
+
     }
 
     private void initPassagesAffiches(HttpServletRequest request, GestionPassages passages, User user) {

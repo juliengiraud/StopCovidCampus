@@ -3,20 +3,15 @@ package fr.univlyon1.m1if.m1if03.servlets;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 @WebFilter(filterName = "cache", urlPatterns = {"/presence", "/admin"})
 public class Cache extends HttpFilter {
     //On stocke la date au premier chargement de la page
     private Date date = new Date();
-    private int i = 1;
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
