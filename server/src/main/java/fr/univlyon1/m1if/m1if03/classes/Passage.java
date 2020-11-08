@@ -48,23 +48,4 @@ public class Passage {
                 entree.equals(passage.entree) &&
                 Objects.equals(sortie, passage.sortie);
     }
-
-    /**
-     * Retourne vraie si deux passages ont lieu au même endroit au même moment
-     * @param p
-     * @return
-     */
-    public boolean isAuMemeEndroitEnMemeTemps(Passage p) {
-        if (!salle.equals(p.salle)) { // Pas au même endroit
-            return false;
-        }
-        Date a = getEntree();
-        Date b = getSortie();
-        Date c = p.getEntree();
-        Date d = p.getSortie();
-        // L'interval "a,b" touche l'interval "c,d" si "a" inclus dans "c,d" ou si b inclus dans "c,d"
-        // ou si "c" inclus dans "a,b" ou si "d" inclus dans "a,b"
-        return (a.after(c) && a.before(d) || b.after(c) && b.before(d)
-                || c.after(a) && c.before(b) || d.after(a) && d.before(b));
-    }
 }
