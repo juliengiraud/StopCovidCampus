@@ -10,6 +10,6 @@ import java.io.IOException;
 public class Deco extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
-        response.sendRedirect("Init");
+        response.sendRedirect("./");
     }
 }
