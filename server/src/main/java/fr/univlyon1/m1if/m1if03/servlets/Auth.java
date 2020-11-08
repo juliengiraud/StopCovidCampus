@@ -29,7 +29,7 @@ public class Auth extends HttpFilter {
                 session.setAttribute("user", user);
                 chain.doFilter(req, res);
             } else {
-                res.sendRedirect("./");
+                getServletContext().getRequestDispatcher("/WEB-INF/jsp/index.jsp").include(req, res);
             }
         } else {
             chain.doFilter(req, res);

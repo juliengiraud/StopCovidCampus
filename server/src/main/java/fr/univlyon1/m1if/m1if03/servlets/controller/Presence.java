@@ -21,7 +21,7 @@ public class Presence extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         initAttributes(request);
-        getServletContext().getRequestDispatcher("/interface.jsp").include(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/jsp/interface.jsp").include(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -30,7 +30,7 @@ public class Presence extends HttpServlet {
         }
 
         initAttributes(request);
-        getServletContext().getRequestDispatcher("/interface.jsp").include(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/jsp/interface.jsp").include(request, response);
     }
 
     private void saisiePassage(HttpServletRequest request) {

@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<jsp:include page="composants/header.jsp"/>
+<jsp:include page="/WEB-INF/jsp/composants/header.jsp"/>
 
 <main id="contenu" class="wrapper">
     <aside class="menu"></aside>
@@ -40,6 +40,6 @@
     </article>
 </main>
 
-<jsp:include page="composants/footer.html"/>
+<jsp:include page="/WEB-INF/jsp/composants/footer.html"/>
 </body>
 </html>

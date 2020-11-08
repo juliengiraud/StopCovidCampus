@@ -23,7 +23,7 @@ public class Admin extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         initAttributes(request);
-        getServletContext().getRequestDispatcher("/interface_admin.jsp").include(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/jsp/interface_admin.jsp").include(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -32,7 +32,7 @@ public class Admin extends HttpServlet {
         if (request.getParameter("nomSalle") != null && request.getParameter("capacite") != null) {
             saisieCapaciteSalle(request);
         }
-        getServletContext().getRequestDispatcher("/interface_admin.jsp").include(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/jsp/interface_admin.jsp").include(request, response);
     }
 
     private void saisieCapaciteSalle(HttpServletRequest request) {
