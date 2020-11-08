@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <section>
-    <h1>Passages d'un utilisateur</h1>
+    <h1>Passages dans une salle</h1>
 
     <form method="get" action="admin">
         <label>
-            Login de l'utilisateur cherché :
-            <input type="text" name="login" autofocus>
+            Nom de la salle cherchée :
+            <input type="text" name="nomSalle" autofocus>
         </label>
         <input type="hidden" name="contenu" value="passages">
         <input type="submit" value="Envoyer">
