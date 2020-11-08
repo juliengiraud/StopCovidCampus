@@ -25,8 +25,8 @@ public class Cache extends HttpFilter {
                 chain.doFilter(req, res);
             } //S'il s'ajout de l'affichage de tous les passages par un admin
             else if (url.equals("admin") && req.getMethod().equals("GET")) {
-                long lastModifiedFromBrowser = req.getDateHeader("If-Modified-Since")/1000*1000;
-                long lastModifiedFromServer = this.date.getTime()/1000*1000;
+                long lastModifiedFromBrowser = (req.getDateHeader("If-Modified-Since")/1000)*1000;
+                long lastModifiedFromServer = (this.date.getTime()/1000)*1000;
                 if (lastModifiedFromBrowser != -1 && lastModifiedFromServer <= lastModifiedFromBrowser) {
                     res.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 } else {
