@@ -27,6 +27,7 @@ public class Presence extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getParameter("login") == null) { // Traitement du formulaire envoyé par saisie_passage.jsp
             saisiePassage(request);
+            response.sendRedirect("presence");
         }
 
         initAttributes(request);
