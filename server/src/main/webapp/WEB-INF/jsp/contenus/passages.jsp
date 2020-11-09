@@ -1,17 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.text.ParseException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.*" %>
-
-<c:set var="salle" value="${requestScope.salles[param.nom]}"/>
+<%@ page contentType="text/html; charset=UTF-8" %>
 
 <section>
-
-    <c:if test="${salle.saturee}">
-        <h2><span style="color: red">Alerte : capacite de la salle ${param.nom} dépassée</span></h2>
-    </c:if>
     <h1>
         Liste des passages
         <c:if test="${param.login != null}">
@@ -43,6 +37,7 @@
 
     <table>
         <tr>
+            <th>Numéro</th>
             <th>Login</th>
             <th>Salle</th>
             <th>Entrée</th>
@@ -50,6 +45,7 @@
         </tr>
         <c:forEach items="${requestScope.passagesAffiches}" var="passage">
             <tr>
+                <td><a href="<%= request.getServletPath().substring(1) %>?contenu=passage&num=${passage.id}">${passage.id}</a></td>
                 <td>
                     <a href="<%= request.getServletPath().substring(1) %>?contenu=passages&login=${passage.user.login}">${passage.user.login}</a>
                 </td>

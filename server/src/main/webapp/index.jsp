@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,8 +7,7 @@
     <link rel="stylesheet" type="text/css" href="static/presence.css">
 </head>
 <body>
-
-<jsp:include page="/WEB-INF/jsp/composants/header.jsp"/>
+<jsp:include page="WEB-INF/jsp/composants/header.jsp"/>
 
 <main id="contenu" class="wrapper">
     <aside class="menu"></aside>
@@ -34,12 +33,12 @@
                 </label>
             </p>
             <p>
-                <input type="submit" value="Connexion">
+                <input type="submit" name="action" value="Connexion">
             </p>
         </form>
     </article>
 </main>
 
-<jsp:include page="/WEB-INF/jsp/composants/footer.html"/>
+<jsp:include page="WEB-INF/jsp/composants/footer.html"/>
 </body>
 </html>

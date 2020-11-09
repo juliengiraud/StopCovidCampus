@@ -9,7 +9,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>4 Maven Webapp</name>
+  <name>tp3 Maven Webapp</name>
   <url>https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/</url>
 
   <properties>
@@ -35,6 +35,13 @@
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>3.11.0</version>
     </dependency>
   </dependencies>
 
