@@ -23,6 +23,9 @@
     <filter-name>Authentication</filter-name>
     <url-pattern>/presence</url-pattern>
     <url-pattern>/admin</url-pattern>
+    <url-pattern>/users</url-pattern>
+    <url-pattern>/salles</url-pattern>
+    <url-pattern>/passages</url-pattern>
   </filter-mapping>
 
   <filter>
