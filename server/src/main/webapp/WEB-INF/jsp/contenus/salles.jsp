@@ -17,12 +17,12 @@
             <tr>
                 <td><a href="admin?contenu=salle&nomSalle=${salleEntry.value.nom}">${salleEntry.value.nom}</a></td>
                 <td>
-                    <form action="admin" method="post" accept-charset="utf-8">
+                    <form action="salles" method="put" accept-charset="utf-8">
                         <input type="text" name="capacite" size="3"
                                value="${salleEntry.value.capacite != -1 ? salleEntry.value.capacite : ''}"/>
                         <input type="hidden" name="contenu" value="salles">
                         <input type="hidden" name="nomSalle" value="${salleEntry.value.nom}">
-                        <input type="submit" name="action" value="Modifier">
+                        <input type="submit" value="Modifier">
                     </form>
                 </td>
                 <td>${salleEntry.value.presents} présent(s)</td>
@@ -32,10 +32,10 @@
                     </c:if>
                 </td>
                 <td>
-                    <form action="admin" method="post" accept-charset="UTF-8">
+                    <form action="salles" method="delete" accept-charset="UTF-8">
                         <input type="hidden" name="contenu" value="salles">
                         <input type="hidden" name="nomSalle" value="${salleEntry.value.nom}">
-                        <input type="submit" name="action" value="Supprimer">
+                        <input type="submit" value="Supprimer">
                     </form>
                 </td>
             </tr>
@@ -43,11 +43,11 @@
     </table>
     <hr>
     <h2>Ajouter une salle</h2>
-    <form action="admin" method="post" accept-charset="UTF-8">
+    <form action="salles" method="post" accept-charset="UTF-8">
         <input type="hidden" name="contenu" value="salles">
         <label> Nom de la salle :
             <input type="text" name="nomSalle">
         </label>
-        <input type="submit" name="action" value="Ajouter">
+        <input type="submit" value="Ajouter">
     </form>
 </section>
