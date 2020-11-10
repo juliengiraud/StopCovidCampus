@@ -76,9 +76,12 @@ public class PassageController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //todo faire que ça soit beau
+
+        //admin
         String contenu = request.getParameter("contenu");
         if (contenu != null) {
-            if (contenu.equals("passage")) {
+            if (contenu.equals("passages")) {
                 if (request.getParameter("nomSalle") != null) {
                     if (request.getParameter("login") != null)
                         request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle(new User(request.getParameter("login")), new Salle(request.getParameter("nomSalle"))));
@@ -110,7 +113,48 @@ public class PassageController extends HttpServlet {
             // Attribut de requête pour default
             request.setAttribute("mesPassages", passages.getPassagesByUserEncours((User) request.getSession().getAttribute("user")));
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp");
-        dispatcher.include(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp").include(request, response);
+
+        //Utilisateur normal
+        HttpSession session = request.getSession();
+        if (request.getParameter("contenu") != null) {
+            switch (request.getParameter("contenu")) {
+                case "passages":
+                    if (request.getParameter("nomSalle") != null)
+                        request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle((User) session.getAttribute("user"), new Salle(request.getParameter("nomSalle"))));
+                    else
+                        request.setAttribute("passagesAffiches", passages.getPassagesByUser((User) session.getAttribute("user")));
+                    break;
+                case "passage":
+                    try {
+                        int id = Integer.parseInt(request.getParameter("num"));
+                        Passage passage = passages.getPassageById(id);
+                        if (!passage.getUser().equals(session.getAttribute("user"))) {
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                            return;
+                        }
+                        request.setAttribute("passage", passages.getPassageById(id));
+                    } catch (Exception e) {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "numéro du passage non présent ou invalide");
+                        return;
+                    }
+                    break;
+                case "user":
+                    if (request.getParameter("login") != null && !request.getParameter("login").equals(((User) (session.getAttribute("user"))).getLogin())) {
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                        return;
+                    } else if (session.getAttribute("user") == null) {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                        return;
+                    }
+                    request.setAttribute("user", session.getAttribute("user"));
+                    break;
+            }
+        } else {
+            // Attribut de requête pour default
+            request.setAttribute("mesPassages", passages.getPassagesByUserEncours((User) session.getAttribute("user")));
+            response.setHeader("Refresh", "5");
+        }
+        request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp").include(request, response);
     }
 }

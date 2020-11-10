@@ -34,7 +34,6 @@ public class UserController extends HttpServlet {
         if (contenu != null && contenu.equals("user")) {
             request.setAttribute("user", users.get(request.getParameter("login")));
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp");
-        dispatcher.include(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp").include(request, response);
     }
 }

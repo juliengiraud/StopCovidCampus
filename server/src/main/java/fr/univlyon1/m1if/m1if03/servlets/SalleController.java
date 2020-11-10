@@ -37,8 +37,7 @@ public class SalleController extends HttpServlet {
         if (contenu != null && contenu.equals("salle")) {
             request.setAttribute("salle", salles.get(request.getParameter("nomSalle")));
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp");
-        dispatcher.include(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp").include(request, response);
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
