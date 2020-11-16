@@ -25,7 +25,7 @@ public class UserController extends HttpServlet {
         this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
     }
 
