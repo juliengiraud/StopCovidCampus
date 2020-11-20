@@ -1,9 +1,7 @@
 package fr.univlyon1.m1if.m1if03.servlets;
 
 import fr.univlyon1.m1if.m1if03.classes.Salle;
-import fr.univlyon1.m1if.m1if03.classes.User;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,11 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Map;
 
-@WebServlet(name = "SalleController", urlPatterns = "/salles/*")
+@WebServlet(name = "SalleController", urlPatterns = "/salle")
 public class SalleController extends HttpServlet {
     Map<String, Salle> salles;
 
@@ -32,12 +28,12 @@ public class SalleController extends HttpServlet {
         doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String contenu = request.getParameter("contenu");
-        if (contenu != null && contenu.equals("salle")) {
-            request.setAttribute("salle", salles.get(request.getParameter("nomSalle")));
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (verifyRequest(request, response)) {
+            Salle salle = salles.get(request.getParameter("nomSalle"));
+            salles.remove(salle.getNom());
         }
-        request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp").include(request, response);
+        doGet(request, response);
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,17 +49,30 @@ public class SalleController extends HttpServlet {
         doGet(request, response);
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (verifyRequest(request, response)) {
-            Salle salle = salles.get(request.getParameter("nomSalle"));
-            salles.remove(salle.getNom());
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String contenu = request.getParameter("contenu");
+        if (contenu != null) {
+            if (contenu.equals("salle")) {
+                request.setAttribute("salle", salles.get(request.getParameter("nomSalle")));
+            } else if (contenu.equals("salles")) {
+                request.setAttribute("salles", salles);
+            }
         }
-        doGet(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp").include(request, response);
     }
 
     private boolean verifyRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (request.getParameter("action") == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non spécifiée.");
+            return false;
+        }
+        // Si le paramètre "action" est "Connexion", la requête est traitée dans le filtre, il n'y a rien à faire.
+        if (request.getParameter("action").equals("connexion")) {
+            return false;
+        }
+
         String contenu = request.getParameter("contenu");
-        if (contenu != null && contenu.equals("salle")) {
+        if (contenu != null && contenu.equals("salles")) {
             Salle salle;
             if (request.getParameter("nomSalle") == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle doit être précisé.");
