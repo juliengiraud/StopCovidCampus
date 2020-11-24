@@ -15,21 +15,25 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-@WebServlet(name = "PassageController", urlPatterns = "/passage")
+@WebServlet(name = "PassageController", urlPatterns = "/passage/*") // TODO filtrer les 401
 public class PassageController extends HttpServlet {
+
     GestionPassages passages;
     Map<String, Salle> salles;
+    Map<String, User> users;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.passages = (GestionPassages) config.getServletContext().getAttribute("passages");
         this.salles = (Map<String, Salle>) config.getServletContext().getAttribute("salles");
+        this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -77,7 +81,7 @@ public class PassageController extends HttpServlet {
         doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException { // TODO 403 pour tous les GET
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
         String contenu = request.getParameter("contenu");
@@ -129,4 +133,130 @@ public class PassageController extends HttpServlet {
             }
         }
     }
+
+    // GET /passages
+    private void getPassages(HttpServletRequest request, HttpServletResponse response) {
+        List<Passage> passage = passages.getAllPassages();
+        // TODO envoyer passages
+    }
+
+    // GET /passages/{passageId}
+    private void getPassage(HttpServletRequest request, HttpServletResponse response,
+                            String passageId) throws IOException {
+        int id = -1;
+        try {
+            id = Integer.parseInt(passageId);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La capacité d'une salle doit être un nombre entier.");
+        }
+        Passage passage = passages.getPassageById(id);
+        if (passage == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Le passage " + id + "n'existe pas.");
+            return;
+        }
+        // TODO envoyer passage
+    }
+
+    // GET /passages/byUser/{userId}
+    private void getPassagesByUser(HttpServletRequest request, HttpServletResponse response,
+                                   String userId) throws IOException {
+        User user = users.get(userId);
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
+            return;
+        }
+        List<Passage> passageByUser = this.passages.getPassagesByUser(user);
+        // TODO envoyer passageByUser
+    }
+
+    // GET /passages/byUser/{userId}/enCours
+    private void getPassagesByUserEnCours(HttpServletRequest request, HttpServletResponse response,
+                                          String userId) throws IOException {
+        User user = users.get(userId);
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
+            return;
+        }
+        List<Passage> passageByUserEnCours = this.passages.getPassagesByUserEncours(user);
+        // TODO envoyer passageByUserEnCours
+    }
+
+    // GET /passages/byUserAndDates/{userId}/{dateEntree}/{dateSortie}
+    private void getPassagesByUserAndDates(HttpServletRequest request, HttpServletResponse response,
+                                          String userId, String dateEntree, String dateSortie) throws IOException {
+        User user = users.get(userId);
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
+            return;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
+        Date entree;
+        Date sortie;
+        try {
+            entree = sdf.parse(dateEntree);
+            sortie = sdf.parse(dateSortie);
+        } catch (ParseException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La date est invalide.");
+            return;
+        }
+        List<Passage> passagesByUserAndDates = passages.getPassagesByUserAndDates(user, entree, sortie);
+        // TODO envoyer passagesByUserAndDates
+    }
+
+    // GET /passages/bySalle/{salleId}
+    private void getPassagesBySalle(HttpServletRequest request, HttpServletResponse response,
+                                    String salleId) throws IOException {
+        Salle salle = salles.get(salleId);
+        if (salle == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            return;
+        }
+        List<Passage> passagesBySalle = passages.getPassagesBySalle(salle);
+        // TODO envoyer passagesBySalle
+    }
+
+    // GET /passages/bySalleAndDates/{salleId}/{dateEntree}/{dateSortie}
+    private void getPassagesBySalleAndDates(HttpServletRequest request, HttpServletResponse response,
+                                            String salleId, String dateEntree, String dateSortie) throws IOException {
+        Salle salle = salles.get(salleId);
+        if (salle == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            return;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
+        Date entree;
+        Date sortie;
+        try {
+            entree = sdf.parse(dateEntree);
+            sortie = sdf.parse(dateSortie);
+        } catch (ParseException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La date est invalide.");
+            return;
+        }
+        List<Passage> passagesBySalleAndDates = passages.getPassagesBySalleAndDates(salle, entree, sortie);
+        // TODO envoyer passagesBySalleAndDates
+    }
+
+    // GET /passages/byUserAndSalle/{userId}/{salleId}
+    private void getPassagesByUserAndSalle(HttpServletRequest request, HttpServletResponse response,
+                                           String userId, String salleId) throws IOException {
+        User user = users.get(userId);
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
+            return;
+        }
+        Salle salle = salles.get(salleId);
+        if (salle == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            return;
+        }
+        List<Passage> passagesByUserAndSalle = passages.getPassagesByUserAndSalle(user, salle);
+        // TODO envoyer passagesByUserAndSalle
+    }
+
+    // POST /passages {"user": "string", salle": "string", dateEntree": "string", dateSortie": "string"}
+    private void createPassage(HttpServletRequest request, HttpServletResponse response) {
+        // TODO
+    }
+
 }

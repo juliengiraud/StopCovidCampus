@@ -124,13 +124,19 @@ public class SalleController extends HttpServlet {
 
     // PUT /salles/{salleId}
     private void doUpdateSalle(HttpServletRequest request, HttpServletResponse response, String salleId, String capacite) throws IOException {
+        int newCapacite;
         try {
-            int newCapacite = Integer.parseInt(capacite);
-            Salle salle = salles.get(salleId);
-            salle.setCapacite(newCapacite);
+            newCapacite = Integer.parseInt(capacite);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La capacité d'une salle doit être un nombre entier.");
+            return;
         }
+        Salle salle = salles.get(salleId);
+        if (salle == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            return;
+        }
+        salle.setCapacite(newCapacite);
     }
 
     // DELETE /salles/{salleId}
