@@ -16,12 +16,13 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-@WebServlet(name = "PassageController", urlPatterns = "/passage/*") // TODO filtrer les 401
+@WebServlet(name = "PassageController", urlPatterns = "/passage/*")
 public class PassageController extends HttpServlet {
 
     GestionPassages passages;
@@ -36,101 +37,47 @@ public class PassageController extends HttpServlet {
         this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String action = request.getParameter("action");
-        if (request.getParameter("action") == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non spécifiée.");
-            return;
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<String> path = Arrays.asList(request.getRequestURI().split("/"));
+        int startIndex = path.indexOf("passages");
+        int endIndex = path.size();
+        path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
-        // Si le paramètre "action" est "Connexion", la requête est traitée dans le filtre, il n'y a rien à faire.
-        if (action.equals("Connexion")) {
-            doGet(request, response);
-        }
-
-        String nomSalle = request.getParameter("nomSalle");
-        if (nomSalle == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Salle non spécifiée.");
-            return;
-        }
-        Salle salle = salles.get(nomSalle);
-        if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + nomSalle + " n'existe pas.");
-            return;
-        }
-
-        User user = (User) session.getAttribute("user");
-
-        if (action.equals("Entrer")) {
-            Passage p = new Passage(user, salle, new Date());
-            passages.add(p);
-            salle.incPresent();
-        } else if (action.equals("Sortir")) {
-            List<Passage> passTemp = passages.getPassagesByUserAndSalle(user, salle);
-            for (Passage p : passTemp) { // On mémorise une sortie de tous les passages existants et sans sortie
-                if (p.getSortie() == null) {
-                    p.setSortie(new Date());
-                    salle.decPresent();
-                }
-            }
+        if (path.size() == 1) { // GET /passages
+            getPassages(request, response);
+        } else if (path.size() == 2) { // GET /passages/{passageId}
+            getPassage(request, response, path.get(1));
+        } else if (path.size() == 3 && path.get(1).equals("byUser")) { // GET /passages/byUser/{userId}
+            getPassagesByUser(request, response, path.get(2));
+        } else if (path.size() == 4 && path.get(1).equals("byUser") && path.get(3).equals("enCours")) { // GET /passages/byUser/{userId}/enCours
+            getPassagesByUserEnCours(request, response, path.get(2));
+        } else if (path.size() == 5 && path.get(1).equals("byUserAndDates")) { // GET /passages/byUserAndDates/{userId}/{dateEntree}/{dateSortie}
+            getPassagesByUserAndDates(request, response, path.get(2), path.get(3), path.get(4));
+        } else if (path.size() == 3 && path.get(1).equals("bySalle")) { // GET /passages/bySalle/{salleId}
+            getPassagesBySalle(request, response, path.get(2));
+        } else if (path.size() == 5 && path.get(1).equals("bySalleAndDates")) { // GET /passages/bySalleAndDates/{salleId}/{dateEntree}/{dateSortie}
+            getPassagesBySalleAndDates(request, response, path.get(2), path.get(3), path.get(4));
+        } else if (path.size() == 4 && path.get(1).equals("byUserAndSalle")) { // GET /passages/byUserAndSalle/{userId}/{salleId}
+            getPassagesByUserAndSalle(request, response, path.get(2), path.get(3));
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action " + request.getParameter("action") + " invalide.");
-            return;
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
-        doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException { // TODO 403 pour tous les GET
-        HttpSession session = request.getSession();
-        User userSession = (User) session.getAttribute("user");
-        String contenu = request.getParameter("contenu");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<String> path = Arrays.asList(request.getRequestURI().split("/"));
+        int startIndex = path.indexOf("passages");
+        int endIndex = path.size();
+        path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
-        // Attribut de requête par défaut
-        if (contenu == null) {
-            request.setAttribute("mesPassages", passages.getPassagesByUserEncours(userSession));
-            response.setHeader("Refresh", "5");
-            //request.getRequestDispatcher("WEB-INF/jsp/interface_admin.jsp").include(request, response);
-            //return;
-        }
-
-        if (contenu.equals("passages")) {
-            if (request.getParameter("nomSalle") != null) {
-                if (request.getParameter("login") != null) {
-                    request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle(new User(request.getParameter("login")), new Salle(request.getParameter("nomSalle"))));
-                } else if (request.getParameter("dateEntree") != null && request.getParameter("dateSortie") != null) {
-                    try {
-                        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
-                        Date dateEntree = sdf.parse(request.getParameter("dateEntree"));
-                        Date dateSortie = sdf.parse(request.getParameter("dateSortie"));
-                        request.setAttribute("passagesAffiches", passages.getPassagesBySalleAndDates(new Salle(request.getParameter("nomSalle")), dateEntree, dateSortie));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    request.setAttribute("passagesAffiches", passages.getPassagesBySalle(new Salle(request.getParameter("nomSalle"))));
-                }
-                //IF NOT ADMIN request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle(userSession, new Salle(request.getParameter("nomSalle"))));
-            } else if (request.getParameter("login") != null) {
-                    request.setAttribute("passagesAffiches", passages.getPassagesByUser(new User(request.getParameter("login"))));
-            } else {
-                request.setAttribute("passagesAffiches", passages.getAllPassages());
-                //IF NOT ADMIN request.setAttribute("passagesAffiches", passages.getPassagesByUser(userSession));
-            }
-        } else if (contenu.equals("passage")) {
-            try {
-                int id = Integer.parseInt(request.getParameter("num"));
-                Passage passage = passages.getPassageById(id);
-                //IF NOT ADMIN
-                /*if (!passage.getUser().equals(userSession)) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                    return;
-                }*/
-                request.setAttribute("passage", passage);
-            } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "numéro du passage non présent ou invalide");
-                return;
-            }
+        if (path.size() == 1) { // POST /passages
+            String userId = request.getParameter("user");
+            String salleId = request.getParameter("salle");
+            String dateEntree = request.getParameter("dateEntree");
+            String dateSortie = request.getParameter("dateSortie");
+            createPassage(request, response, userId, salleId, dateEntree, dateSortie);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
@@ -255,8 +202,46 @@ public class PassageController extends HttpServlet {
     }
 
     // POST /passages {"user": "string", salle": "string", dateEntree": "string", dateSortie": "string"}
-    private void createPassage(HttpServletRequest request, HttpServletResponse response) {
-        // TODO
+    private void createPassage(HttpServletRequest request, HttpServletResponse response, String userId,
+                               String salleId, String dateEntree, String dateSortie) throws IOException {
+        User user = users.get(userId);
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
+            return;
+        }
+        Salle salle = salles.get(salleId);
+        if (salle == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            return;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
+
+        Date entree = null;
+        Date sortie = null;
+        try {
+            entree = dateEntree != null ? sdf.parse(dateEntree) : null;
+            sortie = dateSortie != null ? sdf.parse(dateSortie) : null;
+        } catch (ParseException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La date est invalide.");
+            return;
+        }
+
+        if (entree != null && sortie != null) {
+            Passage p = new Passage(user, salle, new Date());
+            passages.add(p);
+            salle.incPresent();
+        } else if (entree == null && sortie != null) {
+            List<Passage> passTemp = passages.getPassagesByUserAndSalle(user, salle);
+            for (Passage p : passTemp) { // On mémorise une sortie de tous les passages existants et sans sortie
+                if (p.getSortie() == null) {
+                    p.setSortie(new Date());
+                    salle.decPresent();
+                }
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action invalide.");
+            return;
+        }
     }
 
 }

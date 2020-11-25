@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "SalleController", urlPatterns = "/salles/*") // TODO filtrer tous les non admins (401 et 403)
+@WebServlet(name = "SalleController", urlPatterns = "/salles/*")
 public class SalleController extends HttpServlet {
 
     GestionPassages passages;
@@ -75,7 +75,7 @@ public class SalleController extends HttpServlet {
         }
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
