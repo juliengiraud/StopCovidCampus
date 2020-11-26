@@ -23,7 +23,7 @@ public class AuthenticationFilter extends HttpFilter {
         this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
     }
 
-    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException {
+    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
 
@@ -31,19 +31,25 @@ public class AuthenticationFilter extends HttpFilter {
         if (request.getRequestURI().contains("/passages")) {
             if (session == null || userSession == null) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                return;
             } else if (!request.getMethod().equals("POST") && !userSession.getAdmin()) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN); // 403
+                return;
             }
+            chain.doFilter(request, response);
             return;
         }
 
         // Filtre de /salles
-        if (request.getRequestURI().contains("/passages")) {
+        if (request.getRequestURI().contains("/salles")) {
             if (session == null || userSession == null) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                return;
             } else if (!userSession.getAdmin()) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN); // 403
+                return;
             }
+            chain.doFilter(request, response);
             return;
         }
 

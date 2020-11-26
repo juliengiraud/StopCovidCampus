@@ -4,7 +4,9 @@ import fr.univlyon1.m1if.m1if03.classes.GestionPassages;
 import fr.univlyon1.m1if.m1if03.classes.Passage;
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import fr.univlyon1.m1if.m1if03.classes.User;
+import org.json.JSONObject;
 
+import javax.json.JsonObject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-@WebServlet(name = "PassageController", urlPatterns = "/passage/*")
+@WebServlet(name = "PassageController", urlPatterns = "/passages/*")
 public class PassageController extends HttpServlet {
 
     GestionPassages passages;
@@ -71,10 +76,11 @@ public class PassageController extends HttpServlet {
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 1) { // POST /passages
-            String userId = request.getParameter("user");
-            String salleId = request.getParameter("salle");
-            String dateEntree = request.getParameter("dateEntree");
-            String dateSortie = request.getParameter("dateSortie");
+            JSONObject data = new JSONObject(getBody(request));
+            String userId = data.getString("user");
+            String salleId = data.getString("salle");
+            String dateEntree = data.getString("dateEntree");
+            String dateSortie = data.getString("dateSortie");
             createPassage(request, response, userId, salleId, dateEntree, dateSortie);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -242,6 +248,40 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action invalide.");
             return;
         }
+    }
+
+    public static String getBody(HttpServletRequest request) throws IOException {
+
+        String body = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = null;
+
+        try {
+            InputStream inputStream = request.getInputStream();
+            if (inputStream != null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                char[] charBuffer = new char[128];
+                int bytesRead = -1;
+                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                    stringBuilder.append(charBuffer, 0, bytesRead);
+                }
+            } else {
+                stringBuilder.append("");
+            }
+        } catch (IOException ex) {
+            throw ex;
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    throw ex;
+                }
+            }
+        }
+
+        body = stringBuilder.toString();
+        return body;
     }
 
 }
