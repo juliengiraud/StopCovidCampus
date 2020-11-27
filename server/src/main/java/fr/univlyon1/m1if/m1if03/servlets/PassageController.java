@@ -46,7 +46,7 @@ public class PassageController extends HttpServlet {
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("passages");
         int endIndex = path.size();
-        path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
+        path = path.subList(startIndex, endIndex); // "path" commence à partir de /passages
 
         if (path.size() == 1) { // GET /passages
             getPassages(request, response);
@@ -96,11 +96,12 @@ public class PassageController extends HttpServlet {
     // GET /passages/{passageId}
     private void getPassage(HttpServletRequest request, HttpServletResponse response,
                             String passageId) throws IOException {
-        int id = -1;
+        int id;
         try {
             id = Integer.parseInt(passageId);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La capacité d'une salle doit être un nombre entier.");
+            return;
         }
         Passage passage = passages.getPassageById(id);
         if (passage == null) {

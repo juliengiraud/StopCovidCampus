@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @WebFilter(filterName = "AuthenticationFilter")
@@ -30,10 +32,7 @@ public class AuthenticationFilter extends HttpFilter {
         // Filtre de /passages
         if (request.getRequestURI().contains("/passages")) {
             if (session == null || userSession == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
-                return;
-            } else if (!request.getMethod().equals("POST") && !userSession.getAdmin()) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN); // 403
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
                 return;
             }
             chain.doFilter(request, response);
@@ -42,38 +41,33 @@ public class AuthenticationFilter extends HttpFilter {
 
         // Filtre de /salles
         if (request.getRequestURI().contains("/salles")) {
-            if (session == null || userSession == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
-                return;
-            } else if (!userSession.getAdmin()) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN); // 403
+            if (session == null || userSession == null) { // Non authentifié
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
                 return;
             }
             chain.doFilter(request, response);
             return;
         }
 
-        // Test d'une requête d'authentification
-        if (!request.getMethod().equals("POST")) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-        if (request.getParameter("action") != null && request.getParameter("action").equals("Connexion")
-                && request.getParameter("login") != null && !request.getParameter("login").equals("")) {
-            User user = new User(request.getParameter("login"));
-            user.setNom(request.getParameter("nom"));
-            user.setAdmin(request.getParameter("admin") != null && request.getParameter("admin").equals("on"));
+        // Filtre de /users
+        if (request.getRequestURI().contains("/users")) {
+            List<String> path = Arrays.asList(request.getRequestURI().split("/"));
+            int startIndex = path.indexOf("users");
+            int endIndex = path.size();
+            path = path.subList(startIndex, endIndex);
 
-            // On ajoute l'user à la session
-            session = request.getSession(true);
-            session.setAttribute("user", user);
-            // On rajoute l'user dans le DAO
-
-            users.put(request.getParameter("login"), user);
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            if (request.getRequestURI().contains("/users/login")) {
+                chain.doFilter(request, response);
+                return;
+            } else if (session == null || userSession == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
+                return;
+            } else if (path.size() == 2 && users.get(path.get(1)) != null && users.get(path.get(1)).equals(userSession)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'êtes connecté au bon compte."); // 403
+                return;
+            }
+            chain.doFilter(request, response);
             return;
         }
     }
-
 }

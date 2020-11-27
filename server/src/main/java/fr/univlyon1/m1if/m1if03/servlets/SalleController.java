@@ -54,6 +54,9 @@ public class SalleController extends HttpServlet {
 
         if (path.size() == 1) { // POST /salles
             String nomSalle = request.getParameter("nomSalle");
+            if (nomSalle == null || nomSalle.equals("")) { // Paramètres non acceptables
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
+            }
             doCreateSalle(request, response, nomSalle);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -68,8 +71,18 @@ public class SalleController extends HttpServlet {
 
         if (path.size() == 2) { // PUT /salles/{salleId}
             String salleId = request.getParameter("nomSalle");
-            String capacite = request.getParameter("capacite");
-            doUpdateSalle(request, response, salleId, capacite);
+            int capacite;
+            try {
+                capacite = Integer.parseInt(request.getParameter("capacite")); // Paramètres non acceptables
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
+                return;
+            }
+            if (salleId == null || salleId.equals("")) { // Paramètres non acceptables
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
+            } else {
+                doUpdateSalle(request, response, salleId, capacite);
+            }
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -123,20 +136,13 @@ public class SalleController extends HttpServlet {
     }
 
     // PUT /salles/{salleId}
-    private void doUpdateSalle(HttpServletRequest request, HttpServletResponse response, String salleId, String capacite) throws IOException {
-        int newCapacite;
-        try {
-            newCapacite = Integer.parseInt(capacite);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La capacité d'une salle doit être un nombre entier.");
-            return;
-        }
+    private void doUpdateSalle(HttpServletRequest request, HttpServletResponse response, String salleId, int capacite) throws IOException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
             return;
         }
-        salle.setCapacite(newCapacite);
+        salle.setCapacite(capacite);
     }
 
     // DELETE /salles/{salleId}

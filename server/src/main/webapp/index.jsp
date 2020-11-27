@@ -13,7 +13,7 @@
     <aside class="menu"></aside>
     <article class="contenu">
         <h1>Bienvenue sur Présence UCBL</h1>
-        <form method="post" action="presence">
+        <form method="post" action="users/login">
             <p>
                 <label>
                     Entrez votre login :
