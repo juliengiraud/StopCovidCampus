@@ -51,19 +51,8 @@ public class AuthenticationFilter extends HttpFilter {
 
         // Filtre de /users
         if (request.getRequestURI().contains("/users")) {
-            List<String> path = Arrays.asList(request.getRequestURI().split("/"));
-            int startIndex = path.indexOf("users");
-            int endIndex = path.size();
-            path = path.subList(startIndex, endIndex);
-
-            if (request.getRequestURI().contains("/users/login")) {
-                chain.doFilter(request, response);
-                return;
-            } else if (session == null || userSession == null) {
+            if (!(request.getMethod().equals("POST") && request.getRequestURI().contains("users/login")) && (session == null || userSession == null)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
-                return;
-            } else if (path.size() == 2 && users.get(path.get(1)) != null && users.get(path.get(1)).equals(userSession)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'êtes connecté au bon compte."); // 403
                 return;
             }
             chain.doFilter(request, response);
