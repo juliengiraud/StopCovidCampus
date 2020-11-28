@@ -29,28 +29,14 @@ public class AuthenticationFilter extends HttpFilter {
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
 
-        // Filtre de /passages
-        if (request.getRequestURI().contains("/passages")) {
+        if (request.getRequestURI().contains("/passages") || request.getRequestURI().contains("/salles")) {
             if (session == null || userSession == null) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
                 return;
             }
             chain.doFilter(request, response);
             return;
-        }
-
-        // Filtre de /salles
-        if (request.getRequestURI().contains("/salles")) {
-            if (session == null || userSession == null) { // Non authentifié
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
-                return;
-            }
-            chain.doFilter(request, response);
-            return;
-        }
-
-        // Filtre de /users
-        if (request.getRequestURI().contains("/users")) {
+        } else if (request.getRequestURI().contains("/users")) {
             if (!(request.getMethod().equals("POST") && request.getRequestURI().contains("users/login")) && (session == null || userSession == null)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
                 return;
