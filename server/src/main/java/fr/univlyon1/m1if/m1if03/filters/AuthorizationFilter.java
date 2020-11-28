@@ -14,30 +14,19 @@ import java.util.List;
 
 @WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter extends HttpFilter {
-    public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        List<Route> whiteListedPaths = Route.getWhiteListForNonAdmin();
-        String path = req.getRequestURI();
-        User userSession = (User) req.getSession().getAttribute("user");
 
-        if (userSession != null && userSession.getAdmin()) {
-            chain.doFilter(req, resp);
-        } else {
-            // Exemple avec l'url tp4_war/users/login
-            for (Route route : whiteListedPaths) {
-                // l'url contient /users/login
-                if (path.indexOf(route.getPath()) > 0) {
-                    // On supprime tout ce qu'il y a avant /users/login dans l'url
-                    path = path.substring(path.indexOf(route.getPath()));
-                    // l'url est égale à users/login (il n'y a rien après et la méthode est bien POST
-                    if (path.equals(route.getPath()) && req.getMethod().equals(route.getMethod())) {
-                        // On poursuit
-                        chain.doFilter(req, resp);
-                        return;
-                    }
-                }
+    public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
+        User userSession = (User) req.getSession().getAttribute("user");
+        List<Route> whiteListedPaths = Route.getWhiteList(userSession);
+        String path = req.getRequestURI();
+
+        for (Route route : whiteListedPaths) {
+            if (path.contains(route.getPath()) && req.getMethod().equals(route.getMethod())) {
+                chain.doFilter(req, resp);
+                return;
             }
-            //todo gérer s'il faut verifier l'utilisateur connecté s'il n'est pas admin (ex pour avoir ses propres passages)
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'êtes pas administrateur.");
         }
+
+        resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'êtes pas administrateur.");
     }
 }

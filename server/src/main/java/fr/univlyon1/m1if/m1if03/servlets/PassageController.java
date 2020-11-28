@@ -142,7 +142,7 @@ public class PassageController extends HttpServlet {
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
             return;
-        }
+        } // "mon nov 11 13:27:03 UTC 2020"
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
         Date entree;
         Date sortie;
