@@ -1,6 +1,7 @@
 package fr.univlyon1.m1if.m1if03.servlets;
 
 import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.utils.Utilities;
 import org.json.JSONObject;
 
 import javax.servlet.ServletConfig;
@@ -9,15 +10,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "UserController", urlPatterns = {"/users/*"})
+@WebServlet(name = "UserController", urlPatterns = "/users/*")
 public class UserController extends HttpServlet {
     Map<String, User> users;
 
@@ -36,7 +34,7 @@ public class UserController extends HttpServlet {
         if (path.size() == 2) {
             switch (path.get(1)) {
                 case "login":
-                    JSONObject data = new JSONObject(getBody(request));
+                    JSONObject data = new JSONObject(Utilities.getBody(request));
                     String login = "";
                     String nom = "";
                     String admin = "";
@@ -45,7 +43,6 @@ public class UserController extends HttpServlet {
                         nom = data.getString("nom");
                         admin = data.getString("admin");
                     } catch (Exception e) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les paramètres de la requête ne sont pas acceptables.");
                     }
                     if (!login.equals("")) {
                         User user = new User(login);
@@ -55,6 +52,7 @@ public class UserController extends HttpServlet {
                         users.put(login, user);
                     } else {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le login doit être renseigné.");
+                        return;
                     }
                     break;
 
@@ -99,7 +97,7 @@ public class UserController extends HttpServlet {
 
         if (path.size() == 3 && path.get(2).equals("nom")) {
             String userId = path.get(1);
-            JSONObject data = new JSONObject(getBody(request));
+            JSONObject data = new JSONObject(Utilities.getBody(request));
             String userName = "";
             try{
                 userName = data.getString("nom");
@@ -139,37 +137,4 @@ public class UserController extends HttpServlet {
         user.setNom(userName);
     }
 
-    public static String getBody(HttpServletRequest request) throws IOException {
-
-        String body = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            throw ex;
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    throw ex;
-                }
-            }
-        }
-
-        body = stringBuilder.toString();
-        return body;
-    }
 }

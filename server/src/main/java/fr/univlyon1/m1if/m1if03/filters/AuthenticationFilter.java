@@ -1,5 +1,6 @@
 package fr.univlyon1.m1if.m1if03.filters;
 
+import fr.univlyon1.m1if.m1if03.classes.Route;
 import fr.univlyon1.m1if.m1if03.classes.User;
 
 import javax.servlet.FilterChain;
@@ -9,9 +10,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -26,23 +25,18 @@ public class AuthenticationFilter extends HttpFilter {
     }
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpSession session = request.getSession();
-        User userSession = (User) session.getAttribute("user");
+        User userSession = (User) request.getSession().getAttribute("user");
+        List<Route> whiteListedPaths = Route.getWhiteList(userSession);
+        String path = request.getRequestURI();
 
-        if (request.getRequestURI().contains("/passages") || request.getRequestURI().contains("/salles")) {
-            if (session == null || userSession == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
+        for (Route route : whiteListedPaths) {
+            if (path.contains(route.getPath()) && request.getMethod().equals(route.getMethod())) {
+                chain.doFilter(request, response);
                 return;
             }
-            chain.doFilter(request, response);
-            return;
-        } else if (request.getRequestURI().contains("/users")) {
-            if (!(request.getMethod().equals("POST") && request.getRequestURI().contains("users/login")) && (session == null || userSession == null)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté."); // 401
-                return;
-            }
-            chain.doFilter(request, response);
-            return;
         }
+
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté.");
+
     }
 }

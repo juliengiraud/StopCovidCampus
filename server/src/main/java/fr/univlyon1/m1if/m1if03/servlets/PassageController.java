@@ -4,23 +4,18 @@ import fr.univlyon1.m1if.m1if03.classes.GestionPassages;
 import fr.univlyon1.m1if.m1if03.classes.Passage;
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.utils.Utilities;
 import org.json.JSONObject;
 
-import javax.json.JsonObject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -76,7 +71,7 @@ public class PassageController extends HttpServlet {
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 1) { // POST /passages
-            JSONObject data = new JSONObject(getBody(request));
+            JSONObject data = new JSONObject(Utilities.getBody(request));
             String userId = "";
             String salleId = "";
             String dateEntree = "";
@@ -258,40 +253,6 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action invalide.");
             return;
         }
-    }
-
-    public static String getBody(HttpServletRequest request) throws IOException {
-
-        String body = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            throw ex;
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    throw ex;
-                }
-            }
-        }
-
-        body = stringBuilder.toString();
-        return body;
     }
 
 }
