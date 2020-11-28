@@ -3,6 +3,7 @@ package fr.univlyon1.m1if.m1if03.servlets;
 import fr.univlyon1.m1if.m1if03.classes.GestionPassages;
 import fr.univlyon1.m1if.m1if03.classes.Passage;
 import fr.univlyon1.m1if.m1if03.classes.Salle;
+import org.json.JSONObject;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -10,7 +11,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,15 +51,22 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        JSONObject data = new JSONObject(getBody(request));
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 1) { // POST /salles
-            String nomSalle = request.getParameter("nomSalle");
+            String nomSalle = "";
+            try{
+                nomSalle = data.getString("nomSalle");
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); //400
+                return;
+            }
             if (nomSalle == null || nomSalle.equals("")) { // Paramètres non acceptables
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); // 400
             }
             doCreateSalle(request, response, nomSalle);
         } else {
@@ -64,21 +75,28 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        JSONObject data = new JSONObject(getBody(request));
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 2) { // PUT /salles/{salleId}
-            String salleId = request.getParameter("nomSalle");
-            int capacite;
+            String salleId = "";
+            try{
+                salleId = data.getString("nomSalle");
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); //400
+                return;
+            }
+            int capacite = -2;
             try {
-                capacite = Integer.parseInt(request.getParameter("capacite")); // Paramètres non acceptables
+                capacite = data.getInt("capacite"); // Paramètres non acceptables
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
                 return;
             }
-            if (salleId == null || salleId.equals("")) { // Paramètres non acceptables
+            if (salleId == null || salleId.equals("") || capacite < -1) { // Paramètres non acceptables
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
             } else {
                 doUpdateSalle(request, response, salleId, capacite);
@@ -89,13 +107,19 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        JSONObject data = new JSONObject(getBody(request));
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 1) { // DELETE /salles
-            String nomSalle = request.getParameter("nomSalle");
+            String nomSalle = "";
+            try {
+                nomSalle = data.getString("nomSalle");
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
             doDeleteSalle(request, response, nomSalle);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -153,5 +177,39 @@ public class SalleController extends HttpServlet {
             return;
         }
         salles.remove(salle);
+    }
+
+    public static String getBody(HttpServletRequest request) throws IOException {
+
+        String body = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = null;
+
+        try {
+            InputStream inputStream = request.getInputStream();
+            if (inputStream != null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                char[] charBuffer = new char[128];
+                int bytesRead = -1;
+                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                    stringBuilder.append(charBuffer, 0, bytesRead);
+                }
+            } else {
+                stringBuilder.append("");
+            }
+        } catch (IOException ex) {
+            throw ex;
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    throw ex;
+                }
+            }
+        }
+
+        body = stringBuilder.toString();
+        return body;
     }
 }

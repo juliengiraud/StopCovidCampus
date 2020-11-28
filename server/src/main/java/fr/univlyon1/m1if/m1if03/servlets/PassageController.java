@@ -77,10 +77,19 @@ public class PassageController extends HttpServlet {
 
         if (path.size() == 1) { // POST /passages
             JSONObject data = new JSONObject(getBody(request));
-            String userId = data.getString("user");
-            String salleId = data.getString("salle");
-            String dateEntree = data.getString("dateEntree");
-            String dateSortie = data.getString("dateSortie");
+            String userId = "";
+            String salleId = "";
+            String dateEntree = "";
+            String dateSortie = "";
+            try {
+                userId = data.getString("user");
+                salleId = data.getString("salle");
+                dateEntree = data.getString("dateEntree");
+                dateSortie = data.getString("dateSortie");
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les paramètres ne sont pas acceptables"); //400
+                return;
+            }
             createPassage(request, response, userId, salleId, dateEntree, dateSortie);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

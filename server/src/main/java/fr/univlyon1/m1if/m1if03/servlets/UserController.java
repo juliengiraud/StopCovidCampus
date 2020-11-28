@@ -36,17 +36,28 @@ public class UserController extends HttpServlet {
         if (path.size() == 2) {
             switch (path.get(1)) {
                 case "login":
-                    if (request.getParameter("login") != null && !request.getParameter("login").equals("")) {
-                        User user = new User(request.getParameter("login"));
-                        user.setNom(request.getParameter("nom"));
-                        user.setAdmin(request.getParameter("admin") != null && request.getParameter("admin").equals("on"));
+                    JSONObject data = new JSONObject(getBody(request));
+                    String login = "";
+                    String nom = "";
+                    String admin = "";
+                    try {
+                        login = data.getString("login");
+                        nom = data.getString("nom");
+                        admin = data.getString("admin");
+                    } catch (Exception e) {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les paramètres de la requête ne sont pas acceptables.");
+                    }
+                    if (!login.equals("")) {
+                        User user = new User(login);
+                        user.setNom(nom);
+                        user.setAdmin(admin != null && admin.equals("on"));
                         request.getSession().setAttribute("user", user);
-                        users.put(request.getParameter("login"), user);
+                        users.put(login, user);
                     } else {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le login doit être renseigné.");
-                        return;
                     }
                     break;
+
                 case "logout":
                     User user = (User) request.getSession().getAttribute("user");
                     if (user == null) { // Non authentifié
@@ -89,19 +100,23 @@ public class UserController extends HttpServlet {
         if (path.size() == 3 && path.get(2).equals("nom")) {
             String userId = path.get(1);
             JSONObject data = new JSONObject(getBody(request));
-            String userName = data.getString("nom");
+            String userName = "";
+            try{
+                userName = data.getString("nom");
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nouveau nom n'est pas renseigné."); //400
+                return;
+            }
             updateUserName(request, response, userId, userName);
         }
     }
 
     private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("tous");
         request.setAttribute("users", users);
         request.setAttribute("contenu", "users");
     }
 
     private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException {
-        System.out.println("un seul, " + userId);
         User user = this.users.get(userId);
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas."); // 404
