@@ -50,20 +50,20 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        JSONObject data = new JSONObject(Utilities.getBody(request));
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 1) { // POST /salles
-            String nomSalle = "";
-            try{
-                nomSalle = data.getString("nomSalle");
+            JSONObject params;
+            try {
+                params = Utilities.getParams(request, Arrays.asList("nomSalle"));
             } catch (JSONException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); //400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
+            String nomSalle = params.getString("nomSalle");
             if (nomSalle == null || nomSalle.equals("")) { // Paramètres non acceptables
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); // 400
             }
@@ -74,29 +74,29 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        JSONObject data = new JSONObject(Utilities.getBody(request));
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 2) { // PUT /salles/{salleId}
-            String salleId = "";
+            JSONObject params;
             try{
-                salleId = data.getString("nomSalle");
+                params = Utilities.getParams(request, Arrays.asList("nomSalle", "capacite"));
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); //400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
+            String salleId = params.getString("nomSalle");
             int capacite = -2;
             try {
-                capacite = data.getInt("capacite"); // Paramètres non acceptables
+                capacite = params.getInt("capacite");
             } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
-            if (salleId == null || salleId.equals("") || capacite < -1) { // Paramètres non acceptables
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST); // 400
+            if (salleId == null || salleId.equals("") || capacite < -1) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             } else {
                 doUpdateSalle(request, response, salleId, capacite);
             }
@@ -106,19 +106,20 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        JSONObject data = new JSONObject(Utilities.getBody(request));
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 1) { // DELETE /salles
-            String nomSalle = "";
+            JSONObject params;
             try {
-                nomSalle = data.getString("nomSalle");
+                params = Utilities.getParams(request, Arrays.asList("nomSalle"));
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
+            String nomSalle = params.getString("nomSalle");
             doDeleteSalle(request, response, nomSalle);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

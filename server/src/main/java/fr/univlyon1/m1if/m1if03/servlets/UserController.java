@@ -34,20 +34,20 @@ public class UserController extends HttpServlet {
         if (path.size() == 2) {
             switch (path.get(1)) {
                 case "login":
-                    JSONObject data = new JSONObject(Utilities.getBody(request));
-                    String login = "";
-                    String nom = "";
-                    String admin = "";
+                    JSONObject params;
                     try {
-                        login = data.getString("login");
-                        nom = data.getString("nom");
-                        admin = data.getString("admin");
-                    } catch (Exception e) {
+                        params = Utilities.getParams(request, Arrays.asList("login", "nom", "admin"));
+                    } catch (IOException e) {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                        return;
                     }
+                    String login = params.getString("login");
+                    String nom = params.getString("nom");
+                    Boolean admin = params.getBoolean("admin");
                     if (!login.equals("")) {
                         User user = new User(login);
                         user.setNom(nom);
-                        user.setAdmin(admin != null && admin.equals("on"));
+                        user.setAdmin(admin);
                         request.getSession().setAttribute("user", user);
                         users.put(login, user);
                     } else {
@@ -97,14 +97,14 @@ public class UserController extends HttpServlet {
 
         if (path.size() == 3 && path.get(2).equals("nom")) {
             String userId = path.get(1);
-            JSONObject data = new JSONObject(Utilities.getBody(request));
-            String userName = "";
-            try{
-                userName = data.getString("nom");
-            } catch (Exception e) {
+            JSONObject params;
+            try {
+                params = Utilities.getParams(request, Arrays.asList("nom"));
+            } catch (IOException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nouveau nom n'est pas renseigné."); //400
                 return;
             }
+            String userName = params.getString("nom");
             updateUserName(request, response, userId, userName);
         }
     }

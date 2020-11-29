@@ -71,20 +71,17 @@ public class PassageController extends HttpServlet {
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
         if (path.size() == 1) { // POST /passages
-            JSONObject data = new JSONObject(Utilities.getBody(request));
-            String userId = "";
-            String salleId = "";
-            String dateEntree = "";
-            String dateSortie = "";
+            JSONObject params;
             try {
-                userId = data.getString("user");
-                salleId = data.getString("salle");
-                dateEntree = data.getString("dateEntree");
-                dateSortie = data.getString("dateSortie");
+                params = Utilities.getParams(request, Arrays.asList("user", "salle", "dateEntree", "dateSortie"));
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les paramètres ne sont pas acceptables"); //400
                 return;
             }
+            String userId = params.getString("user");
+            String salleId = params.getString("salle");
+            String dateEntree = params.getString("dateEntree");
+            String dateSortie = params.getString("dateSortie");
             createPassage(request, response, userId, salleId, dateEntree, dateSortie);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -224,28 +221,28 @@ public class PassageController extends HttpServlet {
         if (salle == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
             return;
-        }
+        } // Wed Oct 16 00:00:00 CEST 2013 -> ce format de date marche
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
 
         Date entree = null;
         Date sortie = null;
         try {
-            entree = dateEntree != null ? sdf.parse(dateEntree) : null;
-            sortie = dateSortie != null ? sdf.parse(dateSortie) : null;
+            entree = !dateEntree.isEmpty() ? sdf.parse(dateEntree) : null;
+            sortie = !dateSortie.isEmpty() ? sdf.parse(dateSortie) : null;
         } catch (ParseException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La date est invalide.");
             return;
         }
 
-        if (entree != null && sortie != null) {
-            Passage p = new Passage(user, salle, new Date());
+        if (entree != null && sortie == null) {
+            Passage p = new Passage(user, salle, entree);
             passages.add(p);
             salle.incPresent();
         } else if (entree == null && sortie != null) {
             List<Passage> passTemp = passages.getPassagesByUserAndSalle(user, salle);
             for (Passage p : passTemp) { // On mémorise une sortie de tous les passages existants et sans sortie
                 if (p.getSortie() == null) {
-                    p.setSortie(new Date());
+                    p.setSortie(sortie);
                     salle.decPresent();
                 }
             }

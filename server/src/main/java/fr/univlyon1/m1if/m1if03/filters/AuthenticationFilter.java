@@ -2,6 +2,7 @@ package fr.univlyon1.m1if.m1if03.filters;
 
 import fr.univlyon1.m1if.m1if03.classes.Route;
 import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.servlets.UserController;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -26,8 +27,13 @@ public class AuthenticationFilter extends HttpFilter {
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         User userSession = (User) request.getSession().getAttribute("user");
-        List<Route> whiteListedPaths = Route.getWhiteList(userSession);
+        List<Route> whiteListedPaths = Route.getWhiteList(null);
         String path = request.getRequestURI();
+
+        if (userSession != null) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         for (Route route : whiteListedPaths) {
             if (path.contains(route.getPath()) && request.getMethod().equals(route.getMethod())) {
