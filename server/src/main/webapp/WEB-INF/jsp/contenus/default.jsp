@@ -4,9 +4,9 @@
 <jsp:useBean id="passages" type="fr.univlyon1.m1if.m1if03.classes.GestionPassages" scope="application"/>
 
 <section id="contenu">
-    <h1>Hello ${sessionScope.user.nom} !</h1>
+    <h1>Hello ${param.user.nom} !</h1>
 
-    <c:set var="myPassages" value="${passages.getPassagesByUserEncours(sessionScope.user)}"/>
+    <c:set var="myPassages" value="${passages.getPassagesByUserEncours(param.user)}"/>
     <c:if test="${myPassages.size() > 0}">
         <h2>Vous êtes actuellement dans les salles :</h2>
         <ul>
