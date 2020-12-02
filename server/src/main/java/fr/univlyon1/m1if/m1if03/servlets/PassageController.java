@@ -145,12 +145,15 @@ public class PassageController extends HttpServlet {
             return;
         } // "mon nov 11 13:27:03 UTC 2020"
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
-        Date entree;
-        Date sortie;
+        Date entree = null;
+        Date sortie = null;
         try {
             entree = sdf.parse(dateEntree);
             sortie = sdf.parse(dateSortie);
         } catch (ParseException e) {
+            // C'est grave que pour l'entrée, on gère ça juste après
+        }
+        if (entree == null) { // On peut avoir la sortie à null
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La date est invalide.");
             return;
         }
@@ -179,12 +182,15 @@ public class PassageController extends HttpServlet {
             return;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
-        Date entree;
-        Date sortie;
+        Date entree = null;
+        Date sortie = null;
         try {
             entree = sdf.parse(dateEntree);
             sortie = sdf.parse(dateSortie);
         } catch (ParseException e) {
+            // C'est grave que pour l'entrée, on gère ça juste après
+        }
+        if (entree == null) { // On peut avoir la sortie à null
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La date est invalide.");
             return;
         }
@@ -223,13 +229,15 @@ public class PassageController extends HttpServlet {
             return;
         } // Wed Oct 16 00:00:00 CEST 2013 -> ce format de date marche
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
-
         Date entree = null;
         Date sortie = null;
         try {
-            entree = !dateEntree.isEmpty() ? sdf.parse(dateEntree) : null;
-            sortie = !dateSortie.isEmpty() ? sdf.parse(dateSortie) : null;
+            entree = sdf.parse(dateEntree);
+            sortie = sdf.parse(dateSortie);
         } catch (ParseException e) {
+            // C'est normal que l'un des deux soit à null, on gère ça juste après
+        }
+        if (entree == null && sortie == null) { // Là c'est pas normal par contre
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La date est invalide.");
             return;
         }
@@ -238,7 +246,12 @@ public class PassageController extends HttpServlet {
             Passage p = new Passage(user, salle, entree);
             passages.add(p);
             salle.incPresent();
-        } else if (entree == null && sortie != null) {
+        } else if (entree != null && sortie != null) {
+            Passage p = new Passage(user, salle, entree);
+            p.setSortie(sortie);
+            passages.add(p);
+            salle.incPresent();
+        } else { // entree == null && sortie != null
             List<Passage> passTemp = passages.getPassagesByUserAndSalle(user, salle);
             for (Passage p : passTemp) { // On mémorise une sortie de tous les passages existants et sans sortie
                 if (p.getSortie() == null) {
@@ -246,9 +259,6 @@ public class PassageController extends HttpServlet {
                     salle.decPresent();
                 }
             }
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action invalide.");
-            return;
         }
     }
 
