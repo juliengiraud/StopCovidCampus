@@ -60,13 +60,14 @@ public class SalleController extends HttpServlet {
             JSONObject params;
             try {
                 params = Utilities.getParams(request, Arrays.asList("nomSalle"));
-            } catch (JSONException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci de renseigner le nom de la salle.");
                 return;
             }
             String nomSalle = params.getString("nomSalle");
             if (nomSalle == null || nomSalle.equals("")) { // Paramètres non acceptables
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); // 400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci de renseigner le nom de la salle."); // 400
+                return;
             }
             doCreateSalle(request, response, nomSalle);
         } else {
@@ -85,19 +86,19 @@ public class SalleController extends HttpServlet {
             try{
                 params = Utilities.getParams(request, Arrays.asList("nomSalle", "capacite"));
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer le nom et la capacité de la salle");
                 return;
             }
             String salleId = params.getString("nomSalle");
             int capacite = -2;
             try {
                 capacite = params.getInt("capacite");
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer une capacité positive.");
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer une capacité entière.");
                 return;
             }
-            if (salleId == null || salleId.equals("") || capacite < -1) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer l'identifiant de la salle et sa capacité.");
+            if (salleId.equals("") || capacite < -1) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer l'identifiant de la salle et une capacité positive (ou -1 si inconnue).");
             } else {
                 doUpdateSalle(request, response, salleId, capacite);
             }
@@ -129,7 +130,7 @@ public class SalleController extends HttpServlet {
     private void doGetSalle(HttpServletRequest request, HttpServletResponse response, String salleId) throws IOException, ServletException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + " n'existe pas.");
             return;
         }
         request.setAttribute("salle", salle);
@@ -146,8 +147,8 @@ public class SalleController extends HttpServlet {
     private void doUpdateSalle(HttpServletRequest request, HttpServletResponse response, String salleId, int capacite) throws IOException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
-            return;
+            salle = new Salle(salleId);
+            salles.put(salleId, salle);
         }
         salle.setCapacite(capacite);
     }
@@ -156,7 +157,7 @@ public class SalleController extends HttpServlet {
     private void doDeleteSalle(HttpServletRequest request, HttpServletResponse response, String salleId) throws IOException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + " n'existe pas.");
             return;
         }
         salles.remove(salle.getNom());
