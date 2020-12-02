@@ -18,7 +18,7 @@
         <li>Entrée : <fmt:formatDate value="${passage.entree}" var="heureEntree" type="time"/> ${heureEntree}</li>
         <li>Sortie : <fmt:formatDate value="${passage.sortie}" var="heureSortie" type="time"/> ${heureSortie}</li>
     </ul>
-    <c:if test="${passage.sortie != null && sessionScope.user.admin}">
+    <c:if test="${passage.sortie != null && param.user.admin}">
         <p>
             <a href="admin?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">
                 tous les présents pendant ce passage
