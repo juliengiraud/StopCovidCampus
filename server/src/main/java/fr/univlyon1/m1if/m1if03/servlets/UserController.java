@@ -128,7 +128,7 @@ public class UserController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
-        if (user != request.getSession().getAttribute("user")) {
+        if (user != request.getAttribute("user")) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous ne pouvez modifier que votre propre nom.");
             return;
         }
@@ -143,7 +143,6 @@ public class UserController extends HttpServlet {
         User user = new User(login);
         user.setNom(nom);
         user.setAdmin(admin);
-        // request.getSession().setAttribute("user", user);
         String token = PresenceUcblJwtHelper.generateToken(login, admin, request);
         response.setHeader("Authorization", "Bearer: " + token);
         users.put(login, user);

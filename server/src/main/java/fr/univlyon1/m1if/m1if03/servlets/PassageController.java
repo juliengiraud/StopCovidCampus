@@ -242,7 +242,7 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         }
-        if (user != request.getSession().getAttribute("user")) {
+        if (user != request.getAttribute("user")) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous ne pouvez ajouter que vos propres passages");
             return;
         }
@@ -304,5 +304,4 @@ public class PassageController extends HttpServlet {
         }
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
-
 }

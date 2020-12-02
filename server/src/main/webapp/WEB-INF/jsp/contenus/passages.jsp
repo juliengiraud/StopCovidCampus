@@ -60,7 +60,7 @@
                     <fmt:formatDate value="${passage.sortie}" var="heureSortie" type="time"/>
                         ${heureSortie}
                 </td>
-                <c:if test="${passage.sortie != null && sessionScope.user.admin}">
+                <c:if test="${passage.sortie != null && param.user.admin}">
                     <td>
                         <a href="admin?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">tous
                             les présents</a>
