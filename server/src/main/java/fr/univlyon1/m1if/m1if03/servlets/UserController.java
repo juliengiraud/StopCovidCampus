@@ -109,18 +109,19 @@ public class UserController extends HttpServlet {
         }
     }
 
-    private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("users", users);
-        request.setAttribute("contenu", "users");
+        request.getRequestDispatcher("WEB-INF/jsp/contenus/users.jsp").include(request, response);
     }
 
-    private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException {
+    private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException, ServletException {
         User user = this.users.get(userId);
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas."); // 404
             return;
         }
         request.setAttribute("user", users.get(userId));
+        request.getRequestDispatcher("../WEB-INF/jsp/contenus/user.jsp").include(request, response);
     }
 
     private void updateUserName(HttpServletRequest request, HttpServletResponse response, String userId, String userName) throws IOException {
@@ -136,5 +137,4 @@ public class UserController extends HttpServlet {
 
         user.setNom(userName);
     }
-
 }
