@@ -38,6 +38,10 @@ public class PresenceUcblJwtHelper {
 
         authenticationVerifier.verify(token); // Lève une NullPointerException si le token n'existe pas, et une JWTVerificationException s'il est invalide
         DecodedJWT jwt = JWT.decode(token); // Pourrait lever une JWTDecodeException mais comme le token est vérifié avant, cela ne devrait pas arriver
+        Date expiration = JWT.decode(token).getExpiresAt();
+        if (!new Date().before(expiration)) {
+            throw new JWTVerificationException("Token expired");
+        }
         return jwt.getClaim("sub").asString();
     }
 
@@ -94,6 +98,14 @@ public class PresenceUcblJwtHelper {
             origin = origin + request.getHeader("X-Forwarded-Path");
         }
         return origin + request.getContextPath();
+    }
+
+    public static String getTokenFromRequest(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header == null || !header.contains("Bearer: ")) {
+            return "";
+        }
+        return header.split(" ")[1];
     }
 
 }

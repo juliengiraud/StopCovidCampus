@@ -1,6 +1,7 @@
 package fr.univlyon1.m1if.m1if03.servlets;
 
 import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
 import fr.univlyon1.m1if.m1if03.utils.Utilities;
 import org.json.JSONObject;
 
@@ -37,23 +38,14 @@ public class UserController extends HttpServlet {
                     JSONObject params;
                     try {
                         params = Utilities.getParams(request, Arrays.asList("login", "nom", "admin"));
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci de renseigner : login, nom et admin.");
                         return;
                     }
                     String login = params.getString("login");
                     String nom = params.getString("nom");
                     Boolean admin = params.getBoolean("admin");
-                    if (!login.equals("")) {
-                        User user = new User(login);
-                        user.setNom(nom);
-                        user.setAdmin(admin);
-                        request.getSession().setAttribute("user", user);
-                        users.put(login, user);
-                    } else {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le login doit être renseigné.");
-                        return;
-                    }
+                    doLogin(request, response, login, nom, admin);
                     break;
 
                 case "logout":
@@ -86,7 +78,7 @@ public class UserController extends HttpServlet {
             getUserById(request, response, userId);
         } else if (path.size() == 3 && path.get(2).equals("passages")) { // GET /users/{userId}/passages
             //tp4, tp4_war +...
-            response.sendRedirect("/" + Arrays.asList(request.getRequestURI().split("/")).get(1) + "/passages/byUser/" + path.get(1));
+            response.sendRedirect("/" + request.getRequestURI().split("/")[1] + "/passages/byUser/" + path.get(1));
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
@@ -104,7 +96,7 @@ public class UserController extends HttpServlet {
             JSONObject params;
             try {
                 params = Utilities.getParams(request, Arrays.asList("nom"));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nouveau nom n'est pas renseigné."); //400
                 return;
             }
@@ -146,4 +138,19 @@ public class UserController extends HttpServlet {
         }
         user.setNom(userName);
     }
+
+    private void doLogin(HttpServletRequest request, HttpServletResponse response, String login, String nom, Boolean admin) throws IOException {
+        if (login.equals("")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le login doit être renseigné.");
+            return;
+        }
+        User user = new User(login);
+        user.setNom(nom);
+        user.setAdmin(admin);
+        // request.getSession().setAttribute("user", user);
+        String token = PresenceUcblJwtHelper.generateToken(login, admin, request);
+        response.setHeader("Authorization", "Bearer: " + token);
+        users.put(login, user);
+    }
+
 }

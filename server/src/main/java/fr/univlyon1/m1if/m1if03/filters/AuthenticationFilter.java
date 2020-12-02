@@ -1,8 +1,10 @@
 package fr.univlyon1.m1if.m1if03.filters;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import fr.univlyon1.m1if.m1if03.classes.Route;
 import fr.univlyon1.m1if.m1if03.classes.User;
 import fr.univlyon1.m1if.m1if03.servlets.UserController;
+import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -26,13 +29,20 @@ public class AuthenticationFilter extends HttpFilter {
     }
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        User userSession = (User) request.getSession().getAttribute("user");
         List<Route> whiteListedPaths = Route.getWhiteList(null);
         String path = request.getRequestURI();
+        String token = PresenceUcblJwtHelper.getTokenFromRequest(request);
 
-        if (userSession != null) {
-            chain.doFilter(request, response);
-            return;
+        if (token != "") { // La requête contien un token
+            try {
+                String login = PresenceUcblJwtHelper.verifyToken(token, request);
+                request.setAttribute("userLogin", login);
+                chain.doFilter(request, response);
+                return;
+            } catch (NullPointerException | JWTVerificationException e) {
+                response.sendRedirect("/" + request.getRequestURI().split("/")[1]);
+                return;
+            }
         }
 
         for (Route route : whiteListedPaths) {
@@ -43,6 +53,5 @@ public class AuthenticationFilter extends HttpFilter {
         }
 
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté.");
-
     }
 }

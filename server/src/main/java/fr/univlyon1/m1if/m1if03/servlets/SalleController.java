@@ -44,7 +44,7 @@ public class SalleController extends HttpServlet {
             doGetSalle(request, response, path.get(1));
         } else if (path.size() == 3 && path.get(2).equals("passages")) { // GET /salles/{salleId}/passages
             //tp4, tp4_war +...
-            response.sendRedirect("/" + Arrays.asList(request.getRequestURI().split("/")).get(1) + "/passages/bySalle/" + path.get(1));
+            response.sendRedirect("/" + request.getRequestURI().split("/")[1] + "/passages/bySalle/" + path.get(1));
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }

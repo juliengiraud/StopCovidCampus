@@ -2,6 +2,7 @@ package fr.univlyon1.m1if.m1if03.filters;
 
 import fr.univlyon1.m1if.m1if03.classes.Route;
 import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,18 +16,24 @@ import java.util.List;
 @WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter extends HttpFilter {
 
-    public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        User userSession = (User) req.getSession().getAttribute("user");
-        List<Route> whiteListedPaths = Route.getWhiteList(userSession);
-        String path = req.getRequestURI();
+    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        String token = PresenceUcblJwtHelper.getTokenFromRequest(request);
+        User user = null;
+        String userLogin = (String) request.getAttribute("userLogin");
+        if (userLogin != null) {
+            user = new User(userLogin, PresenceUcblJwtHelper.verifyAdmin(token));
+        }
+
+        List<Route> whiteListedPaths = Route.getWhiteList(user);
+        String path = request.getRequestURI();
 
         for (Route route : whiteListedPaths) {
-            if (path.contains(route.getPath()) && req.getMethod().equals(route.getMethod())) {
-                chain.doFilter(req, resp);
+            if (path.contains(route.getPath()) && request.getMethod().equals(route.getMethod())) {
+                chain.doFilter(request, response);
                 return;
             }
         }
 
-        resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'êtes pas administrateur.");
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'êtes pas administrateur.");
     }
 }

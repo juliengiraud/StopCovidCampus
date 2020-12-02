@@ -22,7 +22,7 @@ public class Utilities {
         return body;
     }
 
-    private static JSONObject getUrlData(HttpServletRequest request) throws IOException {
+    private static JSONObject getUrlData(HttpServletRequest request) {
         String body = (String) request.getParameterMap().keySet().toArray()[0];
         return new JSONObject(body);
     }
