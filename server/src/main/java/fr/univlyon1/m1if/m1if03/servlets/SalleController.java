@@ -123,7 +123,7 @@ public class SalleController extends HttpServlet {
 
     // GET /salles
     private void doGetSalles(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.getRequestDispatcher("WEB-INF/jsp/contenus/salles.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/salles.jsp").include(request, response);
     }
 
     // GET /salles/{salleId}
@@ -134,7 +134,7 @@ public class SalleController extends HttpServlet {
             return;
         }
         request.setAttribute("salle", salle);
-        request.getRequestDispatcher("../WEB-INF/jsp/contenus/salle.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/salle.jsp").include(request, response);
     }
 
     // POST /salles

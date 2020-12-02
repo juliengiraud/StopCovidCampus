@@ -113,7 +113,7 @@ public class UserController extends HttpServlet {
 
     private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("users", users);
-        request.getRequestDispatcher("WEB-INF/jsp/contenus/users.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/users.jsp").include(request, response);
     }
 
     private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException, ServletException {
@@ -123,7 +123,7 @@ public class UserController extends HttpServlet {
             return;
         }
         request.setAttribute("login", userId);
-        request.getRequestDispatcher("../WEB-INF/jsp/contenus/user.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/user.jsp").include(request, response);
     }
 
     private void updateUserName(HttpServletRequest request, HttpServletResponse response, String userId, String userName) throws IOException {

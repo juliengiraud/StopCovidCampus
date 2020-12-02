@@ -125,7 +125,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         request.setAttribute("passage", passage);
-        request.getRequestDispatcher("../WEB-INF/jsp/contenus/passage.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passage.jsp").include(request, response);
     }
 
     // GET /passages/byUser/{userId}
@@ -137,7 +137,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         request.setAttribute("passagesAffiches", this.passages.getPassagesByUser(user));
-        request.getRequestDispatcher("../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUser/{userId}/enCours
@@ -149,7 +149,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         request.setAttribute("passagesAffiches", this.passages.getPassagesByUserEncours(user));
-        request.getRequestDispatcher("../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUserAndDates/{userId}/{dateEntree}/{dateSortie}
@@ -176,7 +176,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesByUserAndDates(user, entree, sortie));
-        request.getRequestDispatcher("../../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/bySalle/{salleId}
@@ -188,7 +188,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesBySalle(salle));
-        request.getRequestDispatcher("../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/bySalleAndDates/{salleId}/{dateEntree}/{dateSortie}
@@ -214,7 +214,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesBySalleAndDates(salle, entree, sortie));
-        request.getRequestDispatcher("../../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUserAndSalle/{userId}/{salleId}
@@ -231,7 +231,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle(user, salle));
-        request.getRequestDispatcher("../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // POST /passages {"user": "string", salle": "string", dateEntree": "string", dateSortie": "string"}
