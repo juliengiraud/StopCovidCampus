@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -162,10 +164,11 @@ public class PassageController extends HttpServlet {
         Date entree = null;
         Date sortie = null;
         try {
-            entree = sdf.parse(dateEntree);
-            sortie = sdf.parse(dateSortie);
-        } catch (ParseException e) {
-            // C'est grave que pour l'entrée, on gère ça juste après
+            entree = sdf.parse(URLDecoder.decode(dateEntree, StandardCharsets.UTF_8.name()));
+            sortie = sdf.parse(URLDecoder.decode(dateSortie, StandardCharsets.UTF_8.name()));
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer la date d'entrée et la date de sortie.");
+            return;
         }
 
         if (entree == null) { // On peut avoir seulement la sortie à null
@@ -200,10 +203,10 @@ public class PassageController extends HttpServlet {
         Date entree = null;
         Date sortie = null;
         try {
-            entree = sdf.parse(dateEntree);
-            sortie = sdf.parse(dateSortie);
-        } catch (ParseException e) {
-            // C'est grave que pour l'entrée, on gère ça juste après
+            entree = sdf.parse(URLDecoder.decode(dateEntree, StandardCharsets.UTF_8.name()));
+            sortie = sdf.parse(URLDecoder.decode(dateSortie, StandardCharsets.UTF_8.name()));
+        } catch (Exception e) {
+            return;
         }
 
         if (entree == null) { // On peut avoir seulement la sortie à null
