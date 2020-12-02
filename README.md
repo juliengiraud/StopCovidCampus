@@ -7,28 +7,6 @@ Un dépôt de qualité
 - 11702137 Jérémy Thomas
 - 11704709 Julien Giraud
 
-### TP 2 : Programmation Java côté serveur
-
-#### Bibliothèques supplémentaires utilisées
-
-Afin d'obtenir une meilleure mise en forme, nous avons choisis d'utiliser la bibliothèque Bootstrap.
-
-#### Choix d'implémentation
-
-##### 1.5 Amélioration des fonctionnalités
-
-###### Cas contacts
-
-Pour savoir quels utilisateurs étaient dans la même salle qu'un autre utilisateur U en même temps, nous regardons pour chaque passage de l'utilisateur U si un autre utilisateur a été dans la même salle. Si oui, nous regardons s'ils se sont croisés à l'aide d'une comparaison d'intervalle en comparant leurs dates d'arrivée et de départ. Si l'utilisateur U était dans la salle durant un intervalle [a, b] et que l'utilisateur U2 était dans la salle durant un intervalle [c, d], alors U et U2 se sont croisés si a est inclu dans [c, d] ou si b est inclu dans [c, d], ou si c est inclu dans [a, b] ou si d inclus dans [a, b].
-
-### TP 3 : Design patterns côté serveur en Java
-
-#### Utilisation des en-têtes HTTP de date
-
-La date recupérée dans l'en-tête If-Modified-Since est moins précise que la date stockée par le serveur par dans la variable d'instance de type Date(). En effet, les dates HTTP n'incluent pas les millisecondes alors que la méthode java.util.Date.getTime() retourne combien de  millisecondes se sont écoulées depuis le 1er Janvier 1970 à 00:00:00 GMT.
-
-Afin de comparer les deux valeurs, nous avons donc décidé d'arrondir les valeurs à la seconde près en les divisant puis en les multipliant par 1000.
-
-### TP4
+### TP 4 : Web API (programmation REST)
 
 Ajout d'une dépendance dans le fichier pom.xml pour manipuler du JSON
