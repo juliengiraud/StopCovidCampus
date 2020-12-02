@@ -28,7 +28,7 @@ public class User {
         this.nom = nom;
     }
 
-    public Boolean isAdmin() {
+    public Boolean getAdmin() {
         return admin;
     }
 
