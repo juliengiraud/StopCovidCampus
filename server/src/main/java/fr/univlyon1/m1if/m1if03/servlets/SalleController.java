@@ -44,7 +44,8 @@ public class SalleController extends HttpServlet {
             doGetSalle(request, response, path.get(1));
         } else if (path.size() == 3 && path.get(2).equals("passages")) { // GET /salles/{salleId}/passages
             //tp4, tp4_war +...
-            response.sendRedirect("/" + Arrays.asList(request.getRequestURI().split("/")).get(1) + "/passages/bySalle/" + path.get(1));
+            response.setStatus(HttpServletResponse.SC_SEE_OTHER);
+            response.setHeader("Location", "/" + Arrays.asList(request.getRequestURI().split("/")).get(1) + "/passages/bySalle/" + path.get(1));
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -60,18 +61,20 @@ public class SalleController extends HttpServlet {
             JSONObject params;
             try {
                 params = Utilities.getParams(request, Arrays.asList("nomSalle"));
-            } catch (JSONException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables.");
                 return;
             }
             String nomSalle = params.getString("nomSalle");
             if (nomSalle == null || nomSalle.equals("")) { // Paramètres non acceptables
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nom de la salle n'est pas renseigné."); // 400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables"); // 400
+                return;
             }
             doCreateSalle(request, response, nomSalle);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
+        response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -85,19 +88,19 @@ public class SalleController extends HttpServlet {
             try{
                 params = Utilities.getParams(request, Arrays.asList("nomSalle", "capacite"));
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                 return;
             }
             String salleId = params.getString("nomSalle");
             int capacite = -2;
             try {
                 capacite = params.getInt("capacite");
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer une capacité positive.");
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                 return;
             }
-            if (salleId == null || salleId.equals("") || capacite < -1) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer l'identifiant de la salle et sa capacité.");
+            if (salleId.equals("") || capacite < -1) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             } else {
                 doUpdateSalle(request, response, salleId, capacite);
             }
@@ -129,7 +132,7 @@ public class SalleController extends HttpServlet {
     private void doGetSalle(HttpServletRequest request, HttpServletResponse response, String salleId) throws IOException, ServletException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
         request.setAttribute("salle", salle);
@@ -146,19 +149,21 @@ public class SalleController extends HttpServlet {
     private void doUpdateSalle(HttpServletRequest request, HttpServletResponse response, String salleId, int capacite) throws IOException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
-            return;
+            salle = new Salle(salleId);
+            salles.put(salleId, salle);
         }
         salle.setCapacite(capacite);
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
     // DELETE /salles/{salleId}
     private void doDeleteSalle(HttpServletRequest request, HttpServletResponse response, String salleId) throws IOException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
         salles.remove(salle.getNom());
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 }

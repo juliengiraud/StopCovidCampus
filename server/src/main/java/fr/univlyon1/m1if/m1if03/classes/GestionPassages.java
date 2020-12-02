@@ -98,8 +98,9 @@ public class GestionPassages {
     private List<Passage> filterByDates(List<Passage> source, Date debut, Date fin) {
         List<Passage> res = new ArrayList<>();
         for (Passage passage : source) {
-            if(!passage.getEntree().after(fin) && (passage.getSortie() == null || !passage.getSortie().before(debut)))
+            if(!passage.getEntree().after(fin) && (passage.getSortie() == null || !passage.getSortie().before(debut))){
                 res.add(passage);
+            }
         }
         return res;
     }

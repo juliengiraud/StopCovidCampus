@@ -18,7 +18,7 @@ public final class Route {
 
         if (user == null) {
             list.add(new Route("/users/login", "POST"));
-        } else if (!user.isAdmin()) {
+        } else if (!user.getAdmin()) {
             String userId = user.getLogin();
             list.add(new Route("/passages", "POST"));
             list.add(new Route("/passages/byUser/" + userId, "GET"));
@@ -41,6 +41,7 @@ public final class Route {
             list.add(new Route("/users", "PUT"));
             list.add(new Route("/users", "POST"));
         }
+
 
         return list;
     }

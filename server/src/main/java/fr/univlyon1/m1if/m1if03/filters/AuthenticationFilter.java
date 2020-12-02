@@ -42,7 +42,6 @@ public class AuthenticationFilter extends HttpFilter {
             }
         }
 
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté.");
-
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utilisateur non authentifié");
     }
 }

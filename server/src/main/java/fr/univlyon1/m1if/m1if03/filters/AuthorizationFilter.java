@@ -27,6 +27,6 @@ public class AuthorizationFilter extends HttpFilter {
             }
         }
 
-        resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'êtes pas administrateur.");
+        resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur");
     }
 }

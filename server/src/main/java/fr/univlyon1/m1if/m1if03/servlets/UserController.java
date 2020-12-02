@@ -38,7 +38,7 @@ public class UserController extends HttpServlet {
                     try {
                         params = Utilities.getParams(request, Arrays.asList("login", "nom", "admin"));
                     } catch (IOException e) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                         return;
                     }
                     String login = params.getString("login");
@@ -50,8 +50,9 @@ public class UserController extends HttpServlet {
                         user.setAdmin(admin);
                         request.getSession().setAttribute("user", user);
                         users.put(login, user);
+                        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                     } else {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le login doit être renseigné.");
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                         return;
                     }
                     break;
@@ -59,12 +60,17 @@ public class UserController extends HttpServlet {
                 case "logout":
                     User user = (User) request.getSession().getAttribute("user");
                     if (user == null) { // Non authentifié
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'est pas connecté."); //401
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utilisateur non authentifié"); //401
                         return;
                     }
-                    request.getRequestDispatcher("Deco").forward(request, response);
+                    request.getSession().invalidate();
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                     break;
+                default:
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
@@ -81,11 +87,11 @@ public class UserController extends HttpServlet {
             String userId = path.get(1);
             getUserById(request, response, userId);
         } else if (path.size() == 3 && path.get(2).equals("passages")) { // GET /users/{userId}/passages
-            String userId = path.get(1);
-            response.sendRedirect("/passages/byUser/" + userId);
+            //tp4, tp4_war +...
+            response.setStatus(HttpServletResponse.SC_SEE_OTHER);
+            response.setHeader("Location", "/" + Arrays.asList(request.getRequestURI().split("/")).get(1) + "/passages/byUser/" + path.get(1));
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
         }
     }
 
@@ -101,12 +107,19 @@ public class UserController extends HttpServlet {
             try {
                 params = Utilities.getParams(request, Arrays.asList("nom"));
             } catch (IOException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nouveau nom n'est pas renseigné."); //400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables"); //400
                 return;
             }
             String userName = params.getString("nom");
+            if (userName.equals("")) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables"); //400
+            }
             updateUserName(request, response, userId, userName);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
         }
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
     private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -117,24 +130,23 @@ public class UserController extends HttpServlet {
     private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException, ServletException {
         User user = this.users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas."); // 404
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Paramètres de la requête non acceptables"); // 404
             return;
         }
-        request.setAttribute("user", users.get(userId));
+        request.setAttribute("login", userId);
         request.getRequestDispatcher("../WEB-INF/jsp/contenus/user.jsp").include(request, response);
     }
 
     private void updateUserName(HttpServletRequest request, HttpServletResponse response, String userId, String userName) throws IOException {
         User user = this.users.get(userId);
-
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas."); // 404
-        }
-        if (userName == null || userName.equals("")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nouveau nom n'est pas renseigné."); //400
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
-
+        if (user != request.getSession().getAttribute("user")) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous ne pouvez modifier que votre propre nom.");
+            return;
+        }
         user.setNom(userName);
     }
 }
