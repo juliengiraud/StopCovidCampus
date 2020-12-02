@@ -37,7 +37,7 @@ public class PassageController extends HttpServlet {
         this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("passages");
         int endIndex = path.size();
@@ -89,64 +89,70 @@ public class PassageController extends HttpServlet {
     }
 
     // GET /passages
-    private void getPassages(HttpServletRequest request, HttpServletResponse response) {
-        List<Passage> passage = passages.getAllPassages();
-        // TODO envoyer passages
+    private void getPassages(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Passage> passages = this.passages.getAllPassages();
+        request.setAttribute("passagesAffiches", passages);
+        request.getRequestDispatcher("WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/{passageId}
     private void getPassage(HttpServletRequest request, HttpServletResponse response,
-                            String passageId) throws IOException {
+                            String passageId) throws IOException, ServletException {
         int id;
         try {
             id = Integer.parseInt(passageId);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La capacité d'une salle doit être un nombre entier.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci de renseigner le numero du passage.");
             return;
         }
-        Passage passage = passages.getPassageById(id);
+        Passage passage = null;
+        this.passages.getPassageById(id);
+
         if (passage == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Le passage " + id + "n'existe pas.");
             return;
         }
-        // TODO envoyer passage
+        request.setAttribute("passage", passage);
+        request.getRequestDispatcher("../WEB-INF/jsp/contenus/passage.jsp").include(request, response);
     }
 
     // GET /passages/byUser/{userId}
     private void getPassagesByUser(HttpServletRequest request, HttpServletResponse response,
-                                   String userId) throws IOException {
+                                   String userId) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
             return;
         }
         List<Passage> passageByUser = this.passages.getPassagesByUser(user);
-        // TODO envoyer passageByUser
+        request.setAttribute("passagesAffiches", passageByUser);
+        request.getRequestDispatcher("../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUser/{userId}/enCours
     private void getPassagesByUserEnCours(HttpServletRequest request, HttpServletResponse response,
-                                          String userId) throws IOException {
+                                          String userId) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
             return;
         }
         List<Passage> passageByUserEnCours = this.passages.getPassagesByUserEncours(user);
-        // TODO envoyer passageByUserEnCours
+        request.setAttribute("passagesAffiches", passageByUserEnCours);
+        request.getRequestDispatcher("../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUserAndDates/{userId}/{dateEntree}/{dateSortie}
     private void getPassagesByUserAndDates(HttpServletRequest request, HttpServletResponse response,
-                                          String userId, String dateEntree, String dateSortie) throws IOException {
+                                          String userId, String dateEntree, String dateSortie) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
             return;
         } // "mon nov 11 13:27:03 UTC 2020"
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
-        Date entree;
-        Date sortie;
+        Date entree = null;
+        Date sortie = null;
         try {
             entree = sdf.parse(dateEntree);
             sortie = sdf.parse(dateSortie);
@@ -155,24 +161,26 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passagesByUserAndDates = passages.getPassagesByUserAndDates(user, entree, sortie);
-        // TODO envoyer passagesByUserAndDates
+        request.setAttribute("passagesAffiches", passagesByUserAndDates);
+        request.getRequestDispatcher("../../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/bySalle/{salleId}
     private void getPassagesBySalle(HttpServletRequest request, HttpServletResponse response,
-                                    String salleId) throws IOException {
+                                    String salleId) throws IOException, ServletException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
             return;
         }
         List<Passage> passagesBySalle = passages.getPassagesBySalle(salle);
-        // TODO envoyer passagesBySalle
+        request.setAttribute("passagesAffiches", passagesBySalle);
+        request.getRequestDispatcher("../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/bySalleAndDates/{salleId}/{dateEntree}/{dateSortie}
     private void getPassagesBySalleAndDates(HttpServletRequest request, HttpServletResponse response,
-                                            String salleId, String dateEntree, String dateSortie) throws IOException {
+                                            String salleId, String dateEntree, String dateSortie) throws IOException, ServletException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
@@ -189,12 +197,13 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passagesBySalleAndDates = passages.getPassagesBySalleAndDates(salle, entree, sortie);
-        // TODO envoyer passagesBySalleAndDates
+        request.setAttribute("passagesAffiches", passagesBySalleAndDates);
+        request.getRequestDispatcher("../../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUserAndSalle/{userId}/{salleId}
     private void getPassagesByUserAndSalle(HttpServletRequest request, HttpServletResponse response,
-                                           String userId, String salleId) throws IOException {
+                                           String userId, String salleId) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + "n'existe pas.");
@@ -206,7 +215,8 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passagesByUserAndSalle = passages.getPassagesByUserAndSalle(user, salle);
-        // TODO envoyer passagesByUserAndSalle
+        request.setAttribute("passagesAffiches", passagesByUserAndSalle);
+        request.getRequestDispatcher("../../../WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // POST /passages {"user": "string", salle": "string", dateEntree": "string", dateSortie": "string"}

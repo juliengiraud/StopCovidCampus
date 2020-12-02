@@ -32,7 +32,7 @@ public class SalleController extends HttpServlet {
         this.salles = (Map<String, Salle>) config.getServletContext().getAttribute("salles");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
@@ -42,8 +42,9 @@ public class SalleController extends HttpServlet {
             doGetSalles(request, response);
         } else if (path.size() == 2) { // GET /salles/{salleId}
             doGetSalle(request, response, path.get(1));
-        } else if (path.size() == 3 && path.get(2) == "passages") { // GET /salles/{salleId}/passages
-            doGetPassagesBySalle(request, response, path.get(1));
+        } else if (path.size() == 3 && path.get(2).equals("passages")) { // GET /salles/{salleId}/passages
+            //tp4, tp4_war +...
+            response.sendRedirect("/" + Arrays.asList(request.getRequestURI().split("/")).get(1) + "/passages/bySalle/" + path.get(1));
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -92,11 +93,11 @@ public class SalleController extends HttpServlet {
             try {
                 capacite = params.getInt("capacite");
             } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer une capacité positive.");
                 return;
             }
             if (salleId == null || salleId.equals("") || capacite < -1) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer l'identifiant de la salle et sa capacité.");
             } else {
                 doUpdateSalle(request, response, salleId, capacite);
             }
@@ -111,46 +112,28 @@ public class SalleController extends HttpServlet {
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /salles
 
-        if (path.size() == 1) { // DELETE /salles
-            JSONObject params;
-            try {
-                params = Utilities.getParams(request, Arrays.asList("nomSalle"));
-            } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-            String nomSalle = params.getString("nomSalle");
-            doDeleteSalle(request, response, nomSalle);
+        if (path.size() == 2) { // DELETE /salles/{salleId}
+            String salleId = path.get(1);
+            doDeleteSalle(request, response, salleId);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
     // GET /salles
-    private void doGetSalles(HttpServletRequest request, HttpServletResponse response) {
-        List<Salle> salle = new ArrayList<>(salles.values());
-        // TODO envoyer salle
+    private void doGetSalles(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.getRequestDispatcher("WEB-INF/jsp/contenus/salles.jsp").include(request, response);
     }
 
     // GET /salles/{salleId}
-    private void doGetSalle(HttpServletRequest request, HttpServletResponse response, String salleId) throws IOException {
+    private void doGetSalle(HttpServletRequest request, HttpServletResponse response, String salleId) throws IOException, ServletException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
             return;
         }
-        // TODO envoyer salle
-    }
-
-    // GET /salles/{salleId}/passages
-    private void doGetPassagesBySalle(HttpServletRequest request, HttpServletResponse response, String salleId) throws IOException {
-        Salle salle = salles.get(salleId);
-        if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
-            return;
-        }
-        List<Passage> passagesBySalle = passages.getPassagesBySalle(salle);
-        // TODO envoyer passagesBySalle
+        request.setAttribute("salle", salle);
+        request.getRequestDispatcher("../WEB-INF/jsp/contenus/salle.jsp").include(request, response);
     }
 
     // POST /salles
@@ -176,7 +159,6 @@ public class SalleController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + "n'existe pas.");
             return;
         }
-        salles.remove(salle);
+        salles.remove(salle.getNom());
     }
-
 }

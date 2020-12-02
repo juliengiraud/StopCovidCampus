@@ -20,7 +20,6 @@ public final class Route {
             list.add(new Route("/users/login", "POST"));
         } else if (!user.isAdmin()) {
             String userId = user.getLogin();
-            System.out.println(userId);
             list.add(new Route("/passages", "POST"));
             list.add(new Route("/passages/byUser/" + userId, "GET"));
             list.add(new Route("/passages/byUser/" + userId + "/enCours", "GET"));
