@@ -3,7 +3,6 @@ package fr.univlyon1.m1if.m1if03.filters;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import fr.univlyon1.m1if.m1if03.classes.Route;
 import fr.univlyon1.m1if.m1if03.classes.User;
-import fr.univlyon1.m1if.m1if03.servlets.UserController;
 import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
 
 import javax.servlet.FilterChain;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +50,6 @@ public class AuthenticationFilter extends HttpFilter {
             }
         }
 
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'êtes pas connecté.");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utilisateur non authentifié");
     }
 }

@@ -49,12 +49,7 @@ public class UserController extends HttpServlet {
                     break;
 
                 case "logout":
-                    User user = (User) request.getSession().getAttribute("user");
-                    if (user == null) { // Non authentifié
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'est pas connecté."); //401
-                        return;
-                    }
-                    request.getSession().invalidate();
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                     break;
                 default:
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -78,10 +73,10 @@ public class UserController extends HttpServlet {
             getUserById(request, response, userId);
         } else if (path.size() == 3 && path.get(2).equals("passages")) { // GET /users/{userId}/passages
             //tp4, tp4_war +...
+            response.setStatus(HttpServletResponse.SC_SEE_OTHER);
             response.sendRedirect("/" + request.getRequestURI().split("/")[1] + "/passages/byUser/" + path.get(1));
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
         }
     }
 
@@ -97,18 +92,19 @@ public class UserController extends HttpServlet {
             try {
                 params = Utilities.getParams(request, Arrays.asList("nom"));
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nouveau nom n'est pas renseigné."); //400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables"); //400
                 return;
             }
             String userName = params.getString("nom");
             if (userName == "") {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le nouveau nom n'est pas renseigné."); //400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables"); //400
             }
             updateUserName(request, response, userId, userName);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
     private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -119,7 +115,7 @@ public class UserController extends HttpServlet {
     private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException, ServletException {
         User user = this.users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas."); // 404
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Paramètres de la requête non acceptables"); // 404
             return;
         }
         request.setAttribute("login", userId);
@@ -129,7 +125,7 @@ public class UserController extends HttpServlet {
     private void updateUserName(HttpServletRequest request, HttpServletResponse response, String userId, String userName) throws IOException {
         User user = this.users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas."); // 404
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
         if (user != request.getSession().getAttribute("user")) {
@@ -141,7 +137,7 @@ public class UserController extends HttpServlet {
 
     private void doLogin(HttpServletRequest request, HttpServletResponse response, String login, String nom, Boolean admin) throws IOException {
         if (login.equals("")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le login doit être renseigné.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
         User user = new User(login);

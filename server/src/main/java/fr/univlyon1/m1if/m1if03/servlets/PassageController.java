@@ -77,7 +77,7 @@ public class PassageController extends HttpServlet {
             try {
                 params = Utilities.getParams(request, Arrays.asList("user", "salle", "dateEntree", "dateSortie"));
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer l'utilisateur, la salle et la date d'entrée ou la date de sortie."); //400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables"); //400
                 return;
             }
             String userId = params.getString("user");
@@ -86,7 +86,7 @@ public class PassageController extends HttpServlet {
             String dateSortie = params.getString("dateSortie");
 
             if (userId.equals("") || salleId.equals("") || (dateEntree.equals("") && dateSortie.equals(""))) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer l'utilisateur, la salle et la date d'entrée ou la date de sortie."); //400
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables"); //400
                 return;
             }
             createPassage(request, response, userId, salleId, dateEntree, dateSortie);
@@ -109,19 +109,19 @@ public class PassageController extends HttpServlet {
         try {
             id = Integer.parseInt(passageId);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci de renseigner un numéro entier.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
         Passage passage = null;
         try {
             passage = this.passages.getPassageById(id);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le passage " + id + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
 
         if (this.passages.getPassageById(id) == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Le passage " + id + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Passage non trouvé");
             return;
         }
         request.setAttribute("passage", passage);
@@ -133,7 +133,7 @@ public class PassageController extends HttpServlet {
                                    String userId) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         }
         request.setAttribute("passagesAffiches", this.passages.getPassagesByUser(user));
@@ -145,7 +145,7 @@ public class PassageController extends HttpServlet {
                                           String userId) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         }
         request.setAttribute("passagesAffiches", this.passages.getPassagesByUserEncours(user));
@@ -157,7 +157,7 @@ public class PassageController extends HttpServlet {
                                           String userId, String dateEntree, String dateSortie) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         } // "mon nov 11 13:27:03 UTC 2020"
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
@@ -167,12 +167,12 @@ public class PassageController extends HttpServlet {
             entree = sdf.parse(URLDecoder.decode(dateEntree, StandardCharsets.UTF_8.name()));
             sortie = sdf.parse(URLDecoder.decode(dateSortie, StandardCharsets.UTF_8.name()));
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer la date d'entrée et la date de sortie.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
 
         if (entree == null) { // On peut avoir seulement la sortie à null
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer la date d'entrée au moins.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesByUserAndDates(user, entree, sortie));
@@ -184,7 +184,7 @@ public class PassageController extends HttpServlet {
                                     String salleId) throws IOException, ServletException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesBySalle(salle));
@@ -196,7 +196,7 @@ public class PassageController extends HttpServlet {
                                             String salleId, String dateEntree, String dateSortie) throws IOException, ServletException {
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
@@ -210,7 +210,7 @@ public class PassageController extends HttpServlet {
         }
 
         if (entree == null) { // On peut avoir seulement la sortie à null
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'indiquer la date d'entrée au moins.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesBySalleAndDates(salle, entree, sortie));
@@ -222,12 +222,12 @@ public class PassageController extends HttpServlet {
                                            String userId, String salleId) throws IOException, ServletException {
         User user = users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         }
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
         request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle(user, salle));
@@ -239,7 +239,7 @@ public class PassageController extends HttpServlet {
                                String salleId, String dateEntree, String dateSortie) throws IOException {
         User user = users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "L'utilisateur " + userId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         }
         if (user != request.getSession().getAttribute("user")) {
@@ -248,7 +248,7 @@ public class PassageController extends HttpServlet {
         }
         Salle salle = salles.get(salleId);
         if (salle == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "La salle " + salleId + " n'existe pas.");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         } // Wed Oct 16 00:00:00 CEST 2013 -> ce format de date marche
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
@@ -268,7 +268,7 @@ public class PassageController extends HttpServlet {
         if (entree == null && sortie == null) { // Là c'est pas normal par contre
             System.out.println(entree);
             System.out.println(sortie);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci d'entrer la date d'entrée et/ou la date de sortie.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }else if (entree != null && sortie == null) {
             Passage p = new Passage(user, salle, entree);
@@ -279,7 +279,7 @@ public class PassageController extends HttpServlet {
             try {
                 p.setSortie(sortie);
             } catch (IllegalArgumentException e) { //Sortie inférieur à l'entrée ?
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                 return;
             }
             passages.add(p);
@@ -290,8 +290,8 @@ public class PassageController extends HttpServlet {
                 if (p.getSortie() == null) {
                     try {
                         p.setSortie(sortie);
-                    } catch (IllegalArgumentException e) { //Sortie inférieur à l'entrée ?
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                    } catch (Exception e) { //Sortie inférieur à l'entrée ?
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                         return;
                     }
                     salle.decPresent();
@@ -299,9 +299,10 @@ public class PassageController extends HttpServlet {
                 }
             }
             if (!found) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Vous ne pouvez pas sortir d'une salle sans y être rentrer.");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             }
         }
+        response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
 }
