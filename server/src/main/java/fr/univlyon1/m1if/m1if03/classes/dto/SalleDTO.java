@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class SalleDTO implements Serializable {
+public class SalleDTO implements Serializable, GenericDTO {
 
     private Salle salle;
 

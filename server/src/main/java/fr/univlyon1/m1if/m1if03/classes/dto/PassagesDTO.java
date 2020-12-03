@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassagesDTO implements Serializable {
+public class PassagesDTO implements Serializable, GenericDTO {
 
     private List<Passage> passages;
 

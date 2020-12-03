@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersDTO implements Serializable {
+public class UsersDTO implements Serializable, GenericDTO {
 
     private List<User> users;
 

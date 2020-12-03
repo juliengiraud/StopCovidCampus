@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SallesDTO implements Serializable {
+public class SallesDTO implements Serializable, GenericDTO {
 
     private List<Salle> salles;
 

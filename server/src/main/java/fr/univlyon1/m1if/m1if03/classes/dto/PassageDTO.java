@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class PassageDTO implements Serializable {
+public class PassageDTO implements Serializable, GenericDTO {
 
     private Passage passage;
 
