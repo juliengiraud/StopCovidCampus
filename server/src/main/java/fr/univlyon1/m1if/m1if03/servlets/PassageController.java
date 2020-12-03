@@ -6,7 +6,6 @@ import fr.univlyon1.m1if.m1if03.classes.Salle;
 import fr.univlyon1.m1if.m1if03.classes.User;
 import fr.univlyon1.m1if.m1if03.classes.dto.PassageDTO;
 import fr.univlyon1.m1if.m1if03.classes.dto.PassagesDTO;
-import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
 import fr.univlyon1.m1if.m1if03.utils.Utilities;
 import org.json.JSONObject;
 
