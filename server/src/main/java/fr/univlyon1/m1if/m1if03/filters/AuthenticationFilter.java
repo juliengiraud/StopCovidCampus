@@ -27,7 +27,7 @@ public class AuthenticationFilter extends HttpFilter {
     }
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        List<Route> whiteListedPaths = Route.getWhiteList(null);
+        List<Route> whiteListedPaths = Route.getWhiteList(null, null);
         String path = request.getRequestURI();
         String token = PresenceUcblJwtHelper.getTokenFromRequest(request);
 

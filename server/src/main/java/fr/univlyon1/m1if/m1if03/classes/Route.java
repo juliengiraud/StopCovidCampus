@@ -13,7 +13,7 @@ public final class Route {
         this.method = method;
     }
 
-    public static List<Route> getWhiteList(User user) {
+    public static List<Route> getWhiteList(User user, List<Passage> passages) {
         List<Route> list = new ArrayList<>();
 
         if (user == null) {
@@ -21,11 +21,15 @@ public final class Route {
         } else if (!user.getAdmin()) {
             String userId = user.getLogin();
             list.add(new Route("/passages", "POST"));
+            for (Passage passage : passages) {
+                list.add(new Route("/passages/" + passage.getId(), "GET"));
+            }
             list.add(new Route("/passages/byUser/" + userId, "GET"));
             list.add(new Route("/passages/byUser/" + userId + "/enCours", "GET"));
             list.add(new Route("/passages/byUserAndDates/" + userId + "/", "GET"));
             list.add(new Route("/passages/byUserAndSalle/" + userId + "/", "GET"));
             list.add(new Route("/users/" + userId, "GET"));
+            list.add(new Route("/users/" + userId + "/nom", "PUT"));
             list.add(new Route("/users/" + userId + "/passages", "GET"));
             list.add(new Route("/users/login", "POST"));
             list.add(new Route("/users/logout", "POST"));
