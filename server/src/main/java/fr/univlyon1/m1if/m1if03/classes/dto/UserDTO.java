@@ -18,7 +18,13 @@ public class UserDTO implements Serializable, GenericDTO {
     }
 
     public String getXML() {
-        return XML.toString(this.getJSON());
+        String xml = String.format("<user>\n" +
+                    "    <login>%s</login>\n" +
+                    "    <nom>%s</nom>\n" +
+                    "    <admin>%b</admin>\n" +
+                    "</user>",
+            user.getLogin(), user.getNom(), user.getAdmin());
+        return xml;
     }
 
     public User getUser() {
