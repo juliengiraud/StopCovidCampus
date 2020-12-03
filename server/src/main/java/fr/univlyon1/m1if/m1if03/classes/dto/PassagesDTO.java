@@ -3,12 +3,13 @@ package fr.univlyon1.m1if.m1if03.classes.dto;
 import fr.univlyon1.m1if.m1if03.classes.Passage;
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import org.json.JSONArray;
+import org.json.XML;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassagesDTO implements Serializable {
+public class PassagesDTO implements Serializable, GenericDTO {
 
     private List<Passage> passages;
 
@@ -24,7 +25,7 @@ public class PassagesDTO implements Serializable {
     }
 
     public String getXML() {
-        return "";
+        return XML.toString(this.getJSON());
     }
 
     public List<Passage> getPassages() {

@@ -2,6 +2,7 @@ package fr.univlyon1.m1if.m1if03.classes.dto;
 
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import org.json.JSONArray;
+import org.json.XML;
 
 import java.io.Serializable;
 import java.sql.Array;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SallesDTO implements Serializable {
+public class SallesDTO implements Serializable, GenericDTO {
 
     private List<Salle> salles;
 
@@ -25,7 +26,7 @@ public class SallesDTO implements Serializable {
     }
 
     public String getXML() {
-        return "";
+        return XML.toString(this.getJSON());
     }
 
     public List<Salle> getSalles() {

@@ -3,12 +3,13 @@ package fr.univlyon1.m1if.m1if03.classes.dto;
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import fr.univlyon1.m1if.m1if03.classes.User;
 import org.json.JSONArray;
+import org.json.XML;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersDTO implements Serializable {
+public class UsersDTO implements Serializable, GenericDTO {
 
     private List<User> users;
 
@@ -24,7 +25,7 @@ public class UsersDTO implements Serializable {
     }
 
     public String getXML() {
-        return "";
+        return XML.toString(this.getJSON());
     }
 
     public List<User> getUsers() {
