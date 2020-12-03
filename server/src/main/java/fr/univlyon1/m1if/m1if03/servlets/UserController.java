@@ -137,7 +137,7 @@ public class UserController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
-        if (user != request.getAttribute("user")) {
+        if (user != request.getAttribute("userLogin")) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous ne pouvez modifier que votre propre nom.");
             return;
         }

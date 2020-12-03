@@ -5,6 +5,6 @@
 <header class="wrapper">
     <div class="header-titre"><strong>Présence UCBL</strong></div>
     <c:if test="${param.user != null}">
-        <div class="header-user"><a href="${param.user.admin ? 'admin?contenu=user&login='.concat(param.user.login) : 'presence?contenu=user&login='.concat(param.user.login)}"><%= ((User) (request.getAttribute("user"))).getLogin() %></a></div>
+        <div class="header-user"><a href="${param.user.admin ? 'admin?contenu=user&login='.concat(param.user.login) : 'presence?contenu=user&login='.concat(param.user.login)}"><%= ((User) (request.getAttribute("userLogin"))).getLogin() %></a></div>
     </c:if>
 </header>
