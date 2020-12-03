@@ -43,7 +43,7 @@ public class UserController extends HttpServlet {
                     try {
                         params = Utilities.getParams(request, Arrays.asList("login", "nom", "admin"));
                     } catch (Exception e) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Merci de renseigner : login, nom et admin.");
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                         return;
                     }
                     String login = params.getString("login");
@@ -155,5 +155,6 @@ public class UserController extends HttpServlet {
         String token = PresenceUcblJwtHelper.generateToken(login, admin, request);
         response.setHeader("Authorization", "Bearer: " + token);
         users.put(login, user);
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 }

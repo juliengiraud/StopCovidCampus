@@ -2,9 +2,10 @@ package fr.univlyon1.m1if.m1if03.classes.dto;
 
 import fr.univlyon1.m1if.m1if03.classes.Passage;
 import org.json.JSONObject;
-import org.json.XML;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class PassageDTO implements Serializable, GenericDTO {
 
@@ -18,7 +19,15 @@ public class PassageDTO implements Serializable, GenericDTO {
     }
 
     public String getXML() {
-        return XML.toString(this.getJSON());
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
+        String xml = String.format("<passage>\n" +
+                        "    <user>%s</user>\n" +
+                        "    <salle>%s</salle>\n" +
+                        "    <dateEntree>%s</dateEntree>\n" +
+                        "    <dateSortie>%s</DateSortie>\n" +
+                        "</passage>",
+                passage.getUser().getLogin(), passage.getSalle().getNom(), sdf.format(passage.getEntree()), sdf.format(passage.getSortie()));
+        return xml;
     }
 
     public Passage getPassage() {

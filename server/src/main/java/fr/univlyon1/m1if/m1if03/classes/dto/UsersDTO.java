@@ -1,5 +1,6 @@
 package fr.univlyon1.m1if.m1if03.classes.dto;
 
+import fr.univlyon1.m1if.m1if03.classes.Passage;
 import fr.univlyon1.m1if.m1if03.classes.User;
 import org.json.JSONArray;
 import org.json.XML;
@@ -18,13 +19,18 @@ public class UsersDTO implements Serializable, GenericDTO {
     public String getJSON() {
         List<String> urls = new ArrayList<>();
         for (User user : this.users) {
-            urls.add("\"http://localhost:8080/users/" + user.getLogin() + "\"");
+            urls.add(String.format("http://localhost:8080/users/%s", user.getLogin()));
         }
         return new JSONArray(urls).toString();
     }
 
     public String getXML() {
-        return XML.toString(this.getJSON());
+        String xml = "<users>";
+        for (User user : users) {
+            xml += String.format("<user>http://localhost:8080/users/%s</user>", user.getLogin());
+        }
+        xml += "</users>";
+        return xml;
     }
 
     public List<User> getUsers() {

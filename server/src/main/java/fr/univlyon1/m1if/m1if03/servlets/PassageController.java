@@ -293,7 +293,7 @@ public class PassageController extends HttpServlet {
         if (entree == null && sortie == null) { // Là c'est pas normal par contre
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
-        }else if (entree != null && sortie == null) {
+        } else if (entree != null && sortie == null) {
             Passage p = new Passage(user, salle, entree);
             passages.add(p);
             salle.incPresent();
