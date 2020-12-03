@@ -122,7 +122,7 @@ public class UserController extends HttpServlet {
     private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException, ServletException {
         User user = this.users.get(userId);
         if (user == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Paramètres de la requête non acceptables"); // 404
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
         UserDTO dto = new UserDTO();
