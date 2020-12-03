@@ -318,14 +318,13 @@ public class PassageController extends HttpServlet {
                 if (p.getSortie() != null) {
                     continue;
                 }
-                if (!sortie.after(entree)) {
+                if (!sortie.after(p.getEntree())) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                     return;
                 }
                 p.setSortie(sortie);
                 salle.decPresent();
                 found = true;
-
             }
             if (!found) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");

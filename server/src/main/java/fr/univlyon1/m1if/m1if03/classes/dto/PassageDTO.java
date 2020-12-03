@@ -21,7 +21,7 @@ public class PassageDTO implements Serializable, GenericDTO {
         json.put("user", basePath + "/users/" + passage.getUser().getLogin());
         json.put("salle", basePath + "/salles/" + passage.getSalle().getNom());
         json.put("dateEntree", passage.getEntree());
-        json.put("dateSortie", passage.getSortie());
+        json.put("dateSortie", passage.getSortie() == null ? "" : passage.getSortie());
         return json.toString();
     }
 

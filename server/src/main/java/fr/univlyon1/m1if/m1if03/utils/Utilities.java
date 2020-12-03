@@ -87,4 +87,5 @@ public class Utilities {
     public static boolean isAdmin(HttpServletRequest request) {
         return PresenceUcblJwtHelper.verifyAdmin(PresenceUcblJwtHelper.getTokenFromRequest(request));
     }
+
 }
