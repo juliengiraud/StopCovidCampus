@@ -4,7 +4,6 @@ import fr.univlyon1.m1if.m1if03.classes.Passage;
 import org.json.JSONObject;
 import org.json.XML;
 
-import javax.xml.crypto.dsig.XMLObject;
 import java.io.Serializable;
 
 public class PassageDTO implements Serializable, GenericDTO {

@@ -42,7 +42,6 @@ public class PassageController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("viewPath", "passage");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("passages");
         int endIndex = path.size();
@@ -105,6 +104,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passages");
     }
 
     // GET /passages/{passageId}
@@ -132,6 +132,7 @@ public class PassageController extends HttpServlet {
         PassageDTO dto = new PassageDTO();
         dto.setPassage(passage);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passage");
     }
 
     // GET /passages/byUser/{userId}
@@ -146,6 +147,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passages");
     }
 
     // GET /passages/byUser/{userId}/enCours
@@ -160,6 +162,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passages");
     }
 
     // GET /passages/byUserAndDates/{userId}/{dateEntree}/{dateSortie}
@@ -189,6 +192,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passages");
     }
 
     // GET /passages/bySalle/{salleId}
@@ -203,6 +207,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passages");
     }
 
     // GET /passages/bySalleAndDates/{salleId}/{dateEntree}/{dateSortie}
@@ -231,6 +236,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passages");
     }
 
     // GET /passages/byUserAndSalle/{userId}/{salleId}
@@ -250,6 +256,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "passages");
     }
 
     // POST /passages {"user": "string", salle": "string", dateEntree": "string", dateSortie": "string"}

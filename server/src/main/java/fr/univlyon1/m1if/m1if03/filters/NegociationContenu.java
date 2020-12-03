@@ -13,32 +13,40 @@ import java.io.IOException;
 @WebFilter(filterName = "NegociationContenu")
 public class NegociationContenu extends HttpFilter {
 
+    private static String prefixe;
+    private static String suffixe;
+
+    public void init(FilterConfig config) throws ServletException {
+        super.init(config);
+        prefixe = config.getInitParameter("prefixe");
+        suffixe = config.getInitParameter("suffixe");
+    }
+
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         chain.doFilter(request, response);
-        if (!request.getMethod().equals(HttpMethod.GET)) {
+        if (!request.getMethod().equals(HttpMethod.GET) || response.getStatus() != 200) {
             return; // On a rien à faire ici
         }
 
-        String prefixe = getServletContext().getInitParameter("prefixe");
-        String sufffixe = getServletContext().getInitParameter("suffixe");
         String accept = Utilities.getAcceptType(request);
         String contentType = "";
         String viewPath = (String) request.getAttribute("viewPath");
 
         if (accept.equals("json")) {
-            contentType = "" + contentType;
+            contentType = "application/json";
         } else if (accept.equals("xml")) {
-            contentType = "application/xml" + contentType;
+            contentType = "application/xml";
         } else {
-            contentType = "text/html" + contentType;
+            contentType = "text/html";
         }
         response.setHeader("Content-Type", contentType + ";charset=UTF-8");
 
-        request.getRequestDispatcher(prefixe + viewPath + sufffixe).include(request, response);
-    }
+        String jspPath = prefixe + accept + "/";
+        jspPath += accept.equals("html") ? viewPath : accept;
+        jspPath += suffixe;
 
-    public void init(FilterConfig config) {
+        request.getRequestDispatcher(jspPath).include(request, response);
     }
 
 }

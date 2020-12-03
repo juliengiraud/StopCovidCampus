@@ -64,7 +64,6 @@ public class UserController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("viewPath", "user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("users");
         int endIndex = path.size();
@@ -117,6 +116,7 @@ public class UserController extends HttpServlet {
         UsersDTO dto = new UsersDTO();
         dto.setUsers(users);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "users");
     }
 
     private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException, ServletException {
@@ -128,6 +128,7 @@ public class UserController extends HttpServlet {
         UserDTO dto = new UserDTO();
         dto.setUser(user);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "user");
     }
 
     private void updateUserName(HttpServletRequest request, HttpServletResponse response, String userId, String userName) throws IOException {

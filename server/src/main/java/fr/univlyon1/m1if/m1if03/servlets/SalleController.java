@@ -33,7 +33,6 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("viewPath", "salle");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
@@ -133,6 +132,7 @@ public class SalleController extends HttpServlet {
         SallesDTO dto = new SallesDTO();
         dto.setSalles(salles);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "salles");
     }
 
     // GET /salles/{salleId}
@@ -146,6 +146,7 @@ public class SalleController extends HttpServlet {
         SalleDTO dto = new SalleDTO();
         dto.setSalle(salle);
         request.setAttribute("dto", dto);
+        request.setAttribute("viewPath", "salle");
     }
 
     // POST /salles
