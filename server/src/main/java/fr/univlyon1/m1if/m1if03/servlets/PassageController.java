@@ -40,7 +40,7 @@ public class PassageController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/passage");
+        request.setAttribute("viewPath", "passage");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("passages");
         int endIndex = path.size();
@@ -68,7 +68,7 @@ public class PassageController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/passage");
+        request.setAttribute("viewPath", "passage");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("passages");
         int endIndex = path.size();

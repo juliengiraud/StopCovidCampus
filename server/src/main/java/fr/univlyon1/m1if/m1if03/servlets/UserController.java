@@ -27,6 +27,7 @@ public class UserController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("viewPath", "user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("users");
         int endIndex = path.size();
@@ -60,11 +61,11 @@ public class UserController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("viewPath", "user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("users");
         int endIndex = path.size();
         path = path.subList(startIndex, endIndex); // "path" commence à partir de /users
-
 
         if (path.size() == 1) { // GET /users
             getUsers(request, response);
@@ -81,6 +82,7 @@ public class UserController extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute("viewPath", "user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("users");
         int endIndex = path.size();
@@ -147,5 +149,4 @@ public class UserController extends HttpServlet {
         response.setHeader("Authorization", "Bearer: " + token);
         users.put(login, user);
     }
-
 }
