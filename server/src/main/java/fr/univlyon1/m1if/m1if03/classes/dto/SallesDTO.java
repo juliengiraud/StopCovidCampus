@@ -2,7 +2,6 @@ package fr.univlyon1.m1if.m1if03.classes.dto;
 
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import org.json.JSONArray;
-import org.json.XML;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -2,8 +2,6 @@ package fr.univlyon1.m1if.m1if03.classes.dto;
 
 import fr.univlyon1.m1if.m1if03.classes.User;
 import org.json.JSONObject;
-import org.json.XML;
-
 import java.io.Serializable;
 
 public class UserDTO implements Serializable, GenericDTO {

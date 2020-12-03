@@ -1,15 +1,11 @@
 package fr.univlyon1.m1if.m1if03.classes.dto;
 
 import fr.univlyon1.m1if.m1if03.classes.Passage;
-import fr.univlyon1.m1if.m1if03.classes.Salle;
 import org.json.JSONArray;
-import org.json.XML;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class PassagesDTO implements Serializable, GenericDTO {
 
