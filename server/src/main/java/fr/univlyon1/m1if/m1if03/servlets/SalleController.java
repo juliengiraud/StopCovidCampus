@@ -33,6 +33,8 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/salle");
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
@@ -52,6 +54,8 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/salle");
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
@@ -78,6 +82,8 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/salle");
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
@@ -110,6 +116,8 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/salle");
+        request.setAttribute("viewPath", "/WEB-INF/jsp/contenus/user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
