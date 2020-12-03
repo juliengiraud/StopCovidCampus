@@ -1,4 +1,4 @@
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.dto.PassagesDTO" %>
+<%@ page import="fr.univlyon1.m1if.m1if03.classes.dto.GenericDTO" %>
 <%@ page contentType="application/json; charset=UTF-8" %>
 
-<%= new PassagesDTO().getJSON() %>
+<%= ((GenericDTO) request.getAttribute("dto")).getJSON() %>
