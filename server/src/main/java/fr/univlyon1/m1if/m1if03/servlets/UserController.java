@@ -84,7 +84,6 @@ public class UserController extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute("viewPath", "user");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("users");
         int endIndex = path.size();
@@ -137,11 +136,13 @@ public class UserController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
-        if (user != request.getAttribute("userLogin")) {
+        if (!userId.equals(request.getAttribute("userLogin"))) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous ne pouvez modifier que votre propre nom.");
             return;
         }
         user.setNom(userName);
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        response.setHeader("Location", Utilities.getPathBase(request) + "/users/" + userId);
     }
 
     private void doLogin(HttpServletRequest request, HttpServletResponse response, String login, String nom, Boolean admin) throws IOException {

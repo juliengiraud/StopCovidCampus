@@ -22,11 +22,20 @@ public class PassageDTO implements Serializable, GenericDTO {
         json.put("salle", basePath + "/salles/" + passage.getSalle().getNom());
         json.put("dateEntree", passage.getEntree());
         json.put("dateSortie", passage.getSortie());
-        return new JSONObject(this.passage).toString();
+        return json.toString();
     }
 
     public String getXML() {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
+        String entree = "";
+        String sortie = "";
+        try {
+            entree = sdf.format(passage.getEntree());
+        } catch (Exception e) {}
+        try {
+            sortie = sdf.format(passage.getSortie());
+        } catch (Exception e) {}
+
         String xml = String.format(
                 "<passage>\n" +
                 "    <user>%s/users/%s</user>\n" +
@@ -36,8 +45,8 @@ public class PassageDTO implements Serializable, GenericDTO {
                 "</passage>",
                 basePath, passage.getUser().getLogin(),
                 basePath, passage.getSalle().getNom(),
-                sdf.format(passage.getEntree()),
-                sdf.format(passage.getSortie()));
+                entree,
+                sortie);
         return xml;
     }
 
