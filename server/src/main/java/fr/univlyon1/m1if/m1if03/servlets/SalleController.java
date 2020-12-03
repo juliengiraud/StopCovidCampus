@@ -153,7 +153,7 @@ public class SalleController extends HttpServlet {
     private void doCreateSalle(HttpServletRequest request, HttpServletResponse response, String nomSalle) {
         Salle salle = new Salle(nomSalle);
         salles.put(nomSalle, salle);
-        response.setHeader("Location", "/salles/" + nomSalle);
+        response.setHeader("Location", Utilities.getPathBase(request) + "/salles/" + nomSalle);
     }
 
     // PUT /salles/{salleId}

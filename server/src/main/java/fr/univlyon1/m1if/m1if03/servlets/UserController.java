@@ -156,6 +156,6 @@ public class UserController extends HttpServlet {
         response.setHeader("Authorization", "Bearer: " + token);
         users.put(login, user);
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-        response.setHeader("Location", "/users/" + login);
+        response.setHeader("Location", Utilities.getPathBase(request) + "/users/" + login);
     }
 }
