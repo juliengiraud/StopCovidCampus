@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<jsp:useBean id="passage" type="fr.univlyon1.m1if.m1if03.classes.Passage" scope="request"/>
+<c:set var="passage" value="${requestScope.dto.passage}"/>
 
 <section>
     <h1>Passage numéro ${passage.id}</h1>

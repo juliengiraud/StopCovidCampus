@@ -13,28 +13,28 @@
             Ici, on utilise le bean de scope application dans le contexte :
             Comme on a besoin de toutes les salles, inutile de le recopier en attribut de chaque requête envoyée à salles.jsp
         --%>
-        <c:forEach items="${applicationScope.salles.entrySet()}" var="salleEntry">
+        <c:forEach items="${requestScope.dto.salles}" var="salle">
             <tr>
-                <td><a href="admin?contenu=salle&nomSalle=${salleEntry.value.nom}">${salleEntry.value.nom}</a></td>
+                <td><a href="admin?contenu=salle&nomSalle=${salle.nom}">${salle.nom}</a></td><!-- TODO mettre l'URI -->
                 <td>
                     <form action="salles" method="put" accept-charset="utf-8">
                         <input type="text" name="capacite" size="3"
-                               value="${salleEntry.value.capacite != -1 ? salleEntry.value.capacite : ''}"/>
+                               value="${salle.capacite != -1 ? salle.capacite : ''}"/>
                         <input type="hidden" name="contenu" value="salles">
-                        <input type="hidden" name="nomSalle" value="${salleEntry.value.nom}">
+                        <input type="hidden" name="nomSalle" value="${salle.nom}">
                         <input type="submit" value="Modifier">
                     </form>
                 </td>
-                <td>${salleEntry.value.presents} présent(s)</td>
+                <td>${salle.presents} présent(s)</td>
                 <td>
-                    <c:if test="${salleEntry.value.saturee}">
+                    <c:if test="${salle.saturee}">
                         <strong style="color: red">Capacité dépassée</strong>
                     </c:if>
                 </td>
                 <td>
                     <form action="salles" method="delete" accept-charset="UTF-8">
                         <input type="hidden" name="contenu" value="salles">
-                        <input type="hidden" name="nomSalle" value="${salleEntry.value.nom}">
+                        <input type="hidden" name="nomSalle" value="${salle.nom}">
                         <input type="submit" value="Supprimer">
                     </form>
                 </td>

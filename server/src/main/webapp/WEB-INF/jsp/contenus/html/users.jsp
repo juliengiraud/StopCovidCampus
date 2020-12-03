@@ -9,15 +9,11 @@
             <th>Nom</th>
             <th>admin</th>
         </tr>
-        <%--
-            Ici, on utilise le bean de scope application dans le contexte :
-            Comme on a besoin de toutes les salles, inutile de le recopier en attribut de chaque requête envoyée à salles.jsp
-        --%>
-        <c:forEach items="${applicationScope.users.entrySet()}" var="userEntry">
+        <c:forEach items="${requestScope.dto.users}" var="user">
             <tr>
-                <td><a href="admin?contenu=user&login=${userEntry.value.login}">${userEntry.value.login}</a></td>
-                <td>${userEntry.value.nom}</td>
-                <td>${userEntry.value.admin == true ? "oui" : "non"}</td>
+                <td><a href="admin?contenu=user&login=${user.login}">${user.login}</a></td><!-- TODO mettre l'URI -->
+                <td>${user.nom}</td>
+                <td>${user.admin ? "oui" : "non"}</td>
             </tr>
         </c:forEach>
     </table>
