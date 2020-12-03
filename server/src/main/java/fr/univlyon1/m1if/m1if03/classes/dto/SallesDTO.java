@@ -24,7 +24,15 @@ public class SallesDTO implements Serializable, GenericDTO {
     }
 
     public String getXML() {
-        return XML.toString(this.getJSON());
+        String xml = "<salles>";
+        for (Salle salle : salles) {
+            xml += String.format(
+                    "<salle>http://localhost:8080/salles/%s</salle>",
+                    salle.getNom()
+            );
+        }
+        xml += "</salles>";
+        return xml;
     }
 
     public List<Salle> getSalles() {

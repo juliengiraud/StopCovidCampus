@@ -2,7 +2,6 @@ package fr.univlyon1.m1if.m1if03.classes.dto;
 
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import org.json.JSONObject;
-import org.json.XML;
 
 import java.io.Serializable;
 
@@ -18,7 +17,14 @@ public class SalleDTO implements Serializable, GenericDTO {
     }
 
     public String getXML() {
-        return XML.toString(this.getJSON());
+        String xml = String.format("<salle>\n" +
+                "    <nomSalle>%s</nomSalle>\n" +
+                "    <capacite>%d</capacite>\n" +
+                "    <presents>%d</presents>\n" +
+                "    <saturee>%b</saturee>\n" +
+                "</salle>",
+                salle.getNom(), salle.getCapacite(), salle.getPresents(), salle.getSaturee());
+        return xml;
     }
 
     public Salle getSalle() {

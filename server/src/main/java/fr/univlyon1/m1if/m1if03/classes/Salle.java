@@ -4,7 +4,9 @@ import java.util.Objects;
 
 public class Salle {
     private final String nom;
-    private int capacite = -1, presents = 0;
+    private int capacite = -1;
+    private int presents = 0;
+    private Boolean sature = false;
 
     public Salle(String nom) {
         this.nom = nom;
@@ -20,6 +22,7 @@ public class Salle {
 
     public void setCapacite(int capacite) {
         this.capacite = capacite;
+        sature = getSaturee();
     }
 
     public int getPresents() {
@@ -28,10 +31,12 @@ public class Salle {
 
     public void incPresent() {
         this.presents++;
+        sature = getSaturee();
     }
 
     public void decPresent() {
         this.presents--;
+        sature = getSaturee();
     }
 
     public boolean getSaturee() {
