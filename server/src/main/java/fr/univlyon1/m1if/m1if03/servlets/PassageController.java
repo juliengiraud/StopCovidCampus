@@ -105,7 +105,7 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("WEB-INF/jsp/contenus/passages.jsp").include(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passage/passages.jsp").include(request, response);
     }
 
     // GET /passages/{passageId}
