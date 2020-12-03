@@ -10,14 +10,16 @@ import java.util.List;
 public class UsersDTO implements Serializable, GenericDTO {
 
     private List<User> users;
+    private String basePath;
 
-    public UsersDTO() {
+    public UsersDTO(String basePath) {
+        this.basePath = basePath;
     }
 
     public String getJSON() {
         List<String> urls = new ArrayList<>();
         for (User user : this.users) {
-            urls.add(String.format("http://localhost:8080/users/%s", user.getLogin()));
+            urls.add(basePath + "/users/" + user.getLogin());
         }
         return new JSONArray(urls).toString();
     }
@@ -25,7 +27,9 @@ public class UsersDTO implements Serializable, GenericDTO {
     public String getXML() {
         String xml = "<users>";
         for (User user : users) {
-            xml += String.format("<user>http://localhost:8080/users/%s</user>", user.getLogin());
+            xml += String.format(
+                    "<user>%s/users/%s</user>",
+                    basePath, user.getLogin());
         }
         xml += "</users>";
         return xml;

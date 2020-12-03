@@ -101,7 +101,7 @@ public class PassageController extends HttpServlet {
     // GET /passages
     private void getPassages(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Passage> passages = this.passages.getAllPassages();
-        PassagesDTO dto = new PassagesDTO();
+        PassagesDTO dto = new PassagesDTO(Utilities.getPathBase(request));
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passages");
@@ -129,7 +129,7 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Passage non trouvé");
             return;
         }
-        PassageDTO dto = new PassageDTO();
+        PassageDTO dto = new PassageDTO(Utilities.getPathBase(request));
         dto.setPassage(passage);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passage");
@@ -144,7 +144,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passages = this.passages.getPassagesByUser(user);
-        PassagesDTO dto = new PassagesDTO();
+        PassagesDTO dto = new PassagesDTO(Utilities.getPathBase(request));
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passages");
@@ -159,7 +159,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passages = this.passages.getPassagesByUserEncours(user);
-        PassagesDTO dto = new PassagesDTO();
+        PassagesDTO dto = new PassagesDTO(Utilities.getPathBase(request));
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passages");
@@ -189,7 +189,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passages = this.passages.getPassagesByUserAndDates(user, entree, sortie);
-        PassagesDTO dto = new PassagesDTO();
+        PassagesDTO dto = new PassagesDTO(Utilities.getPathBase(request));
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passages");
@@ -204,7 +204,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passages = this.passages.getPassagesBySalle(salle);
-        PassagesDTO dto = new PassagesDTO();
+        PassagesDTO dto = new PassagesDTO(Utilities.getPathBase(request));
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passages");
@@ -233,7 +233,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passages = this.passages.getPassagesBySalleAndDates(salle, entree, sortie);
-        PassagesDTO dto = new PassagesDTO();
+        PassagesDTO dto = new PassagesDTO(Utilities.getPathBase(request));
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passages");
@@ -253,7 +253,7 @@ public class PassageController extends HttpServlet {
             return;
         }
         List<Passage> passages = this.passages.getPassagesByUserAndSalle(user, salle);
-        PassagesDTO dto = new PassagesDTO();
+        PassagesDTO dto = new PassagesDTO(Utilities.getPathBase(request));
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "passages");

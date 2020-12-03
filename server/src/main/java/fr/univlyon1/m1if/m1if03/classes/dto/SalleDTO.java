@@ -8,8 +8,10 @@ import java.io.Serializable;
 public class SalleDTO implements Serializable, GenericDTO {
 
     private Salle salle;
+    private String basePath;
 
-    public SalleDTO() {
+    public SalleDTO(String basePath) {
+        this.basePath = basePath;
     }
 
     public String getJSON() {
@@ -17,7 +19,8 @@ public class SalleDTO implements Serializable, GenericDTO {
     }
 
     public String getXML() {
-        String xml = String.format("<salle>\n" +
+        String xml = String.format(
+                "<salle>\n" +
                 "    <nomSalle>%s</nomSalle>\n" +
                 "    <capacite>%d</capacite>\n" +
                 "    <presents>%d</presents>\n" +

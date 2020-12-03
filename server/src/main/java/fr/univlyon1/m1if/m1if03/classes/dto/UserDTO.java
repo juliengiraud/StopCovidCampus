@@ -7,8 +7,10 @@ import java.io.Serializable;
 public class UserDTO implements Serializable, GenericDTO {
 
     private User user;
+    private String basePath;
 
-    public UserDTO() {
+    public UserDTO(String basePath) {
+        this.basePath = basePath;
     }
 
     public String getJSON() {
@@ -16,7 +18,8 @@ public class UserDTO implements Serializable, GenericDTO {
     }
 
     public String getXML() {
-        String xml = String.format("<user>\n" +
+        String xml = String.format(
+                "<user>\n" +
                     "    <login>%s</login>\n" +
                     "    <nom>%s</nom>\n" +
                     "    <admin>%b</admin>\n" +

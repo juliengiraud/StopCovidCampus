@@ -113,7 +113,7 @@ public class UserController extends HttpServlet {
 
     private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<User> users = new ArrayList<>(this.users.values());
-        UsersDTO dto = new UsersDTO();
+        UsersDTO dto = new UsersDTO(Utilities.getPathBase(request));
         dto.setUsers(users);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "users");
@@ -125,7 +125,7 @@ public class UserController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
-        UserDTO dto = new UserDTO();
+        UserDTO dto = new UserDTO(Utilities.getPathBase(request));
         dto.setUser(user);
         request.setAttribute("dto", dto);
         request.setAttribute("viewPath", "user");

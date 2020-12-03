@@ -10,14 +10,16 @@ import java.util.List;
 public class PassagesDTO implements Serializable, GenericDTO {
 
     private List<Passage> passages;
+    private String basePath;
 
-    public PassagesDTO() {
+    public PassagesDTO(String basePath) {
+        this.basePath = basePath;
     }
 
     public String getJSON() {
         List<String> urls = new ArrayList<>();
         for (Passage passage : this.passages) {
-            urls.add(String.format("http://localhost:8080/passages/%d", passage.getId()));
+            urls.add(basePath + "/passages/" + passage.getId());
         }
         return new JSONArray(urls).toString();
     }
@@ -25,7 +27,9 @@ public class PassagesDTO implements Serializable, GenericDTO {
     public String getXML() {
         String xml = "<passages>";
         for (Passage passage : passages) {
-            xml += String.format("<passage>http://localhost:8080/passages/%d</passage>",passage.getId());
+            xml += String.format(
+                    "<passage>%s/passages/%d</passage>",
+                    basePath, passage.getId());
         }
         xml += "</passages>";
         return xml;

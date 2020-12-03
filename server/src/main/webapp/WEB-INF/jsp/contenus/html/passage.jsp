@@ -20,7 +20,7 @@
     </ul>
     <c:if test="${passage.sortie != null && param.user.admin}">
         <p>
-            <a href="admin?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">
+            <a href="<%= request.getServletPath().substring(1) %>admin?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">
                 tous les présents pendant ce passage
             </a>
         </p>

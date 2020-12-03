@@ -80,4 +80,8 @@ public class Utilities {
         return "json";
     }
 
+    public static String getPathBase(HttpServletRequest request) {
+        return request.getRequestURL().substring(0, request.getRequestURL().indexOf(request.getContextPath())) + request.getContextPath();
+    }
+
 }

@@ -32,7 +32,7 @@
                 </td>
                 <c:if test="${passage.sortie != null}">
                     <td>
-                        <a href="admin?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">tous
+                        <a href="<%= request.getServletPath().substring(1) %>admin?contenu=passages&nomSalle=${passage.salle.nom}&dateEntree=${passage.entree}&dateSortie=${passage.sortie}">tous
                             les présents</a>
                     </td>
                 </c:if>
