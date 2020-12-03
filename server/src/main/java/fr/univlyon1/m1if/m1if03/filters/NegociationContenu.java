@@ -18,8 +18,7 @@ public class NegociationContenu extends HttpFilter {
         String prefixe = getServletContext().getInitParameter("prefixe");
         String sufffixe = getServletContext().getInitParameter("suffixe");
         String accept = request.getHeader("Accept");
-        request.setAttribute(Utilities.getAcceptType(accept));
-        request.getN
+        request.setAttribute("accept", Utilities.getAcceptType(request));
         request.getRequestDispatcher(prefixe + request.getAttribute("viewPath") + sufffixe).include(request, response);
     }
 

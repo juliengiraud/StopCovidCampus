@@ -139,6 +139,7 @@ public class SalleController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
+
         request.setAttribute("salle", salle);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/salle.jsp").include(request, response);
     }
