@@ -31,7 +31,7 @@ public class AuthenticationFilter extends HttpFilter {
         String path = request.getRequestURI();
         String token = PresenceUcblJwtHelper.getTokenFromRequest(request);
 
-        if (token != "") { // La requête contien un token
+        if (token != "") { // La requête contient un token
             try {
                 String login = PresenceUcblJwtHelper.verifyToken(token, request);
                 request.setAttribute("userLogin", login);

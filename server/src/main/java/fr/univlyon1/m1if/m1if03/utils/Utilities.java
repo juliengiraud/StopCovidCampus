@@ -83,4 +83,8 @@ public class Utilities {
     public static String getPathBase(HttpServletRequest request) {
         return request.getRequestURL().substring(0, request.getRequestURL().indexOf(request.getContextPath())) + request.getContextPath();
     }
+
+    public static boolean isAdmin(HttpServletRequest request) {
+        return PresenceUcblJwtHelper.verifyAdmin(PresenceUcblJwtHelper.getTokenFromRequest(request));
+    }
 }

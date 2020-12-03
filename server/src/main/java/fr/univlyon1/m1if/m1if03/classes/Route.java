@@ -26,7 +26,6 @@ public final class Route {
             list.add(new Route("/passages/byUserAndDates/" + userId + "/", "GET"));
             list.add(new Route("/passages/byUserAndSalle/" + userId + "/", "GET"));
             list.add(new Route("/users/" + userId, "GET"));
-            list.add(new Route("/users/" + userId + "/nom", "PUT"));
             list.add(new Route("/users/" + userId + "/passages", "GET"));
             list.add(new Route("/users/login", "POST"));
             list.add(new Route("/users/logout", "POST"));

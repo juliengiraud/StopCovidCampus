@@ -6,6 +6,7 @@ import fr.univlyon1.m1if.m1if03.classes.Salle;
 import fr.univlyon1.m1if.m1if03.classes.User;
 import fr.univlyon1.m1if.m1if03.classes.dto.PassageDTO;
 import fr.univlyon1.m1if.m1if03.classes.dto.PassagesDTO;
+import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
 import fr.univlyon1.m1if.m1if03.utils.Utilities;
 import org.json.JSONObject;
 
@@ -263,6 +264,11 @@ public class PassageController extends HttpServlet {
     private void createPassage(HttpServletRequest request, HttpServletResponse response, String userId,
                                String salleId, String dateEntree, String dateSortie) throws IOException {
         User user = users.get(userId);
+        // Pour ajouter un passage il faut être l'utilisateur concernant le passage ou être un administrateur
+        if (!userId.equals(request.getAttribute("userLogin")) && !Utilities.isAdmin(request)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur");
+            return;
+        }
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
@@ -319,9 +325,7 @@ public class PassageController extends HttpServlet {
                 p.setSortie(sortie);
                 salle.decPresent();
                 found = true;
-                response.setStatus(HttpServletResponse.SC_CREATED);
-                response.setHeader("Location", Utilities.getPathBase(request) + "/passages/" + p.getId());
-                break;
+
             }
             if (!found) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");

@@ -136,10 +136,6 @@ public class UserController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé"); // 404
             return;
         }
-        if (!userId.equals(request.getAttribute("userLogin"))) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous ne pouvez modifier que votre propre nom.");
-            return;
-        }
         user.setNom(userName);
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         response.setHeader("Location", Utilities.getPathBase(request) + "/users/" + userId);
