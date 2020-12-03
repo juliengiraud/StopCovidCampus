@@ -293,6 +293,7 @@ public class PassageController extends HttpServlet {
             Passage p = new Passage(user, salle, entree);
             passages.add(p);
             salle.incPresent();
+            response.setHeader("Location", "/passages/" + p.getId());
         } else if (entree != null && sortie != null) {
             Passage p = new Passage(user, salle, entree);
             try {
