@@ -63,4 +63,21 @@ public class Utilities {
         return map;
     }
 
+    public static String getAcceptType(HttpServletRequest request) {
+        String header = request.getHeader("Accept");
+        if (header == null) {
+            header = request.getHeader("accept");
+        }
+        if (header == null) {
+            header = "";
+        }
+        if (header.contains("html")) {
+            return "html";
+        }
+        if (header.contains("xml")) {
+            return "xml";
+        }
+        return "json";
+    }
+
 }
