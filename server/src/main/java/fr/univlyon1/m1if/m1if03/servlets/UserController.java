@@ -117,7 +117,6 @@ public class UserController extends HttpServlet {
         UsersDTO dto = new UsersDTO();
         dto.setUsers(users);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/users.jsp").include(request, response);
     }
 
     private void getUserById(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException, ServletException {
@@ -129,7 +128,6 @@ public class UserController extends HttpServlet {
         UserDTO dto = new UserDTO();
         dto.setUser(user);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/user.jsp").include(request, response);
     }
 
     private void updateUserName(HttpServletRequest request, HttpServletResponse response, String userId, String userName) throws IOException {

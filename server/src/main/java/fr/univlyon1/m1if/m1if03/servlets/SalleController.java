@@ -133,7 +133,6 @@ public class SalleController extends HttpServlet {
         SallesDTO dto = new SallesDTO();
         dto.setSalles(salles);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/salles.jsp").include(request, response);
     }
 
     // GET /salles/{salleId}
@@ -147,7 +146,6 @@ public class SalleController extends HttpServlet {
         SalleDTO dto = new SalleDTO();
         dto.setSalle(salle);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/salle.jsp").include(request, response);
     }
 
     // POST /salles

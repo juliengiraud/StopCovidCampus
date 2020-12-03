@@ -23,7 +23,6 @@ public class NegociationContenu extends HttpFilter {
         String prefixe = getServletContext().getInitParameter("prefixe");
         String sufffixe = getServletContext().getInitParameter("suffixe");
         String accept = Utilities.getAcceptType(request);
-        request.setAttribute("accept", accept);
         String contentType = "";
         String viewPath = (String) request.getAttribute("viewPath");
 

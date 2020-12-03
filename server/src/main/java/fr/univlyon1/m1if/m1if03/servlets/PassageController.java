@@ -105,7 +105,6 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passage/passages.jsp").include(request, response);
     }
 
     // GET /passages/{passageId}
@@ -133,7 +132,6 @@ public class PassageController extends HttpServlet {
         PassageDTO dto = new PassageDTO();
         dto.setPassage(passage);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passage.jsp").include(request, response);
     }
 
     // GET /passages/byUser/{userId}
@@ -148,7 +146,6 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUser/{userId}/enCours
@@ -163,7 +160,6 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUserAndDates/{userId}/{dateEntree}/{dateSortie}
@@ -193,7 +189,6 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/bySalle/{salleId}
@@ -208,7 +203,6 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/bySalleAndDates/{salleId}/{dateEntree}/{dateSortie}
@@ -237,7 +231,6 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // GET /passages/byUserAndSalle/{userId}/{salleId}
@@ -257,7 +250,6 @@ public class PassageController extends HttpServlet {
         PassagesDTO dto = new PassagesDTO();
         dto.setPassages(passages);
         request.setAttribute("dto", dto);
-        request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
     // POST /passages {"user": "string", salle": "string", dateEntree": "string", dateSortie": "string"}
