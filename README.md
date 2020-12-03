@@ -13,3 +13,4 @@ Ajout d'une dépendance Json dans le fichier pom.xml pour manipuler du JSON
 
 Nous supposons que :
 	- Seul l'utilisateur concerné (ou un administrateur) peut ajouter un passage à sa liste, visualiser le détail de ses passages et modifier son nom.
+	
