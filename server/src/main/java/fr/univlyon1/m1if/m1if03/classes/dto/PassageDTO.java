@@ -21,8 +21,8 @@ public class PassageDTO implements Serializable, GenericDTO {
     public String getXML() {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
         String xml = String.format("<passage>\n" +
-                        "    <user>%s</user>\n" +
-                        "    <salle>%s</salle>\n" +
+                        "    <user>http://localhost:8080/users/%s</user>\n" +
+                        "    <salle>http://localhost:8080/salles/%s</salle>\n" +
                         "    <dateEntree>%s</dateEntree>\n" +
                         "    <dateSortie>%s</DateSortie>\n" +
                         "</passage>",
