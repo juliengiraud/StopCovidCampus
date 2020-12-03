@@ -112,7 +112,6 @@ public class SalleController extends HttpServlet {
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute("viewPath", "salle");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("salles");
         int endIndex = path.size();
@@ -153,6 +152,7 @@ public class SalleController extends HttpServlet {
     private void doCreateSalle(HttpServletRequest request, HttpServletResponse response, String nomSalle) {
         Salle salle = new Salle(nomSalle);
         salles.put(nomSalle, salle);
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         response.setHeader("Location", Utilities.getPathBase(request) + "/salles/" + nomSalle);
     }
 
@@ -165,6 +165,7 @@ public class SalleController extends HttpServlet {
         }
         salle.setCapacite(capacite);
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        response.setHeader("Location", Utilities.getPathBase(request) + "/salles/" + salleId);
     }
 
     // DELETE /salles/{salleId}

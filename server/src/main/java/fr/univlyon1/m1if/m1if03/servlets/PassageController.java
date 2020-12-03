@@ -121,7 +121,7 @@ public class PassageController extends HttpServlet {
         try {
             passage = this.passages.getPassageById(id);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Passage non trouvé");
             return;
         }
 
@@ -293,30 +293,35 @@ public class PassageController extends HttpServlet {
             Passage p = new Passage(user, salle, entree);
             passages.add(p);
             salle.incPresent();
+            response.setStatus(HttpServletResponse.SC_CREATED);
             response.setHeader("Location", Utilities.getPathBase(request) + "/passages/" + p.getId());
         } else if (entree != null && sortie != null) {
-            Passage p = new Passage(user, salle, entree);
-            try {
-                p.setSortie(sortie);
-            } catch (IllegalArgumentException e) { //Sortie inférieur à l'entrée ?
+            if (!sortie.after(entree)) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                 return;
             }
+            Passage p = new Passage(user, salle, entree);
+            p.setSortie(sortie);
             passages.add(p);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            response.setHeader("Location", Utilities.getPathBase(request) + "/passages/" + p.getId());
         } else { // entree == null && sortie != null
             boolean found = false;
             List<Passage> passTemp = passages.getPassagesByUserAndSalle(user, salle);
             for (Passage p : passTemp) { // On mémorise une sortie de tous les passages existants et sans sortie
-                if (p.getSortie() == null) {
-                    try {
-                        p.setSortie(sortie);
-                    } catch (Exception e) { // Sortie inférieur à l'entrée ?
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
-                        return;
-                    }
-                    salle.decPresent();
-                    found = true;
+                if (p.getSortie() != null) {
+                    continue;
                 }
+                if (!sortie.after(entree)) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
+                    return;
+                }
+                p.setSortie(sortie);
+                salle.decPresent();
+                found = true;
+                response.setStatus(HttpServletResponse.SC_CREATED);
+                response.setHeader("Location", Utilities.getPathBase(request) + "/passages/" + p.getId());
+                break;
             }
             if (!found) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
