@@ -13,26 +13,11 @@ public class SalleDTO implements Serializable {
     }
 
     public String getJSON() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.
-        String json = "{";
-        json += "\"nomSalle\": \"" + this.salle.getNom() + "\"";
-        json += "\"capacite\": \"" + this.salle.getCapacite() + "\"";
-        json += "\"present\": \"" + this.salle.getPresents() + "\"";
-        json += "\"saturee\": \"" + this.salle.getSaturee() + "\"";
-        json += "}";
-        return json;
+        return new JSONObject(this.salle).toString();
     }
 
     public String getXML() {
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        xml += "<salle>";
-        xml += "<nomSalle>" + this.salle.getNom() + "</nomSalle>";
-        xml += "<capacitie>" + this.salle.getCapacite() + "</capacite>";
-        xml += "<presents>" + this.salle.getPresents() + "</presents>";
-        xml += "<saturee>" + this.salle.getSaturee() + "</saturee>";
-        xml += "</salle>";
-        return xml;
+        return "";
     }
 
     public Salle getSalle() {

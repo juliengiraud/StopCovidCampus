@@ -1,8 +1,12 @@
 package fr.univlyon1.m1if.m1if03.classes.dto;
 
 import fr.univlyon1.m1if.m1if03.classes.Salle;
+import org.json.JSONArray;
 
 import java.io.Serializable;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SallesDTO implements Serializable {
@@ -12,6 +16,17 @@ public class SallesDTO implements Serializable {
     public SallesDTO() {
     }
 
+    public String getJSON() {
+        List<String> urls = new ArrayList<>();
+        for (Salle salle : this.salles) {
+            urls.add("\"http://localhost:8080/salles/" + salle.getNom() + "\"");
+        }
+        return new JSONArray(urls).toString();
+    }
+
+    public String getXML() {
+        return "";
+    }
 
     public List<Salle> getSalles() {
         return salles;
