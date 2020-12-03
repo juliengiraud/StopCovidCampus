@@ -4,6 +4,8 @@ import fr.univlyon1.m1if.m1if03.classes.GestionPassages;
 import fr.univlyon1.m1if.m1if03.classes.Passage;
 import fr.univlyon1.m1if.m1if03.classes.Salle;
 import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.classes.dto.PassageDTO;
+import fr.univlyon1.m1if.m1if03.classes.dto.PassagesDTO;
 import fr.univlyon1.m1if.m1if03.utils.Utilities;
 import org.json.JSONObject;
 
@@ -100,7 +102,9 @@ public class PassageController extends HttpServlet {
     // GET /passages
     private void getPassages(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Passage> passages = this.passages.getAllPassages();
-        request.setAttribute("passagesAffiches", passages);
+        PassagesDTO dto = new PassagesDTO();
+        dto.setPassages(passages);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
@@ -126,7 +130,9 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Passage non trouvé");
             return;
         }
-        request.setAttribute("passage", passage);
+        PassageDTO dto = new PassageDTO();
+        dto.setPassage(passage);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/passage.jsp").include(request, response);
     }
 
@@ -138,7 +144,10 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         }
-        request.setAttribute("passagesAffiches", this.passages.getPassagesByUser(user));
+        List<Passage> passages = this.passages.getPassagesByUser(user);
+        PassagesDTO dto = new PassagesDTO();
+        dto.setPassages(passages);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
@@ -150,7 +159,10 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé");
             return;
         }
-        request.setAttribute("passagesAffiches", this.passages.getPassagesByUserEncours(user));
+        List<Passage> passages = this.passages.getPassagesByUserEncours(user);
+        PassagesDTO dto = new PassagesDTO();
+        dto.setPassages(passages);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
@@ -177,7 +189,10 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
-        request.setAttribute("passagesAffiches", passages.getPassagesByUserAndDates(user, entree, sortie));
+        List<Passage> passages = this.passages.getPassagesByUserAndDates(user, entree, sortie);
+        PassagesDTO dto = new PassagesDTO();
+        dto.setPassages(passages);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
@@ -189,7 +204,10 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
-        request.setAttribute("passagesAffiches", passages.getPassagesBySalle(salle));
+        List<Passage> passages = this.passages.getPassagesBySalle(salle);
+        PassagesDTO dto = new PassagesDTO();
+        dto.setPassages(passages);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
@@ -215,7 +233,10 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }
-        request.setAttribute("passagesAffiches", passages.getPassagesBySalleAndDates(salle, entree, sortie));
+        List<Passage> passages = this.passages.getPassagesBySalleAndDates(salle, entree, sortie);
+        PassagesDTO dto = new PassagesDTO();
+        dto.setPassages(passages);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
@@ -232,7 +253,10 @@ public class PassageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
-        request.setAttribute("passagesAffiches", passages.getPassagesByUserAndSalle(user, salle));
+        List<Passage> passages = this.passages.getPassagesByUserAndSalle(user, salle);
+        PassagesDTO dto = new PassagesDTO();
+        dto.setPassages(passages);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/passages.jsp").include(request, response);
     }
 
@@ -268,8 +292,6 @@ public class PassageController extends HttpServlet {
         }
 
         if (entree == null && sortie == null) { // Là c'est pas normal par contre
-            System.out.println(entree);
-            System.out.println(sortie);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
         }else if (entree != null && sortie == null) {
@@ -292,7 +314,7 @@ public class PassageController extends HttpServlet {
                 if (p.getSortie() == null) {
                     try {
                         p.setSortie(sortie);
-                    } catch (Exception e) { //Sortie inférieur à l'entrée ?
+                    } catch (Exception e) { // Sortie inférieur à l'entrée ?
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
                         return;
                     }

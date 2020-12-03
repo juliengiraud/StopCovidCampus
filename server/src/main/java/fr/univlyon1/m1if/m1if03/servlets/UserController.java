@@ -1,6 +1,8 @@
 package fr.univlyon1.m1if.m1if03.servlets;
 
 import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.classes.dto.UserDTO;
+import fr.univlyon1.m1if.m1if03.classes.dto.UsersDTO;
 import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
 import fr.univlyon1.m1if.m1if03.utils.Utilities;
 import org.json.JSONObject;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +29,7 @@ public class UserController extends HttpServlet {
         this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("users");
         int endIndex = path.size();
@@ -108,7 +111,10 @@ public class UserController extends HttpServlet {
     }
 
     private void getUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("users", users);
+        List<User> users = new ArrayList<>(this.users.values());
+        UsersDTO dto = new UsersDTO();
+        dto.setUsers(users);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/users.jsp").include(request, response);
     }
 
@@ -118,7 +124,9 @@ public class UserController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Paramètres de la requête non acceptables"); // 404
             return;
         }
-        request.setAttribute("login", userId);
+        UserDTO dto = new UserDTO();
+        dto.setUser(user);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/user.jsp").include(request, response);
     }
 

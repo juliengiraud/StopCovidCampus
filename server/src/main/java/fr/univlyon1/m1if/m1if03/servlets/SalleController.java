@@ -1,10 +1,10 @@
 package fr.univlyon1.m1if.m1if03.servlets;
 
 import fr.univlyon1.m1if.m1if03.classes.GestionPassages;
-import fr.univlyon1.m1if.m1if03.classes.Passage;
 import fr.univlyon1.m1if.m1if03.classes.Salle;
+import fr.univlyon1.m1if.m1if03.classes.dto.SalleDTO;
+import fr.univlyon1.m1if.m1if03.classes.dto.SallesDTO;
 import fr.univlyon1.m1if.m1if03.utils.Utilities;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.ServletConfig;
@@ -133,6 +133,10 @@ public class SalleController extends HttpServlet {
 
     // GET /salles
     private void doGetSalles(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        List<Salle> salles = new ArrayList<>(this.salles.values());
+        SallesDTO dto = new SallesDTO();
+        dto.setSalles(salles);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/salles.jsp").include(request, response);
     }
 
@@ -143,7 +147,9 @@ public class SalleController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
-        request.setAttribute("salle", salle);
+        SalleDTO dto = new SalleDTO();
+        dto.setSalle(salle);
+        request.setAttribute("dto", dto);
         request.getRequestDispatcher("/WEB-INF/jsp/contenus/salle.jsp").include(request, response);
     }
 
@@ -154,7 +160,7 @@ public class SalleController extends HttpServlet {
     }
 
     // PUT /salles/{salleId}
-    private void doUpdateSalle(HttpServletRequest request, HttpServletResponse response, String salleId, int capacite) throws IOException {
+    private void doUpdateSalle(HttpServletRequest request, HttpServletResponse response, String salleId, int capacite) {
         Salle salle = salles.get(salleId);
         if (salle == null) {
             salle = new Salle(salleId);
