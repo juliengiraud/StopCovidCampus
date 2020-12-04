@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>fr.univlyon1.m1if.m1if03</groupId>
-  <artifactId>tp4</artifactId>
+  <artifactId>tp5</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>tp3 Maven Webapp</name>
+  <name>tp5 Maven Webapp</name>
   <url>https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/</url>
 
   <properties>
@@ -52,7 +52,7 @@
   </dependencies>
 
   <build>
-    <finalName>tp4</finalName>
+    <finalName>tp5</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
@@ -61,7 +61,7 @@
         <configuration>
           <url>http://localhost:8080/manager/text</url>
           <server>TomcatServer</server>
-          <path>/tp4</path>
+          <path>/tp5</path>
         </configuration>
       </plugin>
     </plugins>
