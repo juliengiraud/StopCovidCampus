@@ -1,89 +1,124 @@
 <!DOCTYPE html>
-<!-- saved from url=(0108)https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./js/script.js"></script>
         <title>Présence UCBL</title>
-        
-    <style>._3emE9--dark-theme .-S-tR--ff-downloader{background:rgba(30,30,30,.93);border:1px solid rgba(82,82,82,.54);box-shadow:0 4px 7px rgba(30,30,30,.55);color:#fff}._3emE9--dark-theme .-S-tR--ff-downloader ._6_Mtt--header ._2VdJW--minimize-btn{background:#3d4b52}._3emE9--dark-theme .-S-tR--ff-downloader ._6_Mtt--header ._2VdJW--minimize-btn:hover{background:#131415}._3emE9--dark-theme .-S-tR--ff-downloader ._10vpG--footer{background:rgba(30,30,30,.93)}._2mDEx--white-theme .-S-tR--ff-downloader{background:#fff;border:1px solid rgba(82,82,82,.54);box-shadow:0 4px 7px rgba(30,30,30,.55);color:#314c75}._2mDEx--white-theme .-S-tR--ff-downloader ._6_Mtt--header{font-weight:700}._2mDEx--white-theme .-S-tR--ff-downloader ._2dFLA--container ._2bWNS--notice{border:0;color:rgba(0,0,0,.88)}._2mDEx--white-theme .-S-tR--ff-downloader ._10vpG--footer{background:#fff}.-S-tR--ff-downloader{display:block;overflow:hidden;position:fixed;bottom:20px;right:7.1%;width:330px;height:180px;background:rgba(30,30,30,.93);border-radius:2px;color:#fff;z-index:99999999;border:1px solid rgba(82,82,82,.54);box-shadow:0 4px 7px rgba(30,30,30,.55);transition:.5s}.-S-tR--ff-downloader._3M7UQ--minimize{height:62px}.-S-tR--ff-downloader._3M7UQ--minimize .nxuu4--file-info,.-S-tR--ff-downloader._3M7UQ--minimize ._6_Mtt--header{display:none}.-S-tR--ff-downloader ._6_Mtt--header{padding:10px;font-size:17px;font-family:sans-serif}.-S-tR--ff-downloader ._6_Mtt--header ._2VdJW--minimize-btn{float:right;background:#f1ecec;height:20px;width:20px;text-align:center;padding:2px;margin-top:-10px;cursor:pointer}.-S-tR--ff-downloader ._6_Mtt--header ._2VdJW--minimize-btn:hover{background:#e2dede}.-S-tR--ff-downloader ._13XQ2--error{color:red;padding:10px;font-size:12px;line-height:19px}.-S-tR--ff-downloader ._2dFLA--container{position:relative;height:100%}.-S-tR--ff-downloader ._2dFLA--container .nxuu4--file-info{padding:6px 15px 0;font-family:sans-serif}.-S-tR--ff-downloader ._2dFLA--container .nxuu4--file-info div{margin-bottom:5px;width:100%;overflow:hidden}.-S-tR--ff-downloader ._2dFLA--container ._2bWNS--notice{margin-top:21px;font-size:11px}.-S-tR--ff-downloader ._10vpG--footer{width:100%;bottom:0;position:absolute;font-weight:700}.-S-tR--ff-downloader ._10vpG--footer ._2V73d--loader{animation:n0BD1--rotation 3.5s linear forwards;position:absolute;top:-120px;left:calc(50% - 35px);border-radius:50%;border:5px solid #fff;border-top-color:#a29bfe;height:70px;width:70px;display:flex;justify-content:center;align-items:center}.-S-tR--ff-downloader ._10vpG--footer ._24wjw--loading-bar{width:100%;height:18px;background:#dfe6e9;border-radius:5px}.-S-tR--ff-downloader ._10vpG--footer ._24wjw--loading-bar ._1FVu9--progress-bar{height:100%;background:#8bc34a;border-radius:5px}.-S-tR--ff-downloader ._10vpG--footer ._2KztS--status{margin-top:10px}.-S-tR--ff-downloader ._10vpG--footer ._2KztS--status ._1XilH--state{float:left;font-size:.9em;letter-spacing:1pt;text-transform:uppercase;width:100px;height:20px;position:relative}.-S-tR--ff-downloader ._10vpG--footer ._2KztS--status ._1jiaj--percentage{float:right}</style></head>
-    <body>
-        <h1>Présence UCBL (en AJAX) !</h1>
-        <div id="errMsg"></div>
-        <aside>
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#index">Accueil</a></li>
-                <li><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#monCompte">Mon compte</a></li>
-                <li><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#entree">Entrée</a></li>
-                <li><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#sortie">Sortie</a></li>
-                <li><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#passages">Tous mes passages</a></li>
-                <li><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#deco">Déconnexion</a></li>
-            </ul>
-        </aside>
-        <section id="index" class="active">
-            <h2>Bienvenue sur Présence UCBL</h2>
-            <form method="post" action="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/TODO">
-                <p>Entrez votre login :
-                    <input type="text" name="login">
-                    <input type="submit" value="Connexion">
-                </p>
-            </form>
-            <!--
-                A vous de modifier cette section pour qu'elle affiche les passages en cours quand l'utilisateur est connecté, et qu'elle se recharge toutes les 5 secondes...
-                <p>Vous êtes actuellement dans les salles :</p>
-                <ul>
-                    <li>...</li>
+</head>
+<body>
+    <h1>Présence UCBL (en AJAX) !</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand btn">Menu</a>
+            <div class="collapse navbar-collapse show" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#accueil">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#mon-compte">Mon compte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#entree">Entrée</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sortie">Sortie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tous-mes-passages">Tous mes passages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#deconnexion">Déconnexion</a>
+                    </li>
                 </ul>
-            -->
-        </section>
-        <section id="monCompte" class="inactive">
-            <h2>Mon compte</h2>
-            <ul id="compteList">
-                <li>Login : <span id="login"></span></li>
-                <li>Nom : <span id="nom"></span></li>
-                <li>Admin : <span id="admin"></span></li>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container alert alert-danger mt-3" id="errMsg" style="display: none"></div>
+
+    <section id="accueil" class="container">
+        <h2>Bienvenue sur Présence UCBL</h2>
+        <form method="post" action="users/login" class="form-group">
+            <div class="form-group">
+                <label for="inputLogin">Entrez votre login :</label>
+                <input type="text" name="login" id="inputLogin" class="form-control" required="">
+            </div>
+            <div class="form-group">
+                <label for="inputName">Entrez votre nom (facultatif) :</label>
+                <input type="text" name="nom" id="inputName" class="form-control">
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label" for="inputAdmin">Je suis administrateur</label>
+                <input type="checkbox" class="form-check-input" id="inputAdmin" name="admin">
+            </div>
+            <button type="submit" class="btn btn-primary">Connexion</button>
+        </form>
+        <!--
+            A vous de modifier cette section pour qu'elle affiche les passages en cours quand l'utilisateur est connecté, et qu'elle se recharge toutes les 5 secondes...
+            <p>Vous êtes actuellement dans les salles :</p>
+            <ul>
+                <li>...</li>
             </ul>
-            <form method="post" action="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/TODO">
-                <p>Modifier mon nom :
-                    <input type="text" name="nom">
-                    <input type="submit" value="Modifier">
-                </p>
-            </form>
-            <p><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#deco">Déconnexion</a></p>
-        </section>
-        <section id="entree" class="inactive">
-            <h2>Entrer dans une salle</h2>
-            <form method="post" action="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/TODO">
-                <p>Entrer dans la salle :
-                    <input type="text" name="salle">
-                    <input type="submit" value="Envoyer">
-                </p>
-            </form>
-            <p><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/Deco">Se déconnecter</a></p>
-        </section>
-        <section id="sortie" class="inactive">
-            <h2>Sortir d'une salle</h2>
-            <form method="post" action="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/TODO">
-                <p>Sortir de la salle :
-                    <input type="text" name="salle">
-                    <input type="submit" value="Envoyer">
-                </p>
-            </form>
-            <p><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/Deco">Se déconnecter</a></p>
-        </section>
-        <section id="passages" class="inactive">
-            <h2>Liste de tous mes passages</h2>
-            <ul id="passagesList">
-                <!-- A vous de lister les passages ici. -->
-            </ul>
-            <p><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#deco">Déconnexion</a></p>
-        </section>
-        <section id="deco" class="inactive">
-            <h2>Déconnexion</h2>
-            <form method="post" action="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/Deco">
-                <p>Cliquez ici pour vous déconnecter :
-                    <input type="submit" value="Deconnexion">
-                </p>
-            </form>
-            <p><a href="https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/Tutoriels/exemples/SPA/presence_ajax_base.html#index">Retour à la page d'accueil</a></p>
-        </section>
-    
-</body></html>
+        -->
+    </section>
+
+    <section id="mon-compte" class="container" style="display:none">
+        <h2>Mon compte</h2>
+        <ul id="compteList">
+            <li>Login : <span id="login"></span></li>
+            <li>Nom : <span id="nom"></span></li>
+            <li>Admin : <span id="admin"></span></li>
+        </ul>
+        <form method="put" action="">
+            <p>Modifier mon nom :
+                <input type="text" name="nom">
+                <input type="submit" value="Modifier">
+            </p>
+        </form>
+        <p><a class="nav-link" href="#deconnexion">Déconnexion</a></p>
+    </section>
+    <section id="entree" class="container" style="display:none">
+        <h2>Entrer dans une salle</h2>
+        <form method="post" action="">
+            <p>Entrer dans la salle :
+                <input type="text" name="salle">
+                <input type="submit" value="Envoyer">
+            </p>
+        </form>
+        <p><a class="nav-link" href="#deconnexion">Se déconnecter</a></p>
+    </section>
+    <section id="sortie" class="container" style="display:none">
+        <h2>Sortir d'une salle</h2>
+        <form method="post" action="">
+            <p>Sortir de la salle :
+                <input type="text" name="salle">
+                <input type="submit" value="Envoyer">
+            </p>
+        </form>
+        <p><a class="nav-link" href="#deconnexion">Se déconnecter</a></p>
+    </section>
+    <section id="tous-mes-passages" class="container" style="display:none">
+        <h2>Liste de tous mes passages</h2>
+        <ul id="passagesList">
+            <!-- A vous de lister les passages ici. -->
+        </ul>
+        <p><a class="nav-link" href="#deconnexion">Déconnexion</a></p>
+    </section>
+    <section id="deconnexion" class="container" style="display:none">
+        <h2>Déconnexion</h2>
+        <form method="post" action="">
+            <p>Cliquez ici pour vous déconnecter :
+                <input type="submit" value="Deconnexion">
+            </p>
+        </form>
+        <p><a class="nav-link" href="#accueil">Retour à la page d'accueil</a></p>
+    </section>
+</body>
+</html>
