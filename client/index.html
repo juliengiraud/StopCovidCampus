@@ -6,11 +6,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <!-- Mustache -->
+    <script src="https://cdn.jsdelivr.net/npm/mustache@4.1.0/mustache.min.js" integrity="sha256-mh7gV/es1uh2rW94a1OI1CO/jBNd9O7s70tkiJ69rOQ=" crossorigin="anonymous"></script>
+    <script src="./js/render.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./js/script.js"></script>
         <title>Présence UCBL</title>
 </head>
-<body>
+<body onload="renderHello()">
     <h1>Présence UCBL (en AJAX) !</h1>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
@@ -40,7 +43,10 @@
         </div>
     </nav>
 
-
+    <div id="target"></div>
+    <script id="template" type="x-tmpl-mustache">
+        Hello {{ name }}!
+    </script>
     <div class="container alert alert-danger mt-3" id="errMsg" style="display: none"></div>
 
     <section id="accueil" class="container">
