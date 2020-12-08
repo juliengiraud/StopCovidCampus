@@ -5,7 +5,7 @@ $(document).ready(() => {
 function initEvents() {
 
     // Déplier/replier le menu quand on clique sur son titre
-    $('.navbar-brand').click(function() {
+    $('.navbar-brand').click(() => {
         $('.navbar-nav').toggle("fast");
     });
 
