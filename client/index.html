@@ -114,21 +114,28 @@
     </section>
     <section id="tous-mes-passages" class="container" style="display:none">
         <h2>Liste de tous mes passages</h2>
-        <ul id="passagesListTemplate">
-            <table class="table">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Login</th>
-                    <th>Salle</th>
-                    <th>Entrée</th>
-                    <th>Sortie</th>
-                </tr>
-                </thead>
-                <tbody>
-         
-                </tbody>
-            </table>
-        </ul>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th>Login</th>
+                <th>Salle</th>
+                <th>Entrée</th>
+                <th>Sortie</th>
+            </tr>
+            </thead>
+            <tbody id="passagesListTemplate">
+                <script id="passages" type="x-tmpl-mustache">
+                    {{#passages}}
+                        <tr>
+                            <td>{{ login }}</td>
+                            <td>{{ salle }}</td>
+                            <td>{{ entree }}</td>
+                            <td>{{ sortie }}</td>
+                        </tr>
+                    {{/passages}}
+                </script>
+            </tbody>
+        </table>
         <p><a class="nav-link" href="#deconnexion">Déconnexion</a></p>
     </section>
     <section id="deconnexion" class="container" style="display:none">
