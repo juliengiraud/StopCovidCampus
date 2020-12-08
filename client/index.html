@@ -13,7 +13,7 @@
     <script src="./js/script.js"></script>
         <title>Présence UCBL</title>
 </head>
-<body onload="renderHello()">
+<body onload="render()">
     <h1>Présence UCBL (en AJAX) !</h1>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
@@ -77,10 +77,12 @@
 
     <section id="mon-compte" class="container" style="display:none">
         <h2>Mon compte</h2>
-        <ul id="compteList">
-            <li>Login : <span id="login"></span></li>
-            <li>Nom : <span id="nom"></span></li>
-            <li>Admin : <span id="admin"></span></li>
+        <ul id="loggedUserTemplate">
+            <script id="loggedUser" type="x-tmpl-mustache">
+                <li> Login :<span id="login">{{ login }}</span></li>
+                <li>Nom :<span id="nom">{{ nom }}</span></li>
+                <li>Admin :<span id="admin">{{ admin }}</span></li>
+            </script>
         </ul>
         <form method="put" action="">
             <p>Modifier mon nom :
@@ -112,8 +114,20 @@
     </section>
     <section id="tous-mes-passages" class="container" style="display:none">
         <h2>Liste de tous mes passages</h2>
-        <ul id="passagesList">
-            <!-- A vous de lister les passages ici. -->
+        <ul id="passagesListTemplate">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Login</th>
+                    <th>Salle</th>
+                    <th>Entrée</th>
+                    <th>Sortie</th>
+                </tr>
+                </thead>
+                <tbody>
+         
+                </tbody>
+            </table>
         </ul>
         <p><a class="nav-link" href="#deconnexion">Déconnexion</a></p>
     </section>
