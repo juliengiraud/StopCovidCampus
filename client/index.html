@@ -13,7 +13,7 @@
     <script src="./js/script.js"></script>
         <title>Présence UCBL</title>
 </head>
-<body onload="render()">
+<body>
     <h1>Présence UCBL (en AJAX) !</h1>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
@@ -74,12 +74,12 @@
 
     <section id="mon-compte" class="container" style="display:none">
         <h2>Mon compte</h2>
-        <script id="loggedUser" type="x-tmpl-mustache">
+        <script id="mon-compte-template" type="x-tmpl-mustache">
             <li> Login : <span id="login">{{ data.login }} </span></li>
             <li>Nom : <span id="nom">{{ data.nom }} </span></li>
             <li>Admin : <span id="admin">{{ data.admin }} </span></li>
         </script>
-        <ul id="loggedUserTemplate">
+        <ul id="mon-compte-content">
         </ul>
         <form method="put" action="">
             <p>Modifier mon nom :
@@ -120,7 +120,7 @@
                 <th>Sortie</th>
             </tr>
             </thead>
-            <script id="passages" type="x-tmpl-mustache">
+            <script id="tous-mes-passages-template" type="x-tmpl-mustache">
                 {{#data}}
                     <tr>
                         <td>{{ login }}</td>
@@ -130,7 +130,7 @@
                     </tr>
                 {{/data}}
             </script>
-            <tbody id="passagesTemplate">
+            <tbody id="tous-mes-passages-content">
             </tbody>
         </table>
         <p><a class="nav-link" href="#deconnexion">Déconnexion</a></p>
