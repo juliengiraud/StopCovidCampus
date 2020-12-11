@@ -44,9 +44,6 @@
     </nav>
 
     <div id="target"></div>
-    <script id="template" type="x-tmpl-mustache">
-        Hello {{ name }}!
-    </script>
     <div class="container alert alert-danger mt-3" id="errMsg" style="display: none"></div>
 
     <section id="accueil" class="container">
@@ -77,16 +74,16 @@
 
     <section id="mon-compte" class="container" style="display:none">
         <h2>Mon compte</h2>
+        <script id="loggedUser" type="x-tmpl-mustache">
+            <li> Login : <span id="login">{{ data.login }} </span></li>
+            <li>Nom : <span id="nom">{{ data.nom }} </span></li>
+            <li>Admin : <span id="admin">{{ data.admin }} </span></li>
+        </script>
         <ul id="loggedUserTemplate">
-            <script id="loggedUser" type="x-tmpl-mustache">
-                <li> Login :<span id="login">{{ login }}</span></li>
-                <li>Nom :<span id="nom">{{ nom }}</span></li>
-                <li>Admin :<span id="admin">{{ admin }}</span></li>
-            </script>
         </ul>
         <form method="put" action="">
             <p>Modifier mon nom :
-                <input type="text" name="nom">
+                <input type="text" name="nom" contenteditable="true">
                 <input type="submit" value="Modifier">
             </p>
         </form>
@@ -123,17 +120,17 @@
                 <th>Sortie</th>
             </tr>
             </thead>
-            <tbody id="passagesListTemplate">
-                <script id="passages" type="x-tmpl-mustache">
-                    {{#passages}}
-                        <tr>
-                            <td>{{ login }}</td>
-                            <td>{{ salle }}</td>
-                            <td>{{ entree }}</td>
-                            <td>{{ sortie }}</td>
-                        </tr>
-                    {{/passages}}
-                </script>
+            <script id="passages" type="x-tmpl-mustache">
+                {{#data}}
+                    <tr>
+                        <td>{{ login }}</td>
+                        <td>{{ salle }}</td>
+                        <td>{{ entree }}</td>
+                        <td>{{ sortie }}</td>
+                    </tr>
+                {{/data}}
+            </script>
+            <tbody id="passagesTemplate">
             </tbody>
         </table>
         <p><a class="nav-link" href="#deconnexion">Déconnexion</a></p>

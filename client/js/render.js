@@ -33,6 +33,5 @@ function render() {
 function doRender(templateName) {
   const template = document.getElementById(templateName).innerHTML;
   const rendered = Mustache.render(template, { data: DATA[templateName] });
-  console.log(templateName, DATA[templateName]);
   document.getElementById(templateName + 'Template').innerHTML = rendered;
 }
