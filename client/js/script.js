@@ -3,10 +3,21 @@ $(document).ready(() => {
     $('*[id*=-template]').each(function() {
         Mustache.parse($(this).html());
     });
+    initEvents();
+})
+
+function initEvents() {
 
     // Déplier/replier le menu quand on clique sur son titre
     $('.navbar-brand').click(() => {
         $('.navbar-nav').toggle("fast");
+    });
+
+    // Bouton de connexion
+    $('#accueil button').click((event) => {
+        event.preventDefault()
+        event.stopPropagation();
+        connexion();
     });
 
     // Mettre en place un mécanisme de routage qui affiche la vue correspondant au hash sélectionné
@@ -94,4 +105,31 @@ $(document).ready(() => {
 
         $("#" + id).toggle("fast");
     });
-});
+}
+
+function connexion() {
+    $.ajax({
+        url: "http://localhost:8080/tp4/users/login",
+        type: "POST",
+        dataType: "json",
+        data: JSON.stringify({
+            "login": "string",
+            "nom": "string",
+            "admin": "false"
+        }),
+        contentType: "application/json",
+        accept: "application/json"
+    }).done((data, textStatus, request) => {
+        DATA.loggedUser = {
+            "login": "string",
+            "nom": "string",
+            "admin": false,
+            "token": request.getResponseHeader("authorization")
+        };
+        console.log(DATA);
+    }).fail(function() {
+        console.log( "error" );
+    }).always(function() {
+        console.log( "complete" );
+    });
+}
