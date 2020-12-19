@@ -46,17 +46,31 @@
             </div>
             <button type="submit" class="btn btn-primary">Connexion</button>
         </form>
-        <p>Vous êtes actuellement dans les salles :</p>
-        <script id="accueil-template" type="x-tmpl-mustache">
-            {{#data}}
+        <div id="passages-en-cours" style="display: none">
+            <h3>Vous êtes actuellement dans les salles :</h3>
+            <table class="table">
+                <thead class="thead-dark">
                 <tr>
-                    <td>{{ login }}</td>
-                    <td>{{ salle }}</td>
-                    <td>{{ entree }}</td>
-                    <td>{{ sortie }}</td>
+                    <th>Login</th>
+                    <th>Salle</th>
+                    <th>Entrée</th>
+                    <th>Sortie</th>
                 </tr>
-            {{/data}}
-        </script>
+                </thead>
+                <script id="accueil-template" type="x-tmpl-mustache">
+                {{#data}}
+                    <tr>
+                        <td>{{ login }}</td>
+                        <td>{{ salle }}</td>
+                        <td>{{ entree }}</td>
+                        <td>{{ sortie }}</td>
+                    </tr>
+                {{/data}}
+            </script>
+                <tbody id="accueil-content">
+                </tbody>
+            </table>
+        </div>
     </section>
 
     <section id="mon-compte" class="container" style="display:none">

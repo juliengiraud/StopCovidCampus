@@ -143,6 +143,7 @@ function connexion() {
         DATA.loggedUser = user;
         // Cacher le formulaire de connexion
         $("#accueil form").hide();
+        $("#accueil #passages-en-cours").show();
         showMsg("Vous êtes connecté.", "success");
         getMenu();
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -165,6 +166,7 @@ function deconnexion() {
         // Vider le tableau de données et rediriger vers l'accueil et afficher le formulaire de connexion
         DATA = [];
         $("#accueil form").show();
+        $("#accueil #passages-en-cours").hide();
         window.location.href = urlLocal + "static/client/#accueil";
         showMsg("Vous êtes déconnecté.", "success");
         getMenu();
@@ -360,7 +362,6 @@ function getPassagesFromUrl(url, key) {
     });
 }
 
-<<<<<<< HEAD
 /**
  * Ajoute un passage, entrée ou sortie
  * @param type
