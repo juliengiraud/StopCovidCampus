@@ -36,6 +36,13 @@ function initEvents() {
         deconnexion();
     });
 
+    // Bouton de modification du nom
+    $('#mon-compte form button').click((event) => {
+        event.preventDefault()
+        event.stopPropagation();
+        updateNom();
+    });
+
     // Bouton de création de salle
     $('#salles form button').click((event) => {
         event.preventDefault()
@@ -45,13 +52,13 @@ function initEvents() {
 
     // Mettre en place un mécanisme de routage qui affiche la vue correspondant au hash sélectionné
     $(window).on("popstate", () => {
-        $("#errMsg").empty().hide();
+        $("#msg").empty().hide();
         $('section').hide();
         let view = window.location.href.substr(window.location.href.indexOf("#")+1);
 
         // Rediriger l'utilisateur vers l'accueil s'il n'est pas connecté
         if (view !== "accueil" && DATA.loggedUser === undefined) {
-            $("#errMsg").html("Vous n'êtes pas connecté.").show("fast");
+            $("#msg").html("Vous n'êtes pas connecté.").addClass("alert-danger").show("fast");
             view ="accueil";
         }
 
@@ -120,9 +127,10 @@ function connexion() {
         DATA.loggedUser = user;
         // Cacher le formulaire de connexion
         $("#accueil form").hide();
+        showMsg("Vous êtes connecté.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
 }
 
@@ -141,9 +149,37 @@ function deconnexion() {
         DATA = [];
         $("#accueil form").show();
         window.location.href = urlLocal + "static/client/#accueil";
+        showMsg("Vous êtes déconnecté.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
+    });
+}
+
+/**
+ * Modifie le nom de l'utilisateur
+ */
+function updateNom() {
+    // Récupération des données du formulaire de connexion
+    let nom = {
+        "nom": $('#mon-compte form input[name="nom"]').val()
+    }
+
+    $.ajax({
+        url: urlLocal + "users/" + DATA.loggedUser.login + "/nom",
+        type: "PUT",
+        headers: {
+            Authorization : DATA.loggedUser.token
+        },
+        dataType: "json",
+        data: JSON.stringify(nom),
+        contentType: "application/json"
+    }).done((data, textStatus, jqXHR) => {
+        DATA.loggedUser.nom = nom.nom;
+        showMsg("Votre nom a bien été modifié.", "success");
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        let msg = jqXHR.responseText;
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
 }
 
@@ -164,7 +200,7 @@ function getSalleByUrl(url) {
         DATA.salles.push(data);
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     })
 }
 
@@ -185,7 +221,7 @@ function getSalles() {
         });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
 }
 
@@ -206,7 +242,7 @@ function getUserInfos(login, key) {
         DATA[key] = data;
     }).fail(function(jqXHR, textStatus, errorThrown) {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
 }
 
@@ -229,9 +265,10 @@ function saveSalle() {
         },
         contentType: "application/json"
     }).done((data, textStatus, jqXHR) => {
+        showMsg("La salle a bien été créée.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     }).then(() => {
         window.location.href = urlLocal + "#salles";
     });
@@ -256,7 +293,7 @@ function getPassagesEnCours(login, key) {
         })
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
 }
 
@@ -279,7 +316,7 @@ function getPassages(login, key) {
         })
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
 }
 
@@ -301,6 +338,16 @@ function getPassagesFromUrl(url, key) {
         DATA[key].push(data);
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
-        $("#errMsg").html(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>"))).show("fast");
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
+}
+
+function showMsg(text, type) {
+    if (type == "success") {
+        $("#msg").html(text).addClass("alert-success").removeClass("alert-danger").show("fast");
+    } else if (type == "error") {
+        $("#msg").html(text).removeClass("alert-success").addClass("alert-danger").show("fast");
+    } else {
+        $("#msg").html(text).removeClass("alert-success").removeClass("alert-danger").show("fast");
+    }
 }
