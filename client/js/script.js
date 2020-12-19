@@ -89,42 +89,20 @@ function initEvents() {
             case "accueil":
                 // Ne pas charger les données de l'accueil si l'utilisateur n'est pas connecté
                 if (DATA.loggedUser !== undefined) {
-                    $.when(
-                        getPassagesEnCours(DATA.loggedUser.login, view)
-                    ).then(
-                        render(view)
-                    )
-                    view = "salles-saturees";
-                    $.when(
-                        getSallesSaturees(view)
-                    ).then(
-                        render(view)
-                    )
-                }
+                    getPassagesEnCours(DATA.loggedUser.login, view);
+				}
                 break;
 
             case "mon-compte":
-                $.when(
-                    getUserInfos(DATA.loggedUser.login, view)
-                ).then(
-                    render(view)
-                )
+                getUserInfos(DATA.loggedUser.login, view);
                 break;
 
             case "salles":
-                $.when(
-                    getSalles()
-                ).then(
-                    render(view)
-                )
+                getSalles();
                 break;
 
             case "tous-mes-passages":
-                $.when(
-                    getPassages(DATA.loggedUser.login, view)
-                ).then(
-                    render(view)
-                )
+                getPassages(DATA.loggedUser.login, view);
                 break;
         }
 
@@ -207,6 +185,7 @@ function updateNom() {
         }
     }).done((data, textStatus, jqXHR) => {
         DATA.loggedUser.nom = nom.nom;
+        render(getView());
         showMsg("Votre nom a bien été modifié.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
@@ -229,6 +208,7 @@ function getSalleByUrl(url) {
         }
     }).done((data, textStatus, request) => {
         DATA.salles.push(data);
+        render(getView());
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -281,6 +261,7 @@ function getUserInfos(login, key) {
         }
     }).done((data, textStatus, request) => {
         DATA[key] = data;
+        render(getView());
     }).fail(function(jqXHR, textStatus, errorThrown) {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -328,7 +309,7 @@ function getPassagesEnCours(login, key) {
     }).done((data, textStatus, request) => {
         $(data).each((index, value) => {
             getPassagesFromUrl(value, key);
-        })
+        });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -351,7 +332,7 @@ function getPassages(login, key) {
     }).done((data, textStatus, request) => {
         $(data).each((index, value) => {
             getPassagesFromUrl(value, key);
-        })
+        });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -374,6 +355,7 @@ function getPassagesFromUrl(url, key) {
         }
     }).done((data, textStatus, request) => {
         DATA[key].push(data);
+        render(getView());
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -389,26 +371,22 @@ function savePassage(type) {
     let passage = {
         "user": DATA.loggedUser.login,
         "salle": $('#entree form input[name="salle"]').val(),
-        "dateEntree":"",
-        "dateSortie":""
+        "dateEntree": type === "entree" ? getFuckingStrangeDateFormat(new Date()) : "",
+        "dateSortie": type === "sortie" ? getFuckingStrangeDateFormat(new Date()) : ""
     }
-    if (type == "entree") {
-        passage.dateEntree = new Date(Date.now());
-    } else if (type == "sortie") {
-        passage.dateSortie = '"' + new Date(Date.now()) + '"';
-    }
+
+    console.log(passage);
 
     $.ajax({
         url: urlLocal + "passages",
         type: "POST",
-        contentType: "json",
+        contentType: "application/json",
         data: JSON.stringify(passage),
         headers: {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, jqXHR) => {
-        DATA.loggedUser.nom = nom.nom;
-        showMsg("Votre nom a bien été modifié.", "success");
+        showMsg("Votre passage a bien été ajouté.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -461,4 +439,18 @@ function showMsg(text, type) {
     } else {
         $("#msg").html(text).removeClass("alert-success").removeClass("alert-danger").show("fast");
     }
+}
+
+function getView() {
+    return window.location.href.substr(window.location.href.indexOf("#")+1);
+}
+
+// From "Sat, 19 Dec 2020 17:33:43 GMT" to "Wed Oct 16 00:00:00 GMT 2013"
+function getFuckingStrangeDateFormat(date) {
+    const tmp = date.toGMTString().replace(",", "").split(" ");
+    const tab = [];
+    for (const i of [0, 2, 1, 4, 5, 3]) {
+        tab.push(tmp[i]);
+    }
+    return tab.join(" ");
 }
