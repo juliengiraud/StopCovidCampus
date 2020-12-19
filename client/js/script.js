@@ -65,6 +65,13 @@ function initEvents() {
         savePassage("sortie");
     });
 
+    // Bouton d'affichage des infos d'une salle
+    $('.link-salle').click(function() {
+        let nomSalle = $(this).html();
+        DATA.modal = DATA.salles.find(({nom}) => nom == nomSalle);
+        render("modal");
+    });
+
     // Mettre en place un mécanisme de routage qui affiche la vue correspondant au hash sélectionné
     $(window).on("popstate", () => {
         $("#msg").empty().hide();
@@ -84,6 +91,12 @@ function initEvents() {
                 if (DATA.loggedUser !== undefined) {
                     $.when(
                         getPassagesEnCours(DATA.loggedUser.login, view)
+                    ).then(
+                        render(view)
+                    )
+                    view = "salles-saturees";
+                    $.when(
+                        getSallesSaturees(view)
                     ).then(
                         render(view)
                     )
@@ -140,9 +153,9 @@ function connexion() {
         // Récupération du token jwt
         user.token = jqXHR.getResponseHeader("Authorization");
         DATA.loggedUser = user;
-        // Cacher le formulaire de connexion
-        $("#accueil form").hide();
-        $("#accueil #passages-en-cours").show();
+        // Cacher le formulaire de connexion et afficher l'accueil de l'utilisateur connecté
+        $("#accueil-not-co").hide();
+        $("#accueil-co").show();
         showMsg("Vous êtes connecté.", "success");
         getMenu();
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -164,8 +177,8 @@ function deconnexion() {
     }).done(() => {
         // Vider le tableau de données et rediriger vers l'accueil et afficher le formulaire de connexion
         DATA = [];
-        $("#accueil form").show();
-        $("#accueil #passages-en-cours").hide();
+        $("#accueil-not-co").show();
+        $("#accueil-co").hide();
         window.location.href = urlLocal + "static/client/#accueil";
         showMsg("Vous êtes déconnecté.", "success");
         getMenu();
@@ -240,6 +253,16 @@ function getSalles() {
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
+    });
+}
+
+function getSallesSaturees(key) {
+    getSalles();
+    DATA[key] = [];
+    $(DATA.salles).each((index, value) => {
+       if (value.saturee) {
+           DATA[key].push(value);
+       }
     });
 }
 

@@ -14,6 +14,27 @@
         <title>Présence UCBL</title>
 </head>
 <body>
+    <div class="modal fade" id="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <script id="modal-template" type="x-tmpl-mustache">
+                <div class="modal-header">
+                    <h5 class="modal-title">Salle {{ data.nom }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ data.capacite }}
+                    {{ data.presents }}
+                    {{ data.saturee }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </script>
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
     <h1>Présence UCBL (en AJAX) !</h1>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
@@ -31,22 +52,24 @@
 
     <section id="accueil" class="container">
         <h2>Bienvenue sur Présence UCBL</h2>
-        <form method="post" action="" class="form-group">
-            <div class="form-group">
-                <label for="inputLogin">Entrez votre login :</label>
-                <input type="text" name="login" id="inputLogin" class="form-control" required="">
-            </div>
-            <div class="form-group">
-                <label for="inputName">Entrez votre nom (facultatif) :</label>
-                <input type="text" name="nom" id="inputName" class="form-control">
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label" for="inputAdmin">Je suis administrateur</label>
-                <input type="checkbox" class="form-check-input" id="inputAdmin" name="admin">
-            </div>
-            <button type="submit" class="btn btn-primary">Connexion</button>
-        </form>
-        <div id="passages-en-cours" style="display: none">
+        <div id="accueil-not-co">
+            <form method="post" action="" class="form-group">
+                <div class="form-group">
+                    <label for="inputLogin">Entrez votre login :</label>
+                    <input type="text" name="login" id="inputLogin" class="form-control" required="">
+                </div>
+                <div class="form-group">
+                    <label for="inputName">Entrez votre nom (facultatif) :</label>
+                    <input type="text" name="nom" id="inputName" class="form-control">
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label" for="inputAdmin">Je suis administrateur</label>
+                    <input type="checkbox" class="form-check-input" id="inputAdmin" name="admin">
+                </div>
+                <button type="submit" class="btn btn-primary">Connexion</button>
+            </form>
+        </div>
+        <div id="accueil-co" style="display: none">
             <h3>Vous êtes actuellement dans les salles :</h3>
             <table class="table">
                 <thead class="thead-dark">
@@ -60,8 +83,8 @@
                 <script id="accueil-template" type="x-tmpl-mustache">
                 {{#data}}
                     <tr>
-                        <td>{{ login }}</td>
-                        <td>{{ salle }}</td>
+                        <td>{{ user }}</td>
+                        <td><a class="link-primary link-salle" data-toggle="modal" data-target="#modal">{{ salle }}</a></td>
                         <td>{{ entree }}</td>
                         <td>{{ sortie }}</td>
                     </tr>
@@ -70,7 +93,31 @@
                 <tbody id="accueil-content">
                 </tbody>
             </table>
+            <h3>Les salles ci-dessous sont surchargées :</h3>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Salle</th>
+                    <th>Capacité</th>
+                    <th>Présents</th>
+                    <th>Saturée</th>
+                </tr>
+                </thead>
+                    <script id="salles-saturees-template" type="x-tmpl-mustache">
+                        {{#data}}
+                            <tr>
+                                <td><a class="link-primary link-salle" data-toggle="modal" data-target="#modal">{{ salle }}</a></td>
+                                <td>{{ capacite }}</td>
+                                <td>{{ presents }}</td>
+                                <td>{{ saturee }}</td>
+                            </tr>
+                        {{/data}}
+                    </script>
+                <tbody id="salles-saturees-content">
+                </tbody>
+            </table>
         </div>
+        <div></div>
     </section>
 
     <section id="mon-compte" class="container" style="display:none">
@@ -108,14 +155,14 @@
             </tr>
             </thead>
             <script id="salles-template" type="x-tmpl-mustache">
-            {{#data}}
-                <tr>
-                    <td>{{ nom }}</td>
-                    <td>{{ capacite }}</td>
-                    <td>{{ presents }}</td>
-                    <td>{{ saturee }}</td>
-                </tr>
-            {{/data}}
+                {{#data}}
+                    <tr>
+                        <td><a class="link-primary link-salle" data-toggle="modal" data-target="#modal">{{ salle }}</a></td>
+                        <td>{{ capacite }}</td>
+                        <td>{{ presents }}</td>
+                        <td>{{ saturee }}</td>
+                    </tr>
+                {{/data}}
         </script>
             <tbody id="salles-content">
             </tbody>
