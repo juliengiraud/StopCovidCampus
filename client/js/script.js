@@ -84,34 +84,26 @@ function initEvents() {
                 if (DATA.loggedUser !== undefined) {
                     $.when(
                         getPassagesEnCours(DATA.loggedUser.login, view)
-                    ).then(
-                        render(view)
-                    )
+                    );
                 }
                 break;
 
             case "mon-compte":
                 $.when(
                     getUserInfos(DATA.loggedUser.login, view)
-                ).then(
-                    render(view)
-                )
+                );
                 break;
 
             case "salles":
                 $.when(
                     getSalles()
-                ).then(
-                    render(view)
-                )
+                );
                 break;
 
             case "tous-mes-passages":
                 $.when(
                     getPassages(DATA.loggedUser.login, view)
-                ).then(
-                    render(view)
-                )
+                );
                 break;
         }
 
@@ -140,6 +132,7 @@ function connexion() {
         // Récupération du token jwt
         user.token = jqXHR.getResponseHeader("Authorization");
         DATA.loggedUser = user;
+        render(getView());
         // Cacher le formulaire de connexion
         $("#accueil form").hide();
         $("#accueil #passages-en-cours").show();
@@ -194,6 +187,7 @@ function updateNom() {
         }
     }).done((data, textStatus, jqXHR) => {
         DATA.loggedUser.nom = nom.nom;
+        render(getView());
         showMsg("Votre nom a bien été modifié.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
@@ -216,6 +210,7 @@ function getSalleByUrl(url) {
         }
     }).done((data, textStatus, request) => {
         DATA.salles.push(data);
+        render(getView());
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -258,6 +253,7 @@ function getUserInfos(login, key) {
         }
     }).done((data, textStatus, request) => {
         DATA[key] = data;
+        render(getView());
     }).fail(function(jqXHR, textStatus, errorThrown) {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -305,7 +301,7 @@ function getPassagesEnCours(login, key) {
     }).done((data, textStatus, request) => {
         $(data).each((index, value) => {
             getPassagesFromUrl(value, key);
-        })
+        });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -328,7 +324,7 @@ function getPassages(login, key) {
     }).done((data, textStatus, request) => {
         $(data).each((index, value) => {
             getPassagesFromUrl(value, key);
-        })
+        });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -351,6 +347,7 @@ function getPassagesFromUrl(url, key) {
         }
     }).done((data, textStatus, request) => {
         DATA[key].push(data);
+        render(getView());
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -385,6 +382,7 @@ function savePassage(type) {
         }
     }).done((data, textStatus, jqXHR) => {
         DATA.loggedUser.nom = nom.nom;
+        render(getView());
         showMsg("Votre nom a bien été modifié.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
@@ -438,4 +436,8 @@ function showMsg(text, type) {
     } else {
         $("#msg").html(text).removeClass("alert-success").removeClass("alert-danger").show("fast");
     }
+}
+
+function getView() {
+    return window.location.href.substr(window.location.href.indexOf("#")+1);
 }
