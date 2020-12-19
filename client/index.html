@@ -8,8 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <!-- Mustache -->
     <script src="https://cdn.jsdelivr.net/npm/mustache@4.1.0/mustache.min.js" integrity="sha256-mh7gV/es1uh2rW94a1OI1CO/jBNd9O7s70tkiJ69rOQ=" crossorigin="anonymous"></script>
-    <script src="./js/render.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./js/render.js"></script>
     <script src="./js/script.js"></script>
         <title>Présence UCBL</title>
 </head>
@@ -25,6 +25,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#mon-compte">Mon compte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#salles">Salles</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#entree">Entrée</a>
@@ -48,7 +51,7 @@
 
     <section id="accueil" class="container">
         <h2>Bienvenue sur Présence UCBL</h2>
-        <form method="post" action="users/login" class="form-group">
+        <form method="post" action="" class="form-group">
             <div class="form-group">
                 <label for="inputLogin">Entrez votre login :</label>
                 <input type="text" name="login" id="inputLogin" class="form-control" required="">
@@ -63,13 +66,17 @@
             </div>
             <button type="submit" class="btn btn-primary">Connexion</button>
         </form>
-        <!--
-            A vous de modifier cette section pour qu'elle affiche les passages en cours quand l'utilisateur est connecté, et qu'elle se recharge toutes les 5 secondes...
-            <p>Vous êtes actuellement dans les salles :</p>
-            <ul>
-                <li>...</li>
-            </ul>
-        -->
+        <p>Vous êtes actuellement dans les salles :</p>
+        <script id="accueil-template" type="x-tmpl-mustache">
+            {{#data}}
+                <tr>
+                    <td>{{ login }}</td>
+                    <td>{{ salle }}</td>
+                    <td>{{ entree }}</td>
+                    <td>{{ sortie }}</td>
+                </tr>
+            {{/data}}
+        </script>
     </section>
 
     <section id="mon-compte" class="container" style="display:none">
@@ -88,6 +95,38 @@
             </p>
         </form>
         <p><a class="nav-link" href="#deconnexion">Déconnexion</a></p>
+    </section>
+    <section id="salles" class="container" style="display:none">
+        <h2>Salles</h2>
+        <form method="post" action="">
+            <p>Créer une salle :
+                <input type="text" name="nomSalle">
+                <button type="submit">Envoyer</button>
+            </p>
+        </form>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th>Salle</th>
+                <th>Capacité</th>
+                <th>Présents</th>
+                <th>Saturée</th>
+            </tr>
+            </thead>
+            <script id="salles-template" type="x-tmpl-mustache">
+            {{#data}}
+                <tr>
+                    <td>{{ nom }}</td>
+                    <td>{{ capacite }}</td>
+                    <td>{{ presents }}</td>
+                    <td>{{ saturee }}</td>
+                </tr>
+            {{/data}}
+        </script>
+            <tbody id="salles-content">
+            </tbody>
+        </table>
+        <p><a class="nav-link" href="#deconnexion">Se déconnecter</a></p>
     </section>
     <section id="entree" class="container" style="display:none">
         <h2>Entrer dans une salle</h2>
@@ -138,9 +177,10 @@
     <section id="deconnexion" class="container" style="display:none">
         <h2>Déconnexion</h2>
         <form method="post" action="">
-            <p>Cliquez ici pour vous déconnecter :
-                <input type="submit" value="Deconnexion">
-            </p>
+            <div class="form-group">
+                <label for="inputLogout">Cliquez ici pour vous déconnecter :</label>
+                <button type="submit" id="inputLogout" class="btn btn-primary">Déconnexion</button>
+            </div>
         </form>
         <p><a class="nav-link" href="#accueil">Retour à la page d'accueil</a></p>
     </section>
