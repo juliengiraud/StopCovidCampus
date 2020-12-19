@@ -9,6 +9,7 @@ $(document).ready(() => {
     $('*[id*=-template]').each(function() {
         Mustache.parse($(this).html());
     });
+    getMenu();
     initEvents();
 })
 
@@ -50,6 +51,20 @@ function initEvents() {
         saveSalle();
     });
 
+    // Bouton de création d'une entrée
+    $('#entree form button').click((event) => {
+        event.preventDefault()
+        event.stopPropagation();
+        savePassage("entree");
+    });
+
+    // Bouton de création d'une sortie
+    $('#sortie form button').click((event) => {
+        event.preventDefault()
+        event.stopPropagation();
+        savePassage("sortie");
+    });
+
     // Mettre en place un mécanisme de routage qui affiche la vue correspondant au hash sélectionné
     $(window).on("popstate", () => {
         $("#msg").empty().hide();
@@ -63,6 +78,7 @@ function initEvents() {
         }
 
         switch (view) {
+            // todo gérer l'asynchrone
             case "accueil":
                 // Ne pas charger les données de l'accueil si l'utilisateur n'est pas connecté
                 if (DATA.loggedUser !== undefined) {
@@ -128,6 +144,7 @@ function connexion() {
         // Cacher le formulaire de connexion
         $("#accueil form").hide();
         showMsg("Vous êtes connecté.", "success");
+        getMenu();
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -150,6 +167,7 @@ function deconnexion() {
         $("#accueil form").show();
         window.location.href = urlLocal + "static/client/#accueil";
         showMsg("Vous êtes déconnecté.", "success");
+        getMenu();
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -342,6 +360,80 @@ function getPassagesFromUrl(url, key) {
     });
 }
 
+/**
+ * Ajoute un passage, entrée ou sortie
+ * @param type
+ */
+function savePassage(type) {
+    //todo gérer les date
+    let passage = {
+        "user": DATA.loggedUser.login,
+        "salle": $('#entree form input[name="salle"]').val(),
+        "dateEntree":"",
+        "dateSortie":""
+    }
+    if (type == "entree") {
+        passage.dateEntree = '"' + Date.now() + '"';
+    } else if (type == "sortie") {
+        passage.dateSortie = '"' + Date.now() + '"';
+    }
+
+    $.ajax({
+        url: urlLocal + "passages",
+        type: "POST",
+        headers: {
+            Authorization : DATA.loggedUser.token
+        },
+        dataType: "json",
+        data: JSON.stringify(passage),
+        contentType: "application/json"
+    }).done((data, textStatus, jqXHR) => {
+        DATA.loggedUser.nom = nom.nom;
+        showMsg("Votre nom a bien été modifié.", "success");
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        let msg = jqXHR.responseText;
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
+    });
+}
+
+/**
+ * Génère le menu en fonction de si l'utilisateur est connecté, est admin..
+ */
+function getMenu() {
+    let menu = "";
+    menu += "<li class=\"nav-item\">\n" +
+                "<a class=\"nav-link\" href=\"#accueil\">Accueil</a>\n" +
+            "</li>";
+    if (DATA.loggedUser !== undefined) {
+        if (DATA.loggedUser.admin) {
+            menu += " <li class=\"nav-item\">\n" +
+                "<a class=\"nav-link\" href=\"#salles\">Salles</a>\n" +
+                "</li>\n";
+        }
+        menu +="<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link\" href=\"#mon-compte\">Mon compte</a>\n" +
+                "</li>\n" +
+                "<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link\" href=\"#entree\">Entrée</a>\n" +
+                "</li>\n" +
+                "<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link\" href=\"#sortie\">Sortie</a>\n" +
+                "</li>\n" +
+                "<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link\" href=\"#tous-mes-passages\">Tous mes passages</a>\n" +
+                "</li>\n" +
+                "<li class=\"nav-item\">\n" +
+                    "<a class=\"nav-link\" href=\"#deconnexion\">Déconnexion</a>\n" +
+                "</li>";
+    }
+    $(".navbar-nav").html(menu);
+}
+
+/**
+ * Affiche un message sous le menu, affichage d'une erreur ou d'un message de succès
+ * @param text
+ * @param type
+ */
 function showMsg(text, type) {
     if (type == "success") {
         $("#msg").html(text).addClass("alert-success").removeClass("alert-danger").show("fast");
