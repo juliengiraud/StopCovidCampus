@@ -360,6 +360,7 @@ function getPassagesFromUrl(url, key) {
     });
 }
 
+<<<<<<< HEAD
 /**
  * Ajoute un passage, entrée ou sortie
  * @param type
