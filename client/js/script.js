@@ -134,9 +134,8 @@ function connexion() {
     $.ajax({
         url: urlLocal + "users/login",
         type: "POST",
-        dataType: "json",
-        data: JSON.stringify(user),
-        contentType: "application/json"
+        contentType: "application/json",
+        data: JSON.stringify(user)
     }).done((data, textStatus, jqXHR) => {
         // Récupération du token jwt
         user.token = jqXHR.getResponseHeader("Authorization");
@@ -161,7 +160,7 @@ function deconnexion() {
         type: "POST",
         headers: {
             Authorization : DATA.loggedUser.token
-        },
+        }
     }).done(() => {
         // Vider le tableau de données et rediriger vers l'accueil et afficher le formulaire de connexion
         DATA = [];
@@ -188,12 +187,11 @@ function updateNom() {
     $.ajax({
         url: urlLocal + "users/" + DATA.loggedUser.login + "/nom",
         type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(nom),
         headers: {
             Authorization : DATA.loggedUser.token
-        },
-        dataType: "json",
-        data: JSON.stringify(nom),
-        contentType: "application/json"
+        }
     }).done((data, textStatus, jqXHR) => {
         DATA.loggedUser.nom = nom.nom;
         showMsg("Votre nom a bien été modifié.", "success");
@@ -212,10 +210,10 @@ function getSalleByUrl(url) {
     $.ajax({
         url: url,
         type: "GET",
+        accept: "application/json",
         headers: {
             Authorization : DATA.loggedUser.token
-        },
-        accept: "application/json"
+        }
     }).done((data, textStatus, request) => {
         DATA.salles.push(data);
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -231,10 +229,10 @@ function getSalles() {
     $.ajax({
         url: urlLocal + "salles",
         type: "GET",
+        accept: "application/json",
         headers: {
             Authorization : DATA.loggedUser.token
-        },
-        accept: "application/json"
+        }
     }).done((data, textStatus, request) => {
         $(data).each((index, value) => {
             getSalleByUrl(value);
@@ -257,7 +255,7 @@ function getUserInfos(login, key) {
         accept: "application/json",
         headers: {
             Authorization : DATA.loggedUser.token
-        },
+        }
     }).done((data, textStatus, request) => {
         DATA[key] = data;
     }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -278,19 +276,16 @@ function saveSalle() {
     $.ajax({
         url: urlLocal + "salles",
         type: "POST",
-        dataType: "json",
+        contentType: "application/json",
         data: JSON.stringify(salle),
         headers: {
             Authorization : DATA.loggedUser.token
-        },
-        contentType: "application/json"
+        }
     }).done((data, textStatus, jqXHR) => {
         showMsg("La salle a bien été créée.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
-    }).then(() => {
-        window.location.href = urlLocal + "#salles";
     });
 }
 
@@ -306,7 +301,7 @@ function getPassagesEnCours(login, key) {
         accept: "application/json",
         headers: {
             Authorization : DATA.loggedUser.token
-        },
+        }
     }).done((data, textStatus, request) => {
         $(data).each((index, value) => {
             getPassagesFromUrl(value, key);
@@ -329,7 +324,7 @@ function getPassages(login, key) {
         accept: "application/json",
         headers: {
             Authorization : DATA.loggedUser.token
-        },
+        }
     }).done((data, textStatus, request) => {
         $(data).each((index, value) => {
             getPassagesFromUrl(value, key);
@@ -353,7 +348,7 @@ function getPassagesFromUrl(url, key) {
         accept: "application/json",
         headers: {
             Authorization : DATA.loggedUser.token
-        },
+        }
     }).done((data, textStatus, request) => {
         DATA[key].push(data);
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -375,20 +370,19 @@ function savePassage(type) {
         "dateSortie":""
     }
     if (type == "entree") {
-        passage.dateEntree = '"' + Date.now() + '"';
+        passage.dateEntree = new Date(Date.now());
     } else if (type == "sortie") {
-        passage.dateSortie = '"' + Date.now() + '"';
+        passage.dateSortie = '"' + new Date(Date.now()) + '"';
     }
 
     $.ajax({
         url: urlLocal + "passages",
         type: "POST",
+        contentType: "json",
+        data: JSON.stringify(passage),
         headers: {
             Authorization : DATA.loggedUser.token
-        },
-        dataType: "json",
-        data: JSON.stringify(passage),
-        contentType: "application/json"
+        }
     }).done((data, textStatus, jqXHR) => {
         DATA.loggedUser.nom = nom.nom;
         showMsg("Votre nom a bien été modifié.", "success");
