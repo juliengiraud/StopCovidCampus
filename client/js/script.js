@@ -132,7 +132,6 @@ function connexion() {
         // Récupération du token jwt
         user.token = jqXHR.getResponseHeader("Authorization");
         DATA.loggedUser = user;
-        render(getView());
         // Cacher le formulaire de connexion
         $("#accueil form").hide();
         $("#accueil #passages-en-cours").show();
@@ -363,27 +362,22 @@ function savePassage(type) {
     let passage = {
         "user": DATA.loggedUser.login,
         "salle": $('#entree form input[name="salle"]').val(),
-        "dateEntree":"",
-        "dateSortie":""
+        "dateEntree": type === "entree" ? getFuckingStrangeDateFormat(new Date()) : "",
+        "dateSortie": type === "sortie" ? getFuckingStrangeDateFormat(new Date()) : ""
     }
-    if (type == "entree") {
-        passage.dateEntree = new Date(Date.now());
-    } else if (type == "sortie") {
-        passage.dateSortie = '"' + new Date(Date.now()) + '"';
-    }
+
+    console.log(passage);
 
     $.ajax({
         url: urlLocal + "passages",
         type: "POST",
-        contentType: "json",
+        contentType: "application/json",
         data: JSON.stringify(passage),
         headers: {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, jqXHR) => {
-        DATA.loggedUser.nom = nom.nom;
-        render(getView());
-        showMsg("Votre nom a bien été modifié.", "success");
+        showMsg("Votre passage a bien été ajouté.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -440,4 +434,14 @@ function showMsg(text, type) {
 
 function getView() {
     return window.location.href.substr(window.location.href.indexOf("#")+1);
+}
+
+// From "Sat, 19 Dec 2020 17:33:43 GMT" to "Wed Oct 16 00:00:00 GMT 2013"
+function getFuckingStrangeDateFormat(date) {
+    const tmp = date.toGMTString().replace(",", "").split(" ");
+    const tab = [];
+    for (const i of [0, 2, 1, 4, 5, 3]) {
+        tab.push(tmp[i]);
+    }
+    return tab.join(" ");
 }
