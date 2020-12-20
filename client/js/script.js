@@ -258,6 +258,9 @@ function deconnexion() {
         $("#accueil-not-co").show();
         $("#accueil-co").hide();
         window.location.href = clientUrl + "#accueil";
+        $('*[id*=-content]').each(function() {
+            $(this).html("");
+        });
         showMsg("Vous êtes déconnecté.", "success");
         getMenu();
     }).fail((jqXHR, textStatus, errorThrown) => {
