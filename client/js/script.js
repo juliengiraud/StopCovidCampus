@@ -1,5 +1,6 @@
 const apiUrl = getApiUrl();
 const clientUrl = getClientUrl();
+let passagesInterval;
 
 /**
  * Exécute les instructions lorsque le document est prêt et que tous les objets sont créés
@@ -9,6 +10,7 @@ $(document).ready(() => {
     $('*[id*=-template]').each(function() {
         Mustache.parse($(this).html());
     });
+    getTime();
     getMenu();
     initEvents();
 })
@@ -134,6 +136,7 @@ function initEvents() {
 
     // Mettre en place un mécanisme de routage qui affiche la vue correspondant au hash sélectionné
     $(window).on("popstate", () => {
+        clearInterval(passagesInterval);
         $("#msg").empty().hide();
         $('section').hide();
         let view = getView();
@@ -148,6 +151,14 @@ function initEvents() {
             case "accueil":
                 // Ne pas charger les données de l'accueil si l'utilisateur n'est pas connecté
                 if (DATA.loggedUser !== undefined) {
+                    passagesInterval = setInterval(function(){
+                        $("#passages-reload").show();
+                        setTimeout(function() {
+                            $("#passages-reload").hide()
+                        }, 2000);
+                        getPassagesEnCours(DATA.loggedUser.login);
+                    }, 5000);
+
                     getPassagesEnCours(DATA.loggedUser.login);
                     if (DATA.loggedUser.admin) {
                         getSalles("salles-saturees");
@@ -473,23 +484,23 @@ function getPassagesEnCours(login, destination = getView()) {
  * puis fait appel à la fonction qui ajoute les données du passage correspondant au tableau DATA à l'indice "destination"
  */
 function getPassages(login, destination = getView()) {
-    $.ajax({
-        url: apiUrl + "passages/byUser/" + login,
-        type: "GET",
-        accept: "application/json",
-        headers: {
-            Authorization : DATA.loggedUser.token
-        }
-    }).done((data, textStatus, request) => {
-        DATA[destination] = [];
-        render(destination);
-        $(data).each((index, value) => {
-            getPassagesFromUrl(value, destination);
+        $.ajax({
+            url: apiUrl + "passages/byUser/" + login,
+            type: "GET",
+            accept: "application/json",
+            headers: {
+                Authorization : DATA.loggedUser.token
+            }
+        }).done((data, textStatus, request) => {
+            DATA[destination] = [];
+            render(destination);
+            $(data).each((index, value) => {
+                getPassagesFromUrl(value, destination);
+            });
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            let msg = jqXHR.responseText;
+            showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
         });
-    }).fail((jqXHR, textStatus, errorThrown) => {
-        let msg = jqXHR.responseText;
-        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
-    });
 }
 
 /**
@@ -639,4 +650,13 @@ function getApiUrl() {
 // http://localhost:8080/tp4/static/client/ -> test
 function getClientUrl() {
     return window.location.origin + window.location.pathname
+}
+
+function getTime() {
+    let date = new Date();
+    let h = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+    let m = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+    let s = (date.getSeconds() < 10) ? "0" + date.getSeconds() : date.getSeconds();
+    $("#time").html(h + ":" + m + ":" + s);
+    setTimeout(getTime, 1000);
 }

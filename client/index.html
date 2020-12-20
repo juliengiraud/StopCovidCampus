@@ -72,10 +72,9 @@
     <h1>Présence UCBL (en AJAX) !</h1>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
-            <a class="navbar-brand btn">Menu</a>
+            <a class="navbar-brand btn"><span id="time"></span> Menu</a>
             <div class="collapse navbar-collapse show" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-
                 </ul>
             </div>
         </div>
@@ -104,7 +103,7 @@
             </form>
         </div>
         <div id="accueil-co" style="display: none">
-            <h3>Vous êtes actuellement dans les salles :</h3>
+            <h3>Vous êtes actuellement dans les salles : <span id="passages-reload" style="display: none">Rechargement...</span></h3>
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
