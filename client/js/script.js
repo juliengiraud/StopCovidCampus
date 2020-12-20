@@ -37,7 +37,7 @@ function initEvents() {
         deconnexion();
     });
 
-    // Bouton de modification du nom
+    // Bouton de modification du nom depuis le formulaire
     $('#mon-compte form button').click((event) => {
         event.preventDefault()
         event.stopPropagation();
@@ -47,28 +47,30 @@ function initEvents() {
         updateNom();
     });
 
+    //Bouton de modification du nom depuis le champs nom
     $('#mon-compte').on('click', '.update-nom', function() {
         $(this).parent().find('.validate, .cancel').show();
         $(this).parent().find('.update-nom').hide();
         $(this).parent().find('#nom').attr('contenteditable', 'true').focus();
     });
 
+    //Validation de la modification du nom depuis le champs nom
     $('#mon-compte').on('click', '.validate', function() {
         $(this).parent().find('.update-nom').show();
         $(this).parent().find('.validate, .cancel').hide();
-        $(this).parent().find('#nom').attr('contenteditable', 'false')
+        $(this).parent().find('#nom').attr('contenteditable', 'false');
         let nom = {
             "nom": $(this).parent().find('#nom').text()
         };
         updateNom(nom);
     });
 
+    //Annulation de la modification du nom depuis le champs nom
     $('#mon-compte').on('click', '.cancel', function() {
         $(this).parent().find('.update-nom').show();
         $(this).parent().find('.validate, .cancel').hide();
         $(this).parent().find('#nom').attr('contenteditable', 'false');
     });
-
 
     // Bouton de création de salle
     $('#salles form button').click((event) => {
@@ -91,6 +93,7 @@ function initEvents() {
         savePassage("sortie");
     });
 
+    //Bouton de suppression d'une salle
     $('#salles table').on('click', '.delete-salle', function() {
         deleteSalle($(this).parents().closest('tr').attr('data-salle'));
     });
@@ -102,6 +105,7 @@ function initEvents() {
         $(this).parent().children(':first').attr('contenteditable', 'true').focus();
     });
 
+    // Bouton de validation de modification d'une salle
     $('#salles table').on('click', '.validate', function() {
         $(this).parent().find('.update-salle').show();
         $(this).parent().find('.validate, .cancel').hide();
@@ -109,19 +113,20 @@ function initEvents() {
         updateSalle($(this).parents().closest('tr').attr('data-salle'));
     });
 
+    // Bouton d'annulation modification d'une salle
     $('#salles table').on('click', '.cancel', function() {
         $(this).parent().find('.update-salle').show();
         $(this).parent().find('.validate, .cancel').hide();
         $(this).parent().children(':first').attr('contenteditable', 'false');
     });
 
-    // Bouton d'affichage des infos d'une salle
+    // Bouton d'affichage des infos d'une salle dans la modal
     $('table').on('click', '.link-salle', function() {
         let nomSalle = $(this).html();
         getSalleByNom(nomSalle, "modal-salle");
     });
 
-    // Bouton d'affichage des infos d'un utilisateur
+    // Bouton d'affichage des infos d'un utilisateur dans la modal
     $('table').on('click', '.link-user', function() {
         let loginUser = $(this).html();
         getUserInfos(loginUser, "modal-user");
@@ -135,7 +140,7 @@ function initEvents() {
 
         // Rediriger l'utilisateur vers l'accueil s'il n'est pas connecté
         if (view !== "accueil" && DATA.loggedUser === undefined) {
-            $("#msg").html("Vous n'êtes pas connecté.").addClass("alert-danger").show("fast");
+            showMsg("Vous n'êtes pas connecté.", "error");
             view ="accueil";
         }
 
@@ -152,15 +157,29 @@ function initEvents() {
                 break;
 
             case "salles":
-                getSalles();
+                // La liste des salles n'est visible que par les administrateur
+                if (DATA.loggedUser.admin) {
+                    getSalles();
+                    break;
+                } else {
+                    window.location.href = urlLocal + "static/client/#accueil";
+                    showMsg("Vous n'êtes pas administrateur.", "error");
+                }
                 break;
 
             case "entree":
-                getSalles("entree");
-                break;
+                // La liste des salles n'est visible que par les administrateur. L'utilisateur doit donc deviner les salles qui existent
+                if (DATA.loggedUser.admin) {
+                    getSalles("entree");
+                    break;
+                }
 
             case "sortie":
-                getSalles("sortie");
+                // La liste des salles n'est visible que par les administrateur. L'utilisateur doit donc deviner les salles qui existent
+                if (DATA.loggedUser.admin) {
+                    getSalles("sortie");
+                    break;
+                }
                 break;
 
             case "tous-mes-passages":
@@ -171,7 +190,6 @@ function initEvents() {
         $("#" + view).show();
     });
 }
-
 
 /**
  * Envoie une requête de connexion et recupère que le token
@@ -196,7 +214,8 @@ function connexion() {
         // Cacher le formulaire de connexion et afficher l'accueil de l'utilisateur connecté
         $("#accueil-not-co").hide();
         $("#accueil-co").show();
-        getPassagesEnCours(DATA.loggedUser.login);
+        getPassagesEnCours(DATA.loggedUser.login, "accueil");
+        // Actualisation du menu en fonction des droits de l'utilisateur connecté
         getMenu();
         showMsg("Vous êtes connecté.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -229,14 +248,18 @@ function deconnexion() {
     });
 }
 
-function updateSalle(oldNom) {
+/**
+ * Modifie la capacité d'une salle
+ * @param nom
+ */
+function updateSalle(nom) {
     let salle = {
-        "nomSalle": $("#salles table").find('tr[data-salle='+oldNom+'] .nom-salle').text(),
-        "capacite": $("#salles table").find('tr[data-salle='+oldNom+'] .capacite-salle').text()
+        "nomSalle": $("#salles table").find('tr[data-salle='+nom+'] .nom-salle').text(),
+        "capacite": $("#salles table").find('tr[data-salle='+nom+'] .capacite-salle').text()
     };
 
     $.ajax({
-        url: urlLocal + "salles/" + oldNom,
+        url: urlLocal + "salles/" + nom,
         type: "PUT",
         contentType: "application/json",
         data: JSON.stringify(salle),
@@ -245,13 +268,17 @@ function updateSalle(oldNom) {
         }
     }).done((data, textStatus, jqXHR) => {
         getSalles();
-        showMsg("La salle" + oldNom + " a bien été modifiée.", "success");
+        showMsg("La salle" + nom + " a bien été modifiée.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
     });
 }
 
+/**
+ * Supprime la salle
+ * @param nom
+ */
 function deleteSalle(nom) {
     $.ajax({
         url: urlLocal + "salles/" + nom,
@@ -493,8 +520,8 @@ function savePassage(type) {
     let passage = {
         "user": DATA.loggedUser.login,
         "salle": $('#entree form input[name="salle"]').val(),
-        "dateEntree": type === "entree" ? getFuckingStrangeDateFormat(new Date()) : "",
-        "dateSortie": type === "sortie" ? getFuckingStrangeDateFormat(new Date()) : ""
+        "dateEntree": type === "entree" ? getStrangeDateFormat(new Date()) : "",
+        "dateSortie": type === "sortie" ? getStrangeDateFormat(new Date()) : ""
     }
 
     $.ajax({
@@ -561,12 +588,21 @@ function showMsg(text, type) {
     }
 }
 
+/**
+ * Récupère la vue à afficher en fonction du hash de l'url
+ * @returns {string}
+ */
 function getView() {
     return window.location.href.substr(window.location.href.indexOf("#")+1);
 }
 
+/**
+ * Créer une date au format attendu par l'api
+ * @param date
+ * @returns {string}
+ */
 // From "Sat, 19 Dec 2020 17:33:43 GMT" to "Wed Oct 16 00:00:00 GMT 2013"
-function getFuckingStrangeDateFormat(date) {
+function getStrangeDateFormat(date) {
     const tmp = date.toGMTString().replace(",", "").split(" ");
     const tab = [];
     for (const i of [0, 2, 1, 4, 5, 3]) {
