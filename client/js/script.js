@@ -216,7 +216,7 @@ function connexion() {
         // Cacher le formulaire de connexion et afficher l'accueil de l'utilisateur connecté
         $("#accueil-not-co").hide();
         $("#accueil-co").show();
-        window.location.href = urlLocal + "static/client/#accueil";
+        window.location.href = clientUrl + "#accueil";
         // Actualisation du menu en fonction des droits de l'utilisateur connecté
         getMenu();
         showMsg("Vous êtes connecté.", "success");
@@ -635,7 +635,7 @@ function getApiUrl() {
 }
 
 // https://192.168.75.76/api/client/ -> prod
-// https://192.168.75.76:8080/client/ -> prod
+// http://192.168.75.76:8080/client/ -> prod
 // http://localhost:8080/tp4/static/client/ -> test
 function getClientUrl() {
     return window.location.origin + window.location.pathname
