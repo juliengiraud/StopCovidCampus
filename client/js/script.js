@@ -41,8 +41,34 @@ function initEvents() {
     $('#mon-compte form button').click((event) => {
         event.preventDefault()
         event.stopPropagation();
+        let nom = {
+            "nom": $('#mon-compte form input[name="nom"]').val()
+        };
         updateNom();
     });
+
+    $('#mon-compte').on('click', '.update-nom', function() {
+        $(this).parent().find('.validate, .cancel').show();
+        $(this).parent().find('.update-nom').hide();
+        $(this).parent().find('#nom').attr('contenteditable', 'true').focus();
+    });
+
+    $('#mon-compte').on('click', '.validate', function() {
+        $(this).parent().find('.update-nom').show();
+        $(this).parent().find('.validate, .cancel').hide();
+        $(this).parent().find('#nom').attr('contenteditable', 'false')
+        let nom = {
+            "nom": $(this).parent().find('#nom').text()
+        };
+        updateNom(nom);
+    });
+
+    $('#mon-compte').on('click', '.cancel', function() {
+        $(this).parent().find('.update-nom').show();
+        $(this).parent().find('.validate, .cancel').hide();
+        $(this).parent().find('#nom').attr('contenteditable', 'false');
+    });
+
 
     // Bouton de création de salle
     $('#salles form button').click((event) => {
@@ -65,18 +91,47 @@ function initEvents() {
         savePassage("sortie");
     });
 
+    $('#salles table').on('click', '.delete-salle', function() {
+        deleteSalle($(this).parents().closest('tr').attr('data-salle'));
+    });
+
+    // Bouton de modification d'une salle
+    $('#salles table').on('click', '.update-salle', function() {
+        $(this).parent().find('.validate, .cancel').show();
+        $(this).parent().find('.update-salle').hide();
+        $(this).parent().children(':first').attr('contenteditable', 'true').focus();
+    });
+
+    $('#salles table').on('click', '.validate', function() {
+        $(this).parent().find('.update-salle').show();
+        $(this).parent().find('.validate, .cancel').hide();
+        $(this).parent().children(':first').attr('contenteditable', 'false');
+        updateSalle($(this).parents().closest('tr').attr('data-salle'));
+    });
+
+    $('#salles table').on('click', '.cancel', function() {
+        $(this).parent().find('.update-salle').show();
+        $(this).parent().find('.validate, .cancel').hide();
+        $(this).parent().children(':first').attr('contenteditable', 'false');
+    });
+
     // Bouton d'affichage des infos d'une salle
-    $('.link-salle').click(function() {
+    $('table').on('click', '.link-salle', function() {
         let nomSalle = $(this).html();
-        DATA.modal = DATA.salles.find(({nom}) => nom == nomSalle);
-        render("modal");
+        getSalleByNom(nomSalle, "modal-salle");
+    });
+
+    // Bouton d'affichage des infos d'un utilisateur
+    $('table').on('click', '.link-user', function() {
+        let loginUser = $(this).html();
+        getUserInfos(loginUser, "modal-user");
     });
 
     // Mettre en place un mécanisme de routage qui affiche la vue correspondant au hash sélectionné
     $(window).on("popstate", () => {
         $("#msg").empty().hide();
         $('section').hide();
-        let view = window.location.href.substr(window.location.href.indexOf("#")+1);
+        let view = getView();
 
         // Rediriger l'utilisateur vers l'accueil s'il n'est pas connecté
         if (view !== "accueil" && DATA.loggedUser === undefined) {
@@ -85,24 +140,31 @@ function initEvents() {
         }
 
         switch (view) {
-            // todo gérer l'asynchrone
             case "accueil":
                 // Ne pas charger les données de l'accueil si l'utilisateur n'est pas connecté
                 if (DATA.loggedUser !== undefined) {
-                    getPassagesEnCours(DATA.loggedUser.login, view);
+                    getPassagesEnCours(DATA.loggedUser.login);
 				}
                 break;
 
             case "mon-compte":
-                getUserInfos(DATA.loggedUser.login, view);
+                getUserInfos(DATA.loggedUser.login);
                 break;
 
             case "salles":
                 getSalles();
                 break;
 
+            case "entree":
+                getSalles("entree");
+                break;
+
+            case "sortie":
+                getSalles("sortie");
+                break;
+
             case "tous-mes-passages":
-                getPassages(DATA.loggedUser.login, view);
+                getPassages(DATA.loggedUser.login);
                 break;
         }
 
@@ -134,8 +196,9 @@ function connexion() {
         // Cacher le formulaire de connexion et afficher l'accueil de l'utilisateur connecté
         $("#accueil-not-co").hide();
         $("#accueil-co").show();
-        showMsg("Vous êtes connecté.", "success");
+        getPassagesEnCours(DATA.loggedUser.login);
         getMenu();
+        showMsg("Vous êtes connecté.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -166,15 +229,49 @@ function deconnexion() {
     });
 }
 
+function updateSalle(oldNom) {
+    let salle = {
+        "nomSalle": $("#salles table").find('tr[data-salle='+oldNom+'] .nom-salle').text(),
+        "capacite": $("#salles table").find('tr[data-salle='+oldNom+'] .capacite-salle').text()
+    };
+
+    $.ajax({
+        url: urlLocal + "salles/" + oldNom,
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(salle),
+        headers: {
+            Authorization : DATA.loggedUser.token
+        }
+    }).done((data, textStatus, jqXHR) => {
+        getSalles();
+        showMsg("La salle" + oldNom + " a bien été modifiée.", "success");
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        let msg = jqXHR.responseText;
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
+    });
+}
+
+function deleteSalle(nom) {
+    $.ajax({
+        url: urlLocal + "salles/" + nom,
+        type: "DELETE",
+        headers: {
+            Authorization : DATA.loggedUser.token
+        }
+    }).done((data, textStatus, jqXHR) => {
+        getSalles();
+        showMsg("La salle" + nom + " a bien été supprimée.", "success");
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        let msg = jqXHR.responseText;
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
+    });
+}
+
 /**
  * Modifie le nom de l'utilisateur
  */
-function updateNom() {
-    // Récupération des données du formulaire de connexion
-    let nom = {
-        "nom": $('#mon-compte form input[name="nom"]').val()
-    }
-
+function updateNom(nom) {
     $.ajax({
         url: urlLocal + "users/" + DATA.loggedUser.login + "/nom",
         type: "PUT",
@@ -185,6 +282,7 @@ function updateNom() {
         }
     }).done((data, textStatus, jqXHR) => {
         DATA.loggedUser.nom = nom.nom;
+        DATA["mon-compte"].nom = nom.nom;
         render(getView());
         showMsg("Votre nom a bien été modifié.", "success");
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -197,8 +295,7 @@ function updateNom() {
  * Récupère les données de la salle par son url et les ajoute au tableau DATA
  * @param url
  */
-function getSalleByUrl(url) {
-    DATA.salles = [];
+function getSalleByUrl(url, destination) {
     $.ajax({
         url: url,
         type: "GET",
@@ -207,7 +304,7 @@ function getSalleByUrl(url) {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, request) => {
-        DATA.salles.push(data);
+        DATA[destination].push(data);
         render(getView());
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
@@ -216,9 +313,10 @@ function getSalleByUrl(url) {
 }
 
 /**
- * Récupère la liste des url des salles et pour chaque url, fait appel à la fonction qui ajoute les données de la salle correspondante au tableau DATA
+ * Récupère la liste des url des salles et pour chaque url,
+ * puis fait appel à la fonction qui ajoute les données de la salle correspondante au tableau DATA à l'indice salles
  */
-function getSalles() {
+function getSalles(destination = getView()) {
     $.ajax({
         url: urlLocal + "salles",
         type: "GET",
@@ -227,8 +325,10 @@ function getSalles() {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, request) => {
+        DATA[destination] = [];
+        render(getView());
         $(data).each((index, value) => {
-            getSalleByUrl(value);
+            getSalleByUrl(value, destination);
         });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
@@ -236,22 +336,35 @@ function getSalles() {
     });
 }
 
-function getSallesSaturees(key) {
-    getSalles();
-    DATA[key] = [];
-    $(DATA.salles).each((index, value) => {
-       if (value.saturee) {
-           DATA[key].push(value);
-       }
-    });
+/**
+ *
+ * @param nom
+ * @param destination
+ */
+function getSalleByNom(nom, destination = getView()) {
+    $.ajax({
+        url: urlLocal + "salles/" + nom,
+        type: "GET",
+        accept: "application/json",
+        headers: {
+            Authorization : DATA.loggedUser.token
+        }
+    }).done((data, textStatus, request) => {
+        DATA[destination] = data;
+        render(getView());
+        render(destination);
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        let msg = jqXHR.responseText;
+        showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
+    })
 }
 
 /**
- * Récupère les données de l'utilisateur correspondant au login et les insère dans le tableau DATA à l'indice "key"
+ * Récupère les données de l'utilisateur correspondant au login et les insère dans le tableau DATA à l'indice "destination"
  * @param login
- * @param key
+ * @param destination
  */
-function getUserInfos(login, key) {
+function getUserInfos(login, destination = getView()) {
     $.ajax({
         url: urlLocal + "users/" + DATA.loggedUser.login,
         type: "GET",
@@ -260,8 +373,8 @@ function getUserInfos(login, key) {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, request) => {
-        DATA[key] = data;
-        render(getView());
+        DATA[destination] = data;
+        render(destination);
     }).fail(function(jqXHR, textStatus, errorThrown) {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -287,6 +400,7 @@ function saveSalle() {
         }
     }).done((data, textStatus, jqXHR) => {
         showMsg("La salle a bien été créée.", "success");
+        getSalles();
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -296,9 +410,9 @@ function saveSalle() {
 /**
  *
  * Récupère la liste des url des passages en cours de l'utilisateur associé au login et pour chaque url,
- * puis fait appel à la fonction qui ajoute les données du passage correspondant au tableau DATA à l'indice "key"
+ * puis fait appel à la fonction qui ajoute les données du passage correspondant au tableau DATA à l'indice "destination"
  */
-function getPassagesEnCours(login, key) {
+function getPassagesEnCours(login, destination = getView()) {
     $.ajax({
         url: urlLocal + "passages/byUser/" + login + "/enCours",
         type: "GET",
@@ -307,8 +421,10 @@ function getPassagesEnCours(login, key) {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, request) => {
+        DATA[destination] = [];
+        render(destination);
         $(data).each((index, value) => {
-            getPassagesFromUrl(value, key);
+            getPassagesFromUrl(value, destination);
         });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
@@ -319,9 +435,9 @@ function getPassagesEnCours(login, key) {
 /**
  *
  * Récupère la liste des url des passages de l'utilisateur associé au login et pour chaque url,
- * puis fait appel à la fonction qui ajoute les données du passage correspondant au tableau DATA à l'indice "key"
+ * puis fait appel à la fonction qui ajoute les données du passage correspondant au tableau DATA à l'indice "destination"
  */
-function getPassages(login, key) {
+function getPassages(login, destination = getView()) {
     $.ajax({
         url: urlLocal + "passages/byUser/" + login,
         type: "GET",
@@ -330,8 +446,10 @@ function getPassages(login, key) {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, request) => {
+        DATA[destination] = [];
+        render(destination);
         $(data).each((index, value) => {
-            getPassagesFromUrl(value, key);
+            getPassagesFromUrl(value, destination);
         });
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
@@ -340,12 +458,11 @@ function getPassages(login, key) {
 }
 
 /**
- * Récupère les données du passage par son url et les ajoute au tableau DATA à l'indice key
+ * Récupère les données du passage par son url et les ajoute au tableau DATA à l'indice destination
  * @param url
- * @param key
+ * @param destination
  */
-function getPassagesFromUrl(url, key) {
-    DATA[key] = [];
+function getPassagesFromUrl(url, destination = getView()) {
     $.ajax({
         url: url,
         type: "GET",
@@ -354,8 +471,14 @@ function getPassagesFromUrl(url, key) {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, request) => {
-        DATA[key].push(data);
-        render(getView());
+        let passage = {
+            "user": data.user.split("/").pop(),
+            "salle": data.salle.split("/").pop(),
+            "dateEntree": data.dateEntree,
+            "dateSortie": data.dateSortie,
+        }
+        DATA[destination].push(passage);
+        render(destination);
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -367,15 +490,12 @@ function getPassagesFromUrl(url, key) {
  * @param type
  */
 function savePassage(type) {
-    //todo gérer les date
     let passage = {
         "user": DATA.loggedUser.login,
         "salle": $('#entree form input[name="salle"]').val(),
         "dateEntree": type === "entree" ? getFuckingStrangeDateFormat(new Date()) : "",
         "dateSortie": type === "sortie" ? getFuckingStrangeDateFormat(new Date()) : ""
     }
-
-    console.log(passage);
 
     $.ajax({
         url: urlLocal + "passages",
