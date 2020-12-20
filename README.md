@@ -16,4 +16,6 @@ Nous avons décidé pour ce TP d'utiliser l'API que nous avons développé au TP
 Lors du TP4, l'API développée ne permettait qu'aux utilisateurs administrateurs de récupérer la liste des salles. Les utilisateurs non administrateurs doivent donc "deviner" les salles qui existent car ils n'ont pas accès à la liste (il n'est pas donc pas possible d'utiliser un élément datalist sur le champs input de salle lors de la saisie d'un passage). En réalité, cela ne poserait pas un problème majeur car si on rentre dans une salle, c'est qu'on connait le nom de cette salle.
 
 #### Ca par contre, c'est un bug
-L'application n'est accessible qu'à l'adresse http://192.168.75.76:8080/client. Pour une raison inconnue, l'accès à l'API est bloquée sur l'adresse  https://192.168.75.76/api/client
+L'application n'est accessible qu'à l'adresse http://192.168.75.76:8080/client. Pour une raison inconnue, l'accès à l'API est bloquée sur l'adresse  https://192.168.75.76/api/client.
+
+Nous avons pourtant réussi à requêter notre api sur https://192.168.75.76/api/v3/ avec postman.
