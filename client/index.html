@@ -126,6 +126,17 @@
                 <tbody id="accueil-content">
                 </tbody>
             </table>
+            <script id="salles-saturees-template" type="x-tmpl-mustache">
+                <h3>Liste des salles saturées :</h3>
+                {{#data}}
+                    <li class="text-danger">La salle {{ nom }} est saturée. {{ presents }} personnes sont présentes pour une capacité maximale de {{ capacite }}. </li>
+                {{/data}}
+                {{^data}}
+                    <p class="text-success">Aucune salle n'est saturée</p>
+                {{/data}}
+            </script>
+            <ul id="salles-saturees-content">
+            </ul>
         </div>
     </section>
 

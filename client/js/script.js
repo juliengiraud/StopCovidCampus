@@ -149,6 +149,9 @@ function initEvents() {
                 // Ne pas charger les données de l'accueil si l'utilisateur n'est pas connecté
                 if (DATA.loggedUser !== undefined) {
                     getPassagesEnCours(DATA.loggedUser.login);
+                    if (DATA.loggedUser.admin) {
+                        getSalles("salles-saturees");
+                    }
 				}
                 break;
 
@@ -171,14 +174,13 @@ function initEvents() {
                 // La liste des salles n'est visible que par les administrateur. L'utilisateur doit donc deviner les salles qui existent
                 if (DATA.loggedUser.admin) {
                     getSalles("entree");
-                    break;
                 }
+                break;
 
             case "sortie":
                 // La liste des salles n'est visible que par les administrateur. L'utilisateur doit donc deviner les salles qui existent
                 if (DATA.loggedUser.admin) {
                     getSalles("sortie");
-                    break;
                 }
                 break;
 
@@ -214,7 +216,7 @@ function connexion() {
         // Cacher le formulaire de connexion et afficher l'accueil de l'utilisateur connecté
         $("#accueil-not-co").hide();
         $("#accueil-co").show();
-        getPassagesEnCours(DATA.loggedUser.login, "accueil");
+        window.location.href = urlLocal + "static/client/#accueil";
         // Actualisation du menu en fonction des droits de l'utilisateur connecté
         getMenu();
         showMsg("Vous êtes connecté.", "success");
@@ -331,8 +333,14 @@ function getSalleByUrl(url, destination) {
             Authorization : DATA.loggedUser.token
         }
     }).done((data, textStatus, request) => {
-        DATA[destination].push(data);
-        render(getView());
+        if (destination === "salles-saturees") {
+            if (data.saturee) {
+                DATA[destination].push(data);
+            }
+        } else {
+            DATA[destination].push(data);
+        }
+        render(destination);
     }).fail((jqXHR, textStatus, errorThrown) => {
         let msg = jqXHR.responseText;
         showMsg(msg.substring(msg.indexOf("<body>")+6, msg.indexOf("</body>")), "error");
@@ -353,7 +361,7 @@ function getSalles(destination = getView()) {
         }
     }).done((data, textStatus, request) => {
         DATA[destination] = [];
-        render(getView());
+        render(destination);
         $(data).each((index, value) => {
             getSalleByUrl(value, destination);
         });
