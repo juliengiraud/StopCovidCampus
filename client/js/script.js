@@ -640,3 +640,4 @@ function getApiUrl() {
 function getClientUrl() {
     return window.location.origin + window.location.pathname
 }
+
