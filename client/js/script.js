@@ -51,7 +51,7 @@ function initEvents() {
     $('#mon-compte').on('click', '.update-nom', function() {
         $(this).parent().find('.validate, .cancel').show();
         $(this).parent().find('.update-nom').hide();
-        $(this).parent().find('#nom').attr('contenteditable', 'true').focus();
+        $(this).parent().find('#nom').html("&nbsp;&nbsp;&nbsp;").attr('contenteditable', 'true').focus();
     });
 
     //Validation de la modification du nom depuis le champs nom

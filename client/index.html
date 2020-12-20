@@ -13,6 +13,12 @@
     <script src="./js/render.js"></script>
     <script src="./js/script.js"></script>
     <title>Présence UCBL</title>
+
+    <style>
+        .badge, .link-primary {
+            cursor:pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="modal fade" id="modal-salle" tabindex="-1" role="dialog" aria-labelledby="modal-salle-label" aria-hidden="true">
@@ -112,8 +118,8 @@
                 <script id="accueil-template" type="x-tmpl-mustache">
                 {{#data}}
                     <tr>
-                        <td><button type="button" class="btn btn-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</button></td>
-                        <td><button type="button" class="btn btn-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</button></td>
+                        <td><a class="link-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</a></td>
+                        <td><a class="link-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</a></td>
                         <td>{{ dateEntree }}</td>
                         <td>{{ dateSortie }}</td>
                     </tr>
@@ -260,8 +266,8 @@
             <script id="tous-mes-passages-template" type="x-tmpl-mustache">
                 {{#data}}
                     <tr>
-                        <td><button type="button" class="btn btn-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</button></td>
-                        <td><button type="button" class="btn btn-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</button></td>
+                        <td><a class="link-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</a></td>
+                        <td><a class="link-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</a></td>
                         <td>{{ dateEntree }}</td>
                         <td>{{ dateSortie }}</td>
                     </tr>
