@@ -19,3 +19,5 @@ Lors du TP4, l'API développée ne permettait qu'aux utilisateurs administrateur
 L'application n'est accessible qu'à l'adresse http://192.168.75.76:8080/client. Pour une raison inconnue, nous n'arrivons pas à requêter notre API depuis l'adresse  https://192.168.75.76/api/client. Chaque requête renvoie une erreur 403, y compris la requête vers /users/login.
 
 Nous avons pourtant réussi à requêter notre api sur https://192.168.75.76/api/v3/ avec postman.
+
+Il n'est pas possible de créer d'utilisateur ou de salle avec un espace dans le nom. En effet, lors d'une requête get vers /users/{userId} ou /salles/{salleId}, nous n'avions pas pensé à décoder l'url. Lors d'une requête GET vers l'utilisateur "toto titi" par exemple, l'url sera /users/toto%20titi, et l'API cherchera l'utilisateur ayant pour login toto%20titi, mais il n'existe pas. Idem pour les salles.
