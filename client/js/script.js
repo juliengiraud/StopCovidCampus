@@ -1,5 +1,5 @@
-const urlAPI = "https://192.168.75.76/api/v3/";
-const urlLocal = "http://localhost:8080/tp4/";
+const apiUrl = getApiUrl();
+const clientUrl = getClientUrl();
 
 /**
  * Exécute les instructions lorsque le document est prêt et que tous les objets sont créés
@@ -165,7 +165,7 @@ function initEvents() {
                     getSalles();
                     break;
                 } else {
-                    window.location.href = urlLocal + "static/client/#accueil";
+                    window.location.href = clientUrl + "#accueil";
                     showMsg("Vous n'êtes pas administrateur.", "error");
                 }
                 break;
@@ -205,7 +205,7 @@ function connexion() {
     }
 
     $.ajax({
-        url: urlLocal + "users/login",
+        url: apiUrl + "users/login",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(user)
@@ -231,7 +231,7 @@ function connexion() {
  */
 function deconnexion() {
     $.ajax({
-        url: urlLocal + "users/logout",
+        url: apiUrl + "users/logout",
         type: "POST",
         headers: {
             Authorization : DATA.loggedUser.token
@@ -241,7 +241,7 @@ function deconnexion() {
         DATA = [];
         $("#accueil-not-co").show();
         $("#accueil-co").hide();
-        window.location.href = urlLocal + "static/client/#accueil";
+        window.location.href = clientUrl + "#accueil";
         showMsg("Vous êtes déconnecté.", "success");
         getMenu();
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -261,7 +261,7 @@ function updateSalle(nom) {
     };
 
     $.ajax({
-        url: urlLocal + "salles/" + nom,
+        url: apiUrl + "salles/" + nom,
         type: "PUT",
         contentType: "application/json",
         data: JSON.stringify(salle),
@@ -283,7 +283,7 @@ function updateSalle(nom) {
  */
 function deleteSalle(nom) {
     $.ajax({
-        url: urlLocal + "salles/" + nom,
+        url: apiUrl + "salles/" + nom,
         type: "DELETE",
         headers: {
             Authorization : DATA.loggedUser.token
@@ -302,7 +302,7 @@ function deleteSalle(nom) {
  */
 function updateNom(nom) {
     $.ajax({
-        url: urlLocal + "users/" + DATA.loggedUser.login + "/nom",
+        url: apiUrl + "users/" + DATA.loggedUser.login + "/nom",
         type: "PUT",
         contentType: "application/json",
         data: JSON.stringify(nom),
@@ -353,7 +353,7 @@ function getSalleByUrl(url, destination) {
  */
 function getSalles(destination = getView()) {
     $.ajax({
-        url: urlLocal + "salles",
+        url: apiUrl + "salles",
         type: "GET",
         accept: "application/json",
         headers: {
@@ -378,7 +378,7 @@ function getSalles(destination = getView()) {
  */
 function getSalleByNom(nom, destination = getView()) {
     $.ajax({
-        url: urlLocal + "salles/" + nom,
+        url: apiUrl + "salles/" + nom,
         type: "GET",
         accept: "application/json",
         headers: {
@@ -401,7 +401,7 @@ function getSalleByNom(nom, destination = getView()) {
  */
 function getUserInfos(login, destination = getView()) {
     $.ajax({
-        url: urlLocal + "users/" + DATA.loggedUser.login,
+        url: apiUrl + "users/" + DATA.loggedUser.login,
         type: "GET",
         accept: "application/json",
         headers: {
@@ -426,7 +426,7 @@ function saveSalle() {
     }
 
     $.ajax({
-        url: urlLocal + "salles",
+        url: apiUrl + "salles",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(salle),
@@ -449,7 +449,7 @@ function saveSalle() {
  */
 function getPassagesEnCours(login, destination = getView()) {
     $.ajax({
-        url: urlLocal + "passages/byUser/" + login + "/enCours",
+        url: apiUrl + "passages/byUser/" + login + "/enCours",
         type: "GET",
         accept: "application/json",
         headers: {
@@ -474,7 +474,7 @@ function getPassagesEnCours(login, destination = getView()) {
  */
 function getPassages(login, destination = getView()) {
     $.ajax({
-        url: urlLocal + "passages/byUser/" + login,
+        url: apiUrl + "passages/byUser/" + login,
         type: "GET",
         accept: "application/json",
         headers: {
@@ -533,7 +533,7 @@ function savePassage(type) {
     }
 
     $.ajax({
-        url: urlLocal + "passages",
+        url: apiUrl + "passages",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(passage),
@@ -601,7 +601,7 @@ function showMsg(text, type) {
  * @returns {string}
  */
 function getView() {
-    return window.location.href.substr(window.location.href.indexOf("#")+1);
+    return window.location.hash.substr(1);
 }
 
 /**
@@ -617,4 +617,26 @@ function getStrangeDateFormat(date) {
         tab.push(tmp[i]);
     }
     return tab.join(" ");
+}
+
+// https://192.168.75.76/api/v3/ -> prod
+// http://192.168.75.76:8080/v3/ -> prod
+// http://localhost:8080/tp4/ -> test
+function getApiUrl() {
+    const baseUrl = window.origin;
+
+    if (baseUrl.includes("localhost")) {
+        return baseUrl + "/tp4/"
+    }
+    if (baseUrl.includes("https")) {
+        return baseUrl + "/api/v3/"
+    }
+    return baseUrl + "/v3/"
+}
+
+// https://192.168.75.76/api/client/ -> prod
+// https://192.168.75.76:8080/client/ -> prod
+// http://localhost:8080/tp4/static/client/ -> test
+function getClientUrl() {
+    return window.location.origin + window.location.pathname
 }
