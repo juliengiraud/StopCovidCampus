@@ -527,7 +527,7 @@ function getPassagesFromUrl(url, destination = getView()) {
 function savePassage(type) {
     let passage = {
         "user": DATA.loggedUser.login,
-        "salle": $('#entree form input[name="salle"]').val(),
+        "salle": $('#' + type + ' form input[name="salle"]').val(),
         "dateEntree": type === "entree" ? getStrangeDateFormat(new Date()) : "",
         "dateSortie": type === "sortie" ? getStrangeDateFormat(new Date()) : ""
     }
