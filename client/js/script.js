@@ -124,8 +124,13 @@ function initEvents() {
 
     // Bouton d'affichage des infos d'une salle dans la modal
     $('table').on('click', '.link-salle', function() {
-        let nomSalle = $(this).html();
-        getSalleByNom(nomSalle, "modal-salle");
+        if (DATA.loggedUser.admin) {
+            let nomSalle = $(this).html();
+            getSalleByNom(nomSalle, "modal-salle");
+        } else {
+            $('#modal-salle').hide();
+            showMsg("Vous n'êtes pas administrateur.", "error");
+        }
     });
 
     // Bouton d'affichage des infos d'un utilisateur dans la modal
