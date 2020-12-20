@@ -22,5 +22,6 @@ junit:
     # Useful only for debugging
     #- cat ~/.m2/settings.xml
   script:
+    - apt install zip
     - zip -r client.war client/*
     - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY client.war gitlabci@192.168.75.76:/opt/tomcat/webapps/
