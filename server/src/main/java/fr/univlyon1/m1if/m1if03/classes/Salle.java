@@ -3,17 +3,17 @@ package fr.univlyon1.m1if.m1if03.classes;
 import java.util.Objects;
 
 public class Salle {
-    private final String nom;
+    private final String nomSalle;
     private int capacite = -1;
     private int presents = 0;
     private Boolean sature = false;
 
-    public Salle(String nom) {
-        this.nom = nom;
+    public Salle(String nomSalle) {
+        this.nomSalle = nomSalle;
     }
 
     public String getNom() {
-        return nom;
+        return nomSalle;
     }
 
     public int getCapacite() {
@@ -48,6 +48,6 @@ public class Salle {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Salle salle = (Salle) o;
-        return Objects.equals(nom, salle.nom);
+        return Objects.equals(nomSalle, salle.nomSalle);
     }
 }
