@@ -24,4 +24,4 @@ junit:
   script:
     - cd client/
     - ../bin/zip -r ./client.war *
-    - sudo scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY client.war gitlabci@192.168.75.76:/var/www
+    - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY client.war gitlabci@192.168.75.76:/var/www
