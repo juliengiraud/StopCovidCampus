@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import fr.univlyon1.m1if.m1if03.classes.Route;
 import fr.univlyon1.m1if.m1if03.classes.User;
 import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -12,6 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.midi.Soundbank;
 import javax.ws.rs.HttpMethod;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class AuthenticationFilter extends HttpFilter {
     }
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        System.out.println("test 1");
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
         response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");

@@ -22,6 +22,7 @@ import java.util.Map;
 public class AuthorizationFilter extends HttpFilter {
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        System.out.println("test 2");
         String token = PresenceUcblJwtHelper.getTokenFromRequest(request);
         User user;
         String userLogin = (String) request.getAttribute("userLogin");
