@@ -25,7 +25,7 @@ public class NegociationContenu extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         chain.doFilter(request, response);
-        if (!request.getMethod().equals(HttpMethod.GET) || response.getStatus() != 200) {
+        if (!request.getMethod().equals(HttpMethod.GET) || response.getStatus() != 200 || request.getMethod().equals(HttpMethod.OPTIONS)) {
             return; // On a rien à faire ici
         }
 
