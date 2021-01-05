@@ -25,11 +25,7 @@ public class NegociationContenu extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         chain.doFilter(request, response);
-        response.setHeader("Access-Control-Allow-Origin", "/*");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        if (!request.getMethod().equals(HttpMethod.GET) || response.getStatus() != 200 || request.getMethod().equals(HttpMethod.OPTIONS)) {
+        if (!request.getMethod().equals(HttpMethod.GET) || response.getStatus() != 200) {
             return; // On a rien à faire ici
         }
 
