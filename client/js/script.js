@@ -650,7 +650,7 @@ function getApiUrl() {
     if (baseUrl.includes("https")) {
         return baseUrl + "/api/v3/"
     }
-    return baseUrl + "/v3/"
+    return "http://192.168.75.76:8080/v3/"
 }
 
 // https://192.168.75.76/api/client/ -> prod
