@@ -26,7 +26,7 @@ public class SalleDTO implements Serializable, GenericDTO {
                 "    <presents>%d</presents>\n" +
                 "    <saturee>%b</saturee>\n" +
                 "</salle>",
-                salle.getNom(), salle.getCapacite(), salle.getPresents(), salle.getSaturee());
+                salle.getNomSalle(), salle.getCapacite(), salle.getPresents(), salle.getSaturee());
         return xml;
     }
 

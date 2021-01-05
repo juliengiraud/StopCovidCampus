@@ -175,7 +175,7 @@ public class SalleController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Salle non trouvée");
             return;
         }
-        salles.remove(salle.getNom());
+        salles.remove(salle.getNomSalle());
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 }

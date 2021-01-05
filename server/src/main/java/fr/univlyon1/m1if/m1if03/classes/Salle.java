@@ -12,7 +12,7 @@ public class Salle {
         this.nomSalle = nomSalle;
     }
 
-    public String getNom() {
+    public String getNomSalle() {
         return nomSalle;
     }
 

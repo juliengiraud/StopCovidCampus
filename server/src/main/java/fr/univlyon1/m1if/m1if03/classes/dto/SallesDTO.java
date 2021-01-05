@@ -19,7 +19,7 @@ public class SallesDTO implements Serializable, GenericDTO {
     public String getJSON() {
         List<String> urls = new ArrayList<>();
         for (Salle salle : this.salles) {
-            urls.add(basePath + "/salles/" + salle.getNom());
+            urls.add(basePath + "/salles/" + salle.getNomSalle());
         }
         return new JSONArray(urls).toString();
     }
@@ -29,7 +29,7 @@ public class SallesDTO implements Serializable, GenericDTO {
         for (Salle salle : salles) {
             xml += String.format(
                     "<salle>%s/salles/%s</salle>",
-                    basePath, salle.getNom());
+                    basePath, salle.getNomSalle());
         }
         xml += "</salles>";
         return xml;

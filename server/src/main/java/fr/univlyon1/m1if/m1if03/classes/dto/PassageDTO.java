@@ -19,7 +19,7 @@ public class PassageDTO implements Serializable, GenericDTO {
     public String getJSON() {
         JSONObject json = new JSONObject();
         json.put("user", basePath + "/users/" + passage.getUser().getLogin());
-        json.put("salle", basePath + "/salles/" + passage.getSalle().getNom());
+        json.put("salle", basePath + "/salles/" + passage.getSalle().getNomSalle());
         json.put("dateEntree", passage.getEntree());
         json.put("dateSortie", passage.getSortie() == null ? "" : passage.getSortie());
         return json.toString();
@@ -44,7 +44,7 @@ public class PassageDTO implements Serializable, GenericDTO {
                 "    <dateSortie>%s</DateSortie>\n" +
                 "</passage>",
                 basePath, passage.getUser().getLogin(),
-                basePath, passage.getSalle().getNom(),
+                basePath, passage.getSalle().getNomSalle(),
                 entree,
                 sortie);
         return xml;
