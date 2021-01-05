@@ -27,8 +27,10 @@ public class NegociationContenu extends HttpFilter {
         System.out.println("test 3");
         chain.doFilter(request, response);
         if (!request.getMethod().equals(HttpMethod.GET) || response.getStatus() != 200) {
+            System.out.println("test 3.1");
             return; // On a rien à faire ici
         }
+        System.out.println("test 3.2");
 
         String accept = Utilities.getAcceptType(request);
         String contentType = "";
