@@ -4,8 +4,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import fr.univlyon1.m1if.m1if03.classes.Route;
 import fr.univlyon1.m1if.m1if03.classes.User;
 import fr.univlyon1.m1if.m1if03.utils.PresenceUcblJwtHelper;
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
