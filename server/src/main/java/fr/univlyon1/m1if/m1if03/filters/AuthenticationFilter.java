@@ -30,7 +30,7 @@ public class AuthenticationFilter extends HttpFilter {
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (request.getMethod().equals(HttpMethod.OPTIONS)) {
-            response.setHeader("Access-Control-Allow-Origin", "http://192.168.75.76:8080");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
             response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
             response.setHeader("Access-Control-Allow-Credentials", "true");
