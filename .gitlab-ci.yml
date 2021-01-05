@@ -22,4 +22,4 @@ junit:
     # Useful only for debugging
     #- cat ~/.m2/settings.xml
   script:
-    - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY * gitlabci@192.168.75.76:/var/www
+    - scp -o StrictHostKeyChecking=no -i ./$CI_SSH_KEY client gitlabci@192.168.75.76:/var/www
