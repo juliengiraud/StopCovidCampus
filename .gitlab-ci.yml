@@ -23,4 +23,4 @@ junit:
     #- cat ~/.m2/settings.xml
   script:
     - cd client/
-    - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY client gitlabci@192.168.75.76:/var/www
+    - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY * gitlabci@192.168.75.76:/var/www
