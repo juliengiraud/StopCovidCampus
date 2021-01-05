@@ -24,7 +24,7 @@
         <div class="modal-dialog" role="document">
             <script id="modal-salle-template" type="x-tmpl-mustache">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-salle-label">Salle {{ data.nom }}</h5>
+                    <h5 class="modal-title" id="modal-salle-label">Salle {{ data.nomSalle }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -134,7 +134,7 @@
             <script id="salles-saturees-template" type="x-tmpl-mustache">
                 <h3>Liste des salles saturées :</h3>
                 {{#data}}
-                    <li class="text-danger">La salle {{ nom }} est saturée. {{ presents }} personnes sont présentes pour une capacité maximale de {{ capacite }}. </li>
+                    <li class="text-danger">La salle {{ nomSalle }} est saturée. {{ presents }} personnes sont présentes pour une capacité maximale de {{ capacite }}. </li>
                 {{/data}}
                 {{^data}}
                     <p class="text-success">Aucune salle n'est saturée</p>
@@ -186,10 +186,10 @@
             </thead>
             <script id="salles-template" type="x-tmpl-mustache">
                 {{#data}}
-                    <tr data-salle="{{ nom }}">
+                    <tr data-salle="{{ nomSalle }}">
                         <td>
                             <p>
-                                <span class="nom-salle">{{ nom }}</span>
+                                <span class="nom-salle">{{ nomSalle }}</span>
                                 <span class="badge bg-secondary delete-salle">Supprimer</span>
                             </p>
                         </td>
@@ -220,7 +220,7 @@
         <h2>Entrer dans une salle</h2>
         <script id="entree-template" type="x-tmpl-mustache">
             {{#data}}
-                <option value="{{ nom }}">
+                <option value="{{ nomSalle }}">
             {{/data}}
         </script>
         <datalist id="entree-content">
@@ -237,7 +237,7 @@
         <h2>Sortir d'une salle</h2>
         <script id="sortie-template" type="x-tmpl-mustache">
             {{#data}}
-                <option value="{{ nom }}">
+                <option value="{{ nomSalle }}">
             {{/data}}
         </script>
         <datalist id="sortie-content">
