@@ -92,6 +92,8 @@ public class Utilities {
         }
         if (origin.startsWith("https")) {
             origin += "/api";
+        } else {
+            origin += ":8080";
         }
         return origin + request.getContextPath();
     }
