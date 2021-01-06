@@ -33,7 +33,7 @@ public class PresenceUcblJwtHelper {
     public static String verifyToken(String token, @NotNull HttpServletRequest req) throws NullPointerException, JWTVerificationException {
         JWTVerifier authenticationVerifier = JWT.require(algorithm)
                 .withIssuer(ISSUER)
-                // .withAudience(getOrigin(req)) // Non-reusable verifier instance
+                .withAudience(getOrigin(req)) // Non-reusable verifier instance
                 .build();
 
         authenticationVerifier.verify(token); // Lève une NullPointerException si le token n'existe pas, et une JWTVerificationException s'il est invalide
@@ -73,7 +73,7 @@ public class PresenceUcblJwtHelper {
         return JWT.create()
                 .withIssuer(ISSUER)
                 .withSubject(subject)
-                // .withAudience(getOrigin(req))
+                .withAudience(getOrigin(req))
                 .withClaim("admin", admin)
                 .withExpiresAt(new Date(new Date().getTime() + LIFETIME))
                 .sign(algorithm);
