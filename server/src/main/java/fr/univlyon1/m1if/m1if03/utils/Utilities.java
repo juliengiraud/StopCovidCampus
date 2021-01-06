@@ -81,6 +81,11 @@ public class Utilities {
     }
 
     public static String getPathBase(HttpServletRequest request) {
+        System.out.println("requestURL " + request.getRequestURL());
+        System.out.println("requestURI" + request.getRequestURI());
+        System.out.println("contextPath " + request.getContextPath());
+        System.out.println("host " + request.getHeader("host"));
+        System.out.println("origin " + request.getHeader("origin"));
         String origin = request.getHeader("origin");
         if (origin.equals("null")) {
             origin = request.getHeader("host");
