@@ -73,7 +73,7 @@ public class PresenceUcblJwtHelper {
         return JWT.create()
                 .withIssuer(ISSUER)
                 .withSubject(subject)
-                .withAudience(getOrigin(req))
+                // .withAudience(getOrigin(req))
                 .withClaim("admin", admin)
                 .withExpiresAt(new Date(new Date().getTime() + LIFETIME))
                 .sign(algorithm);
