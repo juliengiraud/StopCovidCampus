@@ -642,15 +642,15 @@ function getStrangeDateFormat(date) {
 // http://192.168.75.76:8080/v3/ -> prod
 // http://localhost:8080/tp4/ -> test
 function getApiUrl() {
-    const baseUrl = window.origin;
+    const baseUrl = window.location.origin;
 
-    if (baseUrl.includes("localhost")) {
-        return baseUrl + "/tp4/"
+    if (baseUrl.includes("localhost") || baseUrl.includes("file")) {
+        return "http://localhost:8080/tp4/";
     }
     if (baseUrl.includes("https")) {
-        return baseUrl + "/api/v3/"
+        return baseUrl + "/api/v3/";
     }
-    return "http://192.168.75.76:8080/v3/"
+    return "http://192.168.75.76:8080/v3/";
 }
 
 // https://192.168.75.76/api/client/ -> prod
