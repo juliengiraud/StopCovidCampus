@@ -81,7 +81,11 @@ public class Utilities {
     }
 
     public static String getPathBase(HttpServletRequest request) {
-        return request.getRequestURL().substring(0, request.getRequestURL().indexOf(request.getContextPath())) + request.getContextPath();
+        String origin = request.getHeader("origin");
+        if (origin.equals("null")) {
+            origin = request.getHeader("host");
+        }
+        return origin + request.getContextPath();
     }
 
     public static boolean isAdmin(HttpServletRequest request) {
