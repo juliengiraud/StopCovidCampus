@@ -90,6 +90,9 @@ public class Utilities {
         if (origin.equals("null")) {
             origin = request.getHeader("host");
         }
+        if (origin.startsWith("https")) {
+            origin += "/api";
+        }
         return origin + request.getContextPath();
     }
 
