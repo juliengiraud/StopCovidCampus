@@ -29,15 +29,6 @@ public class AuthenticationFilter extends HttpFilter {
     }
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println("test 1");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        if (request.getMethod().equals(HttpMethod.OPTIONS)) {
-            return;
-        }
-
         List<Route> whiteListedPaths = Route.getWhiteList(null, null);
         String path = request.getRequestURI();
         String token = PresenceUcblJwtHelper.getTokenFromRequest(request);

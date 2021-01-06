@@ -31,7 +31,6 @@ public class UserController extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("test 4");
         List<String> path = Arrays.asList(request.getRequestURI().split("/"));
         int startIndex = path.indexOf("users");
         int endIndex = path.size();
@@ -143,7 +142,6 @@ public class UserController extends HttpServlet {
     }
 
     private void doLogin(HttpServletRequest request, HttpServletResponse response, String login, String nom, Boolean admin) throws IOException {
-        System.out.println("test 5");
         if (login.equals("")) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
             return;
