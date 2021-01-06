@@ -40,6 +40,7 @@ public class AuthenticationFilter extends HttpFilter {
                 chain.doFilter(request, response);
                 return;
             } catch (NullPointerException | JWTVerificationException e) {
+                System.out.println("Bim le 301");
                 response.sendRedirect("/" + request.getRequestURI().split("/")[1]);
                 return;
             }
