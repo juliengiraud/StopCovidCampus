@@ -51,7 +51,7 @@ Moyenne | 38.3 | 72.9 | 92.9
 Pourcentage d'amélioration | 29.2% | 51.5% | 45.5%
 
 ## 3. Optimisation de votre application
-###Premier rapport d'audit, avant toute modification.
+### Premier rapport d'audit, avant toute modification.
 ![Premier rapport](./rapports_audit/Rapport_Init.png)
 
 ### Optimisation pour les moteurs de recherche (SEO)
