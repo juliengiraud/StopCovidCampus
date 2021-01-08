@@ -48,4 +48,4 @@ Mesure | Temps de chargement de la page HTML initiale (en ms) | Temps d'affichag
 9 | 36 | 75 | 93
 10 | 64 | 70 | 90
 Moyenne | 38.3 | 72.9 | 92.9
-Pourcentage d'amélioration (\frac{valeur d'arrivée - valeur de départ}{valeur de départ}*100)| 29.2% | 51.5% | 45.5%
+Pourcentage d'amélioration | 29.2% | 51.5% | 45.5%
