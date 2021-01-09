@@ -81,21 +81,13 @@ public class Utilities {
     }
 
     public static String getPathBase(HttpServletRequest request) {
-        System.out.println("requestURL " + request.getRequestURL());
-        System.out.println("requestURI" + request.getRequestURI());
-        System.out.println("contextPath " + request.getContextPath());
-        System.out.println("host " + request.getHeader("host"));
-        System.out.println("origin " + request.getHeader("origin"));
-        String origin = request.getHeader("origin");
-        if (origin == null || origin.equals("null")) {
-            origin = request.getHeader("host");
+        String origin = request.getRequestURL().substring(
+                0, request.getRequestURL().indexOf(request.getContextPath())
+        ) + request.getContextPath();
+        if (origin.contains("127.0.0.1")) {
+            origin = "https://192.168.75.76/api/v3";
         }
-        if (origin.startsWith("https")) {
-            origin += "/api";
-        } else {
-            origin += ":8080";
-        }
-        return origin + request.getContextPath();
+        return origin;
     }
 
     public static boolean isAdmin(HttpServletRequest request) {
