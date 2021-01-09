@@ -249,6 +249,7 @@ function deconnexion() {
     $.ajax({
         url: apiUrl + "users/logout",
         type: "POST",
+        contentType: "application/json",
         headers: {
             Authorization : DATA.loggedUser.token
         }
