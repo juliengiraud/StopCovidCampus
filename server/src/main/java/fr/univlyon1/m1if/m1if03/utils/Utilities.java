@@ -87,7 +87,7 @@ public class Utilities {
         System.out.println("host " + request.getHeader("host"));
         System.out.println("origin " + request.getHeader("origin"));
         String origin = request.getHeader("origin");
-        if (origin.equals("null")) {
+        if (origin == null || origin.equals("null")) {
             origin = request.getHeader("host");
         }
         if (origin.startsWith("https")) {
