@@ -65,3 +65,6 @@ Pourcentage d'amélioration | 29.2% | 51.5% | 45.5%
 * ```Utilisation de CDN``` : Notre utilise déjà des CDN pour Bootstrap, Mustache et jQuery.
 ![Utilisation de CDN.](./rapports_audit/Rapport_CDN.png)
 
+* ```Utilisation d'attributs async et/ou defer pour décaler le chargement de scripts non nécessaires au CRP``` : Notre script utilise déjà des appels ajax asynchrones (par défaut, la valeur de l'option async de jQuery.ajax() est true et nous ne l'avons pas modifié).
+
+* ```Minification réduction du nombre de ressources critiques``` : Les balises link sont déjà placées en tête du document et le seul code CSS que nous avons écrit est à également en tête du document html. Les scripts js sont placés en fin de page avec l'attribut async afin d'exécuter ces scripts de manière asynchrone (inutile pour les scripts "inline" (sans attribut src, ici les templates Mustache).

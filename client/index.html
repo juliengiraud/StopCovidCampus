@@ -9,13 +9,6 @@
     <link rel="shortcut icon" type="image/png" href="favicon.png">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <!-- Mustache -->
-    <script src="https://cdn.jsdelivr.net/npm/mustache@4.1.0/mustache.min.js" integrity="sha256-mh7gV/es1uh2rW94a1OI1CO/jBNd9O7s70tkiJ69rOQ=" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="./js/render.js"></script>
-    <script src="./js/script.js"></script>
     <title>Présence UCBL</title>
 
     <style>
@@ -27,24 +20,6 @@
 <body>
     <div class="modal fade" id="modal-salle" tabindex="-1" role="dialog" aria-labelledby="modal-salle-label" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <script id="modal-salle-template" type="x-tmpl-mustache">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-salle-label">Salle {{ data.nomSalle }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        <li> Capacité : {{ data.capacite }} </li>
-                        <li> Présents : {{ data.presents }} </li>
-                        <li> Saturée : {{ data.saturee }} </li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </script>
             <div class="modal-content" id="modal-salle-content">
             </div>
         </div>
@@ -52,23 +27,6 @@
 
     <div class="modal fade" id="modal-user" tabindex="-1" role="dialog" aria-labelledby="modal-user-label" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <script id="modal-user-template" type="x-tmpl-mustache">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-user-label">Utilisateur {{ data.login }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        <li> Nom : {{ data.nom }} </li>
-                        <li> Administrateur : {{ data.admin }} </li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </script>
             <div class="modal-content" id="modal-user-content">
             </div>
         </div>
@@ -118,33 +76,9 @@
                     <th>Sortie</th>
                 </tr>
                 </thead>
-                <script id="accueil-template" type="x-tmpl-mustache">
-                {{#data}}
-                    <tr>
-                        <td><a class="link-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</a></td>
-                        <td><a class="link-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</a></td>
-                        <td>{{ dateEntree }}</td>
-                        <td>{{ dateSortie }}</td>
-                    </tr>
-                {{/data}}
-                {{^data}}
-                    <tr>
-                        <td colspan="4">Vous n'avez aucun passage en cours.</td>
-                    </tr>
-                {{/data}}
-            </script>
                 <tbody id="accueil-content">
                 </tbody>
             </table>
-            <script id="salles-saturees-template" type="x-tmpl-mustache">
-                <h3>Liste des salles saturées :</h3>
-                {{#data}}
-                    <li class="text-danger">La salle {{ nomSalle }} est saturée. {{ presents }} personnes sont présentes pour une capacité maximale de {{ capacite }}. </li>
-                {{/data}}
-                {{^data}}
-                    <p class="text-success">Aucune salle n'est saturée</p>
-                {{/data}}
-            </script>
             <ul id="salles-saturees-content">
             </ul>
         </div>
@@ -152,16 +86,6 @@
 
     <section id="mon-compte" class="container" style="display:none">
         <h2>Mon compte</h2>
-        <script id="mon-compte-template" type="x-tmpl-mustache">
-            <li> Login : <span id="login">{{ data.login }} </span></li>
-            <li>Nom :
-                <span id="nom">{{ data.nom }} </span>
-                <span class="badge bg-secondary update-nom">Modifier</span>
-                <span class="badge bg-secondary validate" style="display:none">Valider</span>
-                <span class="badge bg-secondary cancel" style="display:none">Annuler</span>
-            </li>
-            <li>Admin : <span id="admin">{{ data.admin }} </span></li>
-        </script>
         <ul id="mon-compte-content">
         </ul>
         <form method="put" action="">
@@ -189,33 +113,6 @@
                 <th>Saturée</th>
             </tr>
             </thead>
-            <script id="salles-template" type="x-tmpl-mustache">
-                {{#data}}
-                    <tr data-salle="{{ nomSalle }}">
-                        <td>
-                            <p>
-                                <span class="nom-salle">{{ nomSalle }}</span>
-                                <span class="badge bg-secondary delete-salle">Supprimer</span>
-                            </p>
-                        </td>
-                        <td>
-                            <p>
-                                <span class="capacite-salle">{{ capacite }}</span>
-                                <span class="badge bg-secondary update-salle">Modifier</span>
-                                <span class="badge bg-secondary validate" style="display:none">Valider</span>
-                                <span class="badge bg-secondary cancel" style="display:none">Annuler</span>
-                            </p>
-                        </td>
-                        <td>{{ presents }}</td>
-                        <td>{{ saturee }}</td>
-                    </tr>
-                {{/data}}
-                {{^data}}
-                    <tr>
-                        <td colspan="4">Il n'existe pas de salle pour l'instant.</td>
-                    </tr>
-                {{/data}}
-        </script>
             <tbody id="salles-content">
             </tbody>
         </table>
@@ -223,11 +120,6 @@
     </section>
     <section id="entree" class="container" style="display:none">
         <h2>Entrer dans une salle</h2>
-        <script id="entree-template" type="x-tmpl-mustache">
-            {{#data}}
-                <option value="{{ nomSalle }}">
-            {{/data}}
-        </script>
         <datalist id="entree-content">
         </datalist>
         <form method="post" action="">
@@ -240,11 +132,6 @@
     </section>
     <section id="sortie" class="container" style="display:none">
         <h2>Sortir d'une salle</h2>
-        <script id="sortie-template" type="x-tmpl-mustache">
-            {{#data}}
-                <option value="{{ nomSalle }}">
-            {{/data}}
-        </script>
         <datalist id="sortie-content">
         </datalist>
         <form method="post" action="">
@@ -266,21 +153,6 @@
                 <th>Sortie</th>
             </tr>
             </thead>
-            <script id="tous-mes-passages-template" type="x-tmpl-mustache">
-                {{#data}}
-                    <tr>
-                        <td><a class="link-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</a></td>
-                        <td><a class="link-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</a></td>
-                        <td>{{ dateEntree }}</td>
-                        <td>{{ dateSortie }}</td>
-                    </tr>
-                {{/data}}
-                {{^data}}
-                    <tr>
-                         <td colspan="4">Vous n'avez saisi aucun passage.</td>
-                    </tr>
-                {{/data}}
-            </script>
             <tbody id="tous-mes-passages-content">
             </tbody>
         </table>
@@ -296,5 +168,143 @@
         </form>
         <p><a class="nav-link" href="#accueil">Retour à la page d'accueil</a></p>
     </section>
+	
+	<!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" async></script>
+    <!-- Mustache -->
+    <script src="https://cdn.jsdelivr.net/npm/mustache@4.1.0/mustache.min.js" integrity="sha256-mh7gV/es1uh2rW94a1OI1CO/jBNd9O7s70tkiJ69rOQ=" crossorigin="anonymous" async></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" async></script>
+    <script src="./js/render.js" async></script>
+    <script src="./js/script.js" async></script>
+	
+	<script id="modal-salle-template" type="x-tmpl-mustache">
+		<div class="modal-header">
+			<h5 class="modal-title" id="modal-salle-label">Salle {{ data.nomSalle }}</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<ul>
+				<li> Capacité : {{ data.capacite }} </li>
+				<li> Présents : {{ data.presents }} </li>
+				<li> Saturée : {{ data.saturee }} </li>
+			</ul>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		</div>
+	</script>
+	
+	<script id="modal-user-template" type="x-tmpl-mustache">
+		<div class="modal-header">
+			<h5 class="modal-title" id="modal-user-label">Utilisateur {{ data.login }}</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<ul>
+				<li> Nom : {{ data.nom }} </li>
+				<li> Administrateur : {{ data.admin }} </li>
+			</ul>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		</div>
+	</script>
+	
+	<script id="accueil-template" type="x-tmpl-mustache">
+		{{#data}}
+			<tr>
+				<td><a class="link-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</a></td>
+				<td><a class="link-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</a></td>
+				<td>{{ dateEntree }}</td>
+				<td>{{ dateSortie }}</td>
+			</tr>
+		{{/data}}
+		{{^data}}
+			<tr>
+				<td colspan="4">Vous n'avez aucun passage en cours.</td>
+			</tr>
+		{{/data}}
+	</script>
+
+	<script id="salles-saturees-template" type="x-tmpl-mustache">
+		<h3>Liste des salles saturées :</h3>
+		{{#data}}
+			<li class="text-danger">La salle {{ nomSalle }} est saturée. {{ presents }} personnes sont présentes pour une capacité maximale de {{ capacite }}. </li>
+		{{/data}}
+		{{^data}}
+			<p class="text-success">Aucune salle n'est saturée</p>
+		{{/data}}
+	</script>
+	
+	<script id="mon-compte-template" type="x-tmpl-mustache">
+		<li> Login : <span id="login">{{ data.login }} </span></li>
+		<li>Nom :
+			<span id="nom">{{ data.nom }} </span>
+			<span class="badge bg-secondary update-nom">Modifier</span>
+			<span class="badge bg-secondary validate" style="display:none">Valider</span>
+			<span class="badge bg-secondary cancel" style="display:none">Annuler</span>
+		</li>
+		<li>Admin : <span id="admin">{{ data.admin }} </span></li>
+	</script>
+	
+	<script id="salles-template" type="x-tmpl-mustache">
+		{{#data}}
+			<tr data-salle="{{ nomSalle }}">
+				<td>
+					<p>
+						<span class="nom-salle">{{ nomSalle }}</span>
+						<span class="badge bg-secondary delete-salle">Supprimer</span>
+					</p>
+				</td>
+				<td>
+					<p>
+						<span class="capacite-salle">{{ capacite }}</span>
+						<span class="badge bg-secondary update-salle">Modifier</span>
+						<span class="badge bg-secondary validate" style="display:none">Valider</span>
+						<span class="badge bg-secondary cancel" style="display:none">Annuler</span>
+					</p>
+				</td>
+				<td>{{ presents }}</td>
+				<td>{{ saturee }}</td>
+			</tr>
+		{{/data}}
+		{{^data}}
+			<tr>
+				<td colspan="4">Il n'existe pas de salle pour l'instant.</td>
+			</tr>
+		{{/data}}
+	</script>
+	
+	<script id="entree-template" type="x-tmpl-mustache">
+		{{#data}}
+			<option value="{{ nomSalle }}">
+		{{/data}}
+	</script>
+	
+	<script id="sortie-template" type="x-tmpl-mustache">
+		{{#data}}
+			<option value="{{ nomSalle }}">
+		{{/data}}
+	</script>
+	
+	<script id="tous-mes-passages-template" type="x-tmpl-mustache">
+		{{#data}}
+			<tr>
+				<td><a class="link-primary link-user" data-bs-toggle="modal" data-bs-target="#modal-user">{{ user }}</a></td>
+				<td><a class="link-primary link-salle" data-bs-toggle="modal" data-bs-target="#modal-salle">{{ salle }}</a></td>
+				<td>{{ dateEntree }}</td>
+				<td>{{ dateSortie }}</td>
+			</tr>
+		{{/data}}
+		{{^data}}
+			<tr>
+				 <td colspan="4">Vous n'avez saisi aucun passage.</td>
+			</tr>
+		{{/data}}
+	</script>
 </body>
 </html>
