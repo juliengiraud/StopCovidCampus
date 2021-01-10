@@ -62,11 +62,16 @@ Pourcentage d'amélioration | 29.2% | 51.5% | 41.5%
 ![Rapport après ajout d'une balise meta description pour ajouter une courte description à une page web, utilisée par les navigateurs.](./rapports_audit/Rapport_SEO_MetaDescription.png)
 
 ### Optimisation de la performance
-- ```Utilisation de CDN``` : Pas de modification, notre utilise déjà des CDN pour Bootstrap, Mustache et jQuery.
+- ```Utilisation de CDN``` : Pas de modification, nous utilisons déjà des CDN pour Bootstrap, Mustache et jQuery.
 
-- ```Utilisation d'attributs async et/ou defer pour décaler le chargement de scripts non nécessaires au CRP``` : Pas de modification, notre script utilise déjà des appels ajax asynchrones (par défaut, la valeur de l'option async de jQuery.ajax() est true et nous ne l'avons pas modifié).
+- ```Utilisation d'attributs async et/ou defer pour décaler le chargement de scripts non nécessaires au CRP``` 
+	- Modification : ajout de l'attribut ```async``` pour les scritps que nous avons programmé (render.js et script.js). Les CDN (sauf Bootstrap) n'y ont pas droit car ils sont utilisés par notre scripts et async ne garanti pas l'ordre d'exécution. 
+		- Amélioration : nous n'avons pas observé d'amélioration notable, le chargement de la page html, d'affichage de l'appshell et du CRP restent dans le même ordre de grandeur.
 
 - ```Minification réduction du nombre de ressources critiques```
 	- Les balises ```link``` sont déjà placées en tête du document et le seul code CSS que nous avons écrit est à également en tête du document html. 
-	- Modifications : Les scripts js sont désormais placés en fin de page et ajout de l'attribut ```async``` pour les scritps que nous avons programmé. Les CDN (sauf Bootstrap) n'y ont pas droit car ils sont utilisés par notre scripts et async ne garanti pas l'ordre d'exécution. 
-		- Amélioration : nous n'avons pas observé d'amélioration notable, le chargement de la page html, d'affichage de l'appshell et du CRP restent dans le même ordre de grandeur.
+	- Modification : Les scripts js sont désormais placés en fin de page.
+			- Amélioration : nous n'avons pas observé d'amélioration notable, le chargement de la page html, d'affichage de l'appshell et du CRP restent dans le même ordre de grandeur.
+
+
+- ```Refactoring de l'application pour charger plus rapidement : app shell, CRP``` : Pas de modifications.
