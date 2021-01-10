@@ -73,5 +73,4 @@ Pourcentage d'amélioration | 29.2% | 51.5% | 41.5%
 	- Modification : Les scripts js sont désormais placés en fin de page.
 			- Amélioration : nous n'avons pas observé d'amélioration notable, le chargement de la page html, d'affichage de l'appshell et du CRP restent dans le même ordre de grandeur.
 
-
 - ```Refactoring de l'application pour charger plus rapidement : app shell, CRP``` : Pas de modifications.
