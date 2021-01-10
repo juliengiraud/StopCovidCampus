@@ -55,10 +55,10 @@ Pourcentage d'amélioration | 29.2% | 51.5% | 45.5%
 ![Premier rapport](./rapports_audit/Rapport_Init.png)
 
 ### Optimisation pour les moteurs de recherche (SEO)
-*Rapport après ajout d'une balise ```<meta name="viewport">``` pour contrôler la mise en page sur les navigateurs mobiles.
+* Rapport après ajout d'une balise ```<meta name="viewport">``` pour contrôler la mise en page sur les navigateurs mobiles.
 ![Rapport après ajout d'une balise meta viewport pour contrôler la mise en page sur les navigateurs mobiles.](./rapports_audit/Rapport_SEO_MetaViewport.png)
 
-*Rapport après ajout d'une balise ```<meta name="description">``` pour contrôler la mise en page sur les navigateurs mobiles.
+* Rapport après ajout d'une balise ```<meta name="description">``` pour contrôler la mise en page sur les navigateurs mobiles.
 ![Rapport après ajout d'une balise meta description pour ajouter une courte description à une page web, utilisée par les navigateurs.](./rapports_audit/Rapport_SEO_MetaDescription.png)
 
 ### Optimisation de la performance
