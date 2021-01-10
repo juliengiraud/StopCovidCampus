@@ -70,8 +70,5 @@ Pourcentage d'amélioration | 29.2% | 51.5% | 45.5%
 	Pas de modifications : Notre script utilise déjà des appels ajax asynchrones (par défaut, la valeur de l'option async de jQuery.ajax() est true et nous ne l'avons pas modifié).
 
 - ```Minification réduction du nombre de ressources critiques```
-	- Les balises link sont déjà placées en tête du document et le seul code CSS que nous avons écrit est à également en tête du document html. 
-	- Modifications : Les scripts js sont désormais placés en fin de page et :
-		- L'attribut async pour Bootstrap, Mustache et jQuery : ils sont nécéssaires pour les scripts suivants mais leur ordre d'exécution n'est pas important. 
-		- L'attribut defer pour render.js (qui remplit les templates Mustache) et script.js (qui comprend tout le reste du js que nous avons codé) car ils utilisent les scripts précédents et doivent être exécuter en dernier. 
-		- Ni async ni defer pour les scripts "inline" car ils n'ont pas d'effet sur les balises script sans attribut src, ici les templates Mustache.
+	- Les balises ```link``` sont déjà placées en tête du document et le seul code CSS que nous avons écrit est à également en tête du document html. 
+	- Modifications : Les scripts js sont désormais placés en fin de page et ajout de l'attribut ```javascript async``` pour les scrips que nous avons programmé. Les CDN (sauf Bootstrap) n'y ont pas droit car ils sont utilisés par notre scripts et async ne garanti pas l'ordre d'exécution. 
