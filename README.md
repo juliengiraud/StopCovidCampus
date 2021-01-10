@@ -75,7 +75,7 @@ Pourcentage d'amélioration | 29.2% | 51.5% | 41.5%
 
 - ```Refactoring de l'application pour charger plus rapidement : app shell, CRP``` : Pas de modifications.
 
-Lighthouse conseil ensuite de retirer le javascript et le css inutilisé, mais il s'agit principalement de code qui provient des CDN sur lesquels nous n'avons pas la main.
+Lighthouse conseille ensuite de retirer le javascript et le css inutilisé, mais il s'agit principalement de code qui provient des CDN sur lesquels nous n'avons pas la main.
 
 ### Rapport d'audit final 
 
