@@ -63,11 +63,11 @@ Pourcentage d'amélioration | 29.2% | 51.5% | 45.5%
 
 ### Optimisation de la performance
 - ```Utilisation de CDN```
-	Notre utilise déjà des CDN pour Bootstrap, Mustache et jQuery.
+	- Notre utilise déjà des CDN pour Bootstrap, Mustache et jQuery.
 		![Utilisation de CDN.](./rapports_audit/Rapport_CDN.png)
 
 - ```Utilisation d'attributs async et/ou defer pour décaler le chargement de scripts non nécessaires au CRP```
-	Pas de modifications : Notre script utilise déjà des appels ajax asynchrones (par défaut, la valeur de l'option async de jQuery.ajax() est true et nous ne l'avons pas modifié).
+	- Pas de modifications : Notre script utilise déjà des appels ajax asynchrones (par défaut, la valeur de l'option async de jQuery.ajax() est true et nous ne l'avons pas modifié).
 
 - ```Minification réduction du nombre de ressources critiques```
 	- Les balises ```link``` sont déjà placées en tête du document et le seul code CSS que nous avons écrit est à également en tête du document html. 
