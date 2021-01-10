@@ -21,34 +21,34 @@ console.log("Temps d'affichage du chemin critique de rendu (CRP) : ", window.per
 
 Mesure | Temps de chargement de la page HTML initiale (en ms) | Temps d'affichage de l'app shell (en ms) | Temps d'affichage du chemin critique de rendu (CRP) (en ms)
 :---:|:---: | :---: | :---:
-1 | 57 | 292 | 310
-2 | 47 | 237 | 262
-3 | 48 | 363 | 373
-4 | 58 | 432 | 415
-5 | 45 | 426 | 429
-6 | 52 | 366 | 378
-7 | 56 | 543 | 533
-8 | 42 | 357 | 368
-9 | 51 | 437 | 442
-10 | 49 | 575 | 221
-Moyenne | 50.4 | 402.8 | 407.3
+1 | 45 | 328 | 342
+2 | 47 | 375 | 379
+3 | 51 | 412 | 421
+4 | 48 | 384 | 385
+5 | 54 | 423 | 453
+6 | 48 | 379 | 378
+7 | 44 | 336 | 340
+8 | 45 | 437 | 426
+9 | 51 | 419 | 407
+10 | 48 | 454 | 462
+Moyenne | 48 | 394.6 | 399.1
 
 ## 2. Déploiement des fichiers statiques sur nginx (déploiement sur nginx)
 
 Mesure | Temps de chargement de la page HTML initiale (en ms) | Temps d'affichage de l'app shell (en ms) | Temps d'affichage du chemin critique de rendu (CRP) (en ms)
 :---:|:---: | :---: | :---:
 1 | 32 | 159 | 200
-2 | 39 | 247 | 297
-3 | 32 | 236 | 289
+2 | 33 | 182 | 222
+3 | 36 | 200 | 246
 4 | 34 | 186 | 225
 5 | 38 | 205 | 265
-6 | 35 | 219 | 275
+6 | 34 | 184 | 221
 7 | 31 | 163 | 199
-8 | 42 | 247 | 322
-9 | 40 | 202 | 261
-10 | 34 | 220 | 27
-Moyenne | 35.7 | 208.4 | 236
-Pourcentage d'amélioration | 29.2% | 48.3% | 42.1%
+8 | 32 | 212 | 249
+9 | 36 | 203 | 238
+10 | 34 | 220 | 270
+Moyenne | 34 | 191.4 | 233.5
+Pourcentage d'amélioration | 29.2% | 51.5% | 41.5%
 
 ## 3. Optimisation de votre application
 ### Premier rapport d'audit, avant toute modification.
