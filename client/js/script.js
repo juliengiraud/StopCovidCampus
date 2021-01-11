@@ -46,7 +46,7 @@ function initEvents() {
         let nom = {
             "nom": $('#mon-compte form input[name="nom"]').val()
         };
-        updateNom();
+        updateNom(nom);
     });
 
     //Bouton de modification du nom depuis le champs nom
