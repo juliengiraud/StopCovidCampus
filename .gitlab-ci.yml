@@ -23,3 +23,6 @@ junit:
     #- cat ~/.m2/settings.xml
   script:
     - scp -r -o StrictHostKeyChecking=no -i ./$CI_SSH_KEY client gitlabci@192.168.75.76:/var/www
+    - cd server
+    - mvn test --batch-mode clean package
+    - scp -o StrictHostKeyChecking=no -i ../$CI_SSH_KEY target/tp4.war gitlabci@192.168.75.76:/opt/tomcat/webapps/v3.war
